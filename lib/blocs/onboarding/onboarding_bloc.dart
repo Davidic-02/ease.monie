@@ -8,8 +8,8 @@ part 'onboarding_event.dart';
 part 'onboarding_state.dart';
 part 'onboarding_bloc.freezed.dart';
 
-class OnboardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
-  OnboardingBloc() : super(const OnBoardingState()) {
+class OnBoardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
+  OnBoardingBloc() : super(const OnBoardingState()) {
     on<_EmailChanged>(_emailChanged);
     on<_UsernameChanged>(_usernameChanged);
     on<_FullNameChanged>(_fullNameChanged);

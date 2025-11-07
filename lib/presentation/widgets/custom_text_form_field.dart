@@ -26,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
     this.editIcon,
     this.onChanged,
     this.onTap,
+    this.errorText,
   });
 
   final TextEditingController? controller;
@@ -42,10 +43,11 @@ class CustomTextFormField extends StatelessWidget {
   final bool readOnly;
   final bool? customFilled;
   final int? maxLength;
+  final String? errorText;
   final String? Function(String?)? validator;
   final TextInputAction? textInputAction;
   final void Function()? onSuffixIconPressed;
-  final void Function()? onFieldSubmitted;
+  final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
   final ValueChanged<String>? onChanged;
 
@@ -64,9 +66,10 @@ class CustomTextFormField extends StatelessWidget {
         TextFormField(
           cursorColor: AppColors.primaryColor,
           maxLength: maxLength,
-          onEditingComplete: onFieldSubmitted,
+          onFieldSubmitted: onFieldSubmitted,
           onChanged: onChanged,
           readOnly: readOnly,
+
           style: Theme.of(context).textTheme.bodyMedium,
           focusNode: focusNode,
           textInputAction: textInputAction,
@@ -74,6 +77,7 @@ class CustomTextFormField extends StatelessWidget {
           keyboardType: keyboardType,
           onTap: onTap,
           decoration: InputDecoration(
+            errorText: errorText,
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(8),

@@ -26,7 +26,7 @@ class SignUpScreen extends HookWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF23303B),
-      body: BlocBuilder<OnboardingBloc, OnBoardingState>(
+      body: BlocBuilder<OnBoardingBloc, OnBoardingState>(
         builder: (context, state) {
           return Stack(
             children: [
@@ -57,44 +57,80 @@ class SignUpScreen extends HookWidget {
                         CustomTextFormField(
                           focusNode: nameFocusNode,
                           hintText: 'Name',
+                          textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.text,
                           fillColor: AppColors.whiteColor,
+                          errorText:
+                              state.fullName.isPure && state.fullName.isNotValid
+                              ? "Name must be at least 3 characters."
+                              : null,
+                          onFieldSubmitted: (_) =>
+                              emailFocusNode.requestFocus(),
+                          onChanged: (value) => context
+                              .read<OnBoardingBloc>()
+                              .add(OnBoardingEvent.fullNameChanged(value)),
                         ),
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: emailFocusNode,
+                          textInputAction: TextInputAction.next,
                           hintText: 'Email',
                           keyboardType: TextInputType.emailAddress,
                           fillColor: AppColors.whiteColor,
+                          onFieldSubmitted: (_) =>
+                              mobileNumberFocusNode.requestFocus(),
+                          onChanged: (value) => context
+                              .read<OnBoardingBloc>()
+                              .add(OnBoardingEvent.emailChanged(value)),
+                          errorText:
+                              !state.email.isPure && state.email.isNotValid
+                              ? "Please enter a valid email address"
+                              : null,
                         ),
-
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: mobileNumberFocusNode,
+                          textInputAction: TextInputAction.next,
                           hintText: 'Mobile Number',
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           fillColor: AppColors.whiteColor,
+                          onFieldSubmitted: (_) => cnicNode.requestFocus(),
+                          onChanged: (value) => context
+                              .read<OnBoardingBloc>()
+                              .add(OnBoardingEvent.passwordChanged(value)),
                         ),
 
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: cnicNode,
+                          textInputAction: TextInputAction.next,
                           hintText: 'CNIC',
                           keyboardType: TextInputType.text,
                           fillColor: AppColors.whiteColor,
+                          onFieldSubmitted: (_) =>
+                              passwordFocusNode.requestFocus(),
                         ),
 
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: passwordFocusNode,
+                          textInputAction: TextInputAction.done,
                           hintText: 'Password',
                           keyboardType: TextInputType.text,
                           fillColor: AppColors.whiteColor,
                           obscureText: !obscurePassword.value,
                           isPassword: true,
+                          errorText:
+                              !state.password.isPure &&
+                                  state.password.isNotValid
+                              ? "Password must be at least 6 characters."
+                              : null,
                           onSuffixIconPressed: () {
                             obscurePassword.value = !obscurePassword.value;
                           },
+                          onChanged: (value) => context
+                              .read<OnBoardingBloc>()
+                              .add(OnBoardingEvent.passwordChanged(value)),
                         ),
                         AppSpacing.verticalSpaceSmall,
                         Row(
@@ -124,9 +160,15 @@ class SignUpScreen extends HookWidget {
                             ),
                           ],
                         ),
-
                         AppSpacing.verticalSpaceLarge,
-                        Button('Sign Up', onPressed: () {}),
+                        Button(
+                          'Sign Up',
+                          onPressed: () {
+                            context.read<OnBoardingBloc>().add(
+                              OnBoardingEvent.signUp(),
+                            );
+                          },
+                        ),
                         AppSpacing.verticalSpaceMassive,
                         Center(
                           child: RichText(

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<OnboardingBloc>(create: (context) => OnboardingBloc()),
+        BlocProvider<OnBoardingBloc>(create: (context) => OnBoardingBloc()),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,
