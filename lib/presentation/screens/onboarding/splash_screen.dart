@@ -1,4 +1,4 @@
-import 'package:esae_monie/constants/color.dart';
+import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +14,14 @@ class SplashScreen extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       Future.delayed(const Duration(milliseconds: 500), () {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (_) => const Onboarding()),
-        // );
-        context.navigator.pushReplacementNamed(Onboarding.routeName);
+        if (context.mounted) {
+          context.navigator.pushReplacementNamed(Onboarding.routeName);
+        }
       });
       return null;
     }, []);
     return Scaffold(
-      backgroundColor: myColor1,
+      backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Center(
           child: Lottie.asset(

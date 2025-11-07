@@ -49,6 +49,7 @@ dependencies:
   formz: ^0.8.0
   email_validator: ^3.0.0
   bloc: ^9.1.0
+  google_fonts: ^6.3.2
 
 
 
@@ -83,6 +84,8 @@ flutter:
   assets:
     - assets/
     - assets/lottie/
+    - assets/images/
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

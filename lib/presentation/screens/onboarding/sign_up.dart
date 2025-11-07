@@ -1,0 +1,163 @@
+import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
+import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/presentation/widgets/button.dart';
+import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+class SignUpScreen extends HookWidget {
+  const SignUpScreen({super.key});
+
+  static const String routeName = 'sign_up';
+  @override
+  Widget build(BuildContext context) {
+    final nameFocusNode = useFocusNode();
+    final emailFocusNode = useFocusNode();
+    final mobileNumberFocusNode = useFocusNode();
+    final cnicNode = useFocusNode();
+    final passwordFocusNode = useFocusNode();
+    final obscurePassword = useState(false);
+    final isChecked = useState(false);
+
+    final formKey = useMemoized(() => GlobalKey<FormState>());
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF23303B),
+      body: BlocBuilder<OnboardingBloc, OnBoardingState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .2,
+                        ),
+                        const Center(
+                          child: Text(
+                            'Create Your Account',
+                            style: TextStyle(
+                              color: AppColors.whiteColor,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: nameFocusNode,
+                          hintText: 'Name',
+                          keyboardType: TextInputType.text,
+                          fillColor: AppColors.whiteColor,
+                        ),
+                        AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: emailFocusNode,
+                          hintText: 'Email',
+                          keyboardType: TextInputType.emailAddress,
+                          fillColor: AppColors.whiteColor,
+                        ),
+
+                        AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: mobileNumberFocusNode,
+                          hintText: 'Mobile Number',
+                          keyboardType: TextInputType.text,
+                          fillColor: AppColors.whiteColor,
+                        ),
+
+                        AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: cnicNode,
+                          hintText: 'CNIC',
+                          keyboardType: TextInputType.text,
+                          fillColor: AppColors.whiteColor,
+                        ),
+
+                        AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: passwordFocusNode,
+                          hintText: 'Password',
+                          keyboardType: TextInputType.text,
+                          fillColor: AppColors.whiteColor,
+                          obscureText: !obscurePassword.value,
+                          isPassword: true,
+                          onSuffixIconPressed: () {
+                            obscurePassword.value = !obscurePassword.value;
+                          },
+                        ),
+                        AppSpacing.verticalSpaceSmall,
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: isChecked.value,
+                              activeColor: Colors.blue,
+                              checkColor: Colors.white,
+                              onChanged: (bool? newValue) {
+                                isChecked.value = newValue ?? false;
+                              },
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(text: "I agree to the "),
+                                  TextSpan(
+                                    text: "Terms & Conditions",
+                                    style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      decoration: TextDecoration.underline,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        AppSpacing.verticalSpaceLarge,
+                        Button('Sign Up', onPressed: () {}),
+                        AppSpacing.verticalSpaceMassive,
+                        Center(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: "Already have an account? "),
+                                TextSpan(
+                                  text: "Login",
+                                  style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    decoration: TextDecoration.underline,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                child: SvgPicture.asset('assets/svgs/ellipse.svg'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
