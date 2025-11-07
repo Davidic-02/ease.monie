@@ -6,6 +6,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding extends HookWidget {
   const Onboarding({super.key});
+
+  static const String routeName = 'onboarding';
+
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController(

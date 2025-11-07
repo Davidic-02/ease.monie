@@ -1,4 +1,5 @@
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
+import 'package:esae_monie/router/app_routes.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ease Monie',
-      home: SplashScreen(),
+      initialRoute: SplashScreen.routeName,
+      routes: AppRoutes.routes,
     );
   }
 }
