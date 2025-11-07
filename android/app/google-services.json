@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "564819506011",
+    "project_id": "easemonie",
+    "storage_bucket": "easemonie.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564819506011:android:89740e0f126e836c39a07e",
+        "android_client_info": {
+          "package_name": "com.example.esae_monie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy1_Kfe1D6wRdr4etC93wwx8eqoNhlEDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
