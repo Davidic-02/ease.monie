@@ -48,3 +48,7 @@ app.*.map.json
 firebase.json
 lib/firebase_options.dart
 ios/GoogleService-Info.plist
+
+# Generated Files.
+*.g.dart
+*.freezed.dart
