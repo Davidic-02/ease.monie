@@ -1,4 +1,5 @@
-import 'package:esae_monie/screens/landing_screen';
+import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Ease Monie',
-      home: LandingScreen(),
+      home: SplashScreen(),
     );
   }
 }
