@@ -45,6 +45,14 @@ dependencies:
   get_it: ^9.0.5
   lottie: ^3.3.1
   smooth_page_indicator: ^1.2.1
+  flutter_bloc: ^9.1.1
+  formz: ^0.8.0
+  email_validator: ^3.0.0
+  bloc: ^9.1.0
+  google_fonts: ^6.3.2
+  firebase_auth: ^6.1.2
+  cloud_firestore: ^6.1.0
+  dio: ^5.9.0
 
 
 
@@ -79,6 +87,8 @@ flutter:
   assets:
     - assets/
     - assets/lottie/
+    - assets/images/
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

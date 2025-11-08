@@ -1,11 +1,16 @@
-//import 'package:flutter/src/widgets/framework.dart';
-import 'package:esae_monie/constants/color.dart';
+import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
+import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Onboarding extends HookWidget {
   const Onboarding({super.key});
+
+  static const String routeName = 'onboarding';
+
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController(
@@ -55,7 +60,6 @@ class Onboarding extends HookWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // top animated stack (cartoons)
             SizedBox(
               height: 460,
               child: Stack(
@@ -66,7 +70,7 @@ class Onboarding extends HookWidget {
                     child: SlideTransition(
                       position: img1Offset,
                       child: Image.asset(
-                        'assets/first.png',
+                        'assets/images/first.png',
                         width: 600,
                         height: 300,
                       ),
@@ -78,7 +82,7 @@ class Onboarding extends HookWidget {
                     child: SlideTransition(
                       position: img2Offset,
                       child: Image.asset(
-                        'assets/second.png',
+                        'assets/images/second.png',
                         width: 600,
                         height: 300,
                       ),
@@ -90,7 +94,7 @@ class Onboarding extends HookWidget {
                     child: SlideTransition(
                       position: img3Offset,
                       child: Image.asset(
-                        'assets/third.png',
+                        'assets/images/third.png',
                         width: 600,
                         height: 300,
                       ),
@@ -99,8 +103,6 @@ class Onboarding extends HookWidget {
                 ],
               ),
             ),
-
-            // 👇 PageView with 2 pages of text
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -114,20 +116,20 @@ class Onboarding extends HookWidget {
                         SizedBox(height: 30),
                         Text(
                           "Manage your\nPayment with",
-                          style: TextStyle(
+                          style: context.textTheme.displayMedium?.copyWith(
                             color: Colors.white,
                             fontSize: 35,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
                         Text(
                           "mobile banking ",
-                          style: TextStyle(color: myColor, fontSize: 35),
+                          style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 35,
+                          ),
                         ),
-                        SizedBox(height: 10),
+                        AppSpacing.verticalSpaceMedium,
                         Text(
-                          style: TextStyle(color: Colors.white54),
                           "A convenient way to manage your money\nsecurely from mobile devices.",
                         ),
                       ],
@@ -135,7 +137,7 @@ class Onboarding extends HookWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         SizedBox(height: 30),
                         Text(
                           "A loan for every\ndream with",
@@ -145,19 +147,16 @@ class Onboarding extends HookWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
                         Text(
-                          style: TextStyle(
-                            color: myColor,
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                          ),
                           "mobile banking",
+                          style: context.textTheme.displayMedium?.copyWith(
+                            color: AppColors.primaryColor,
+                            fontSize: 35,
+                          ),
                         ),
-                        SizedBox(height: 5),
+                        AppSpacing.verticalSpaceMedium,
                         Text(
                           "A loan facility that provides you financial\nassistance whenever you need",
-                          style: TextStyle(color: Colors.white54),
                         ),
                       ],
                     ),
@@ -178,7 +177,7 @@ class Onboarding extends HookWidget {
                     effect: ExpandingDotsEffect(
                       activeDotColor: Colors.white,
                       dotHeight: 8,
-                      dotWidth: 16, // makes them rectangular
+                      dotWidth: 16,
                       spacing: 8,
                       expansionFactor: 3,
                     ),
@@ -192,10 +191,14 @@ class Onboarding extends HookWidget {
                       ),
                       backgroundColor: const Color(0xFF4F5962),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.navigator.pushNamedAndRemoveUntil(
+                        SignUpScreen.routeName,
+                        (route) => false,
+                      );
+                    },
                     child: const Text(
                       "Skip",
-
                       style: TextStyle(color: Colors.white54),
                     ),
                   ),
