@@ -1,6 +1,5 @@
 import 'package:esae_monie/config/pref_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:cointicker
 
 class PersistenceService {
   static final PersistenceService _manager = PersistenceService._internal();

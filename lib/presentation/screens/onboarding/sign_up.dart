@@ -3,10 +3,12 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
+import 'package:esae_monie/services/toast_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 
 class SignUpScreen extends HookWidget {
   const SignUpScreen({super.key});
@@ -17,9 +19,10 @@ class SignUpScreen extends HookWidget {
     final nameFocusNode = useFocusNode();
     final emailFocusNode = useFocusNode();
     final mobileNumberFocusNode = useFocusNode();
-    final cnicNode = useFocusNode();
     final passwordFocusNode = useFocusNode();
+    final confirmPasswordFocusNode = useFocusNode();
     final obscurePassword = useState(false);
+    final obscureConfirmPassword = useState(false);
     final isChecked = useState(false);
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -27,6 +30,8 @@ class SignUpScreen extends HookWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF23303B),
       body: BlocBuilder<OnBoardingBloc, OnBoardingState>(
+        buildWhen: (previous, current) =>
+            _signUpBuildWhen(context, previous, current),
         builder: (context, state) {
           return Stack(
             children: [
@@ -52,7 +57,6 @@ class SignUpScreen extends HookWidget {
                             ),
                           ),
                         ),
-
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: nameFocusNode,
@@ -61,7 +65,8 @@ class SignUpScreen extends HookWidget {
                           keyboardType: TextInputType.text,
                           fillColor: AppColors.whiteColor,
                           errorText:
-                              state.fullName.isPure && state.fullName.isNotValid
+                              !state.fullName.isPure &&
+                                  state.fullName.isNotValid
                               ? "Name must be at least 3 characters."
                               : null,
                           onFieldSubmitted: (_) =>
@@ -94,23 +99,12 @@ class SignUpScreen extends HookWidget {
                           hintText: 'Mobile Number',
                           keyboardType: TextInputType.number,
                           fillColor: AppColors.whiteColor,
-                          onFieldSubmitted: (_) => cnicNode.requestFocus(),
-                          onChanged: (value) => context
-                              .read<OnBoardingBloc>()
-                              .add(OnBoardingEvent.passwordChanged(value)),
-                        ),
-
-                        AppSpacing.verticalSpaceSmall,
-                        CustomTextFormField(
-                          focusNode: cnicNode,
-                          textInputAction: TextInputAction.next,
-                          hintText: 'CNIC',
-                          keyboardType: TextInputType.text,
-                          fillColor: AppColors.whiteColor,
                           onFieldSubmitted: (_) =>
                               passwordFocusNode.requestFocus(),
+                          onChanged: (value) => context
+                              .read<OnBoardingBloc>()
+                              .add(OnBoardingEvent.phoneNumberChanged(value)),
                         ),
-
                         AppSpacing.verticalSpaceSmall,
                         CustomTextFormField(
                           focusNode: passwordFocusNode,
@@ -125,14 +119,42 @@ class SignUpScreen extends HookWidget {
                                   state.password.isNotValid
                               ? "Password must be at least 6 characters."
                               : null,
+
                           onSuffixIconPressed: () {
                             obscurePassword.value = !obscurePassword.value;
                           },
+
                           onChanged: (value) => context
                               .read<OnBoardingBloc>()
                               .add(OnBoardingEvent.passwordChanged(value)),
+                          onFieldSubmitted: (_) =>
+                              confirmPasswordFocusNode.requestFocus(),
                         ),
                         AppSpacing.verticalSpaceSmall,
+                        CustomTextFormField(
+                          focusNode: confirmPasswordFocusNode,
+                          textInputAction: TextInputAction.done,
+                          hintText: 'Confirm Password',
+                          keyboardType: TextInputType.text,
+                          fillColor: AppColors.whiteColor,
+                          obscureText: !obscureConfirmPassword.value,
+                          isPassword: true,
+                          errorText:
+                              (!state.passwordConfirm.isPure &&
+                                  state.password.value !=
+                                      state.passwordConfirm.value)
+                              ? "Passwords do not match."
+                              : null,
+                          onSuffixIconPressed: () {
+                            obscureConfirmPassword.value =
+                                !obscureConfirmPassword.value;
+                          },
+                          onChanged: (value) =>
+                              context.read<OnBoardingBloc>().add(
+                                OnBoardingEvent.passwordConfirmChanged(value),
+                              ),
+                        ),
+                        AppSpacing.verticalSpaceLarge,
                         Row(
                           children: [
                             Checkbox(
@@ -168,6 +190,9 @@ class SignUpScreen extends HookWidget {
                               OnBoardingEvent.signUp(),
                             );
                           },
+                          busy:
+                              state.signUpStatus ==
+                              FormzSubmissionStatus.inProgress,
                         ),
                         AppSpacing.verticalSpaceMassive,
                         Center(
@@ -201,5 +226,40 @@ class SignUpScreen extends HookWidget {
         },
       ),
     );
+  }
+
+  bool _signUpBuildWhen(
+    BuildContext context,
+    OnBoardingState previous,
+    OnBoardingState current,
+  ) {
+    if (previous.signUpStatus != current.signUpStatus &&
+        current.signUpStatus.isSuccess) {
+      ToastService.toast('Sign Up Successful');
+      return true;
+    }
+
+    if (previous.errorMessage != current.errorMessage &&
+        current.errorMessage != null) {
+      ToastService.toast('${current.errorMessage}', ToastType.error);
+      context.read<OnBoardingBloc>().add(
+        const OnBoardingEvent.errorMessage(null),
+      );
+      return true;
+    }
+
+    if (previous.signUpStatus != current.signUpStatus) {
+      return true;
+    }
+
+    if (previous.email != current.email ||
+        previous.fullName != current.fullName ||
+        previous.password != current.password ||
+        previous.passwordConfirm != current.passwordConfirm ||
+        previous.phoneNumber != current.phoneNumber) {
+      return true;
+    }
+
+    return false;
   }
 }

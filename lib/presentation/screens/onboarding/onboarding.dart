@@ -1,4 +1,5 @@
 import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -115,13 +116,11 @@ class Onboarding extends HookWidget {
                         SizedBox(height: 30),
                         Text(
                           "Manage your\nPayment with",
-                          style: TextStyle(
+                          style: context.textTheme.displayMedium?.copyWith(
                             color: Colors.white,
                             fontSize: 35,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
                         Text(
                           "mobile banking ",
                           style: TextStyle(
@@ -129,9 +128,8 @@ class Onboarding extends HookWidget {
                             fontSize: 35,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        AppSpacing.verticalSpaceMedium,
                         Text(
-                          style: TextStyle(color: Colors.white54),
                           "A convenient way to manage your money\nsecurely from mobile devices.",
                         ),
                       ],
@@ -139,7 +137,7 @@ class Onboarding extends HookWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         SizedBox(height: 30),
                         Text(
                           "A loan for every\ndream with",
@@ -149,19 +147,16 @@ class Onboarding extends HookWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
                         Text(
-                          style: TextStyle(
+                          "mobile banking",
+                          style: context.textTheme.displayMedium?.copyWith(
                             color: AppColors.primaryColor,
                             fontSize: 35,
-                            fontWeight: FontWeight.bold,
                           ),
-                          "mobile banking",
                         ),
-                        SizedBox(height: 5),
+                        AppSpacing.verticalSpaceMedium,
                         Text(
                           "A loan facility that provides you financial\nassistance whenever you need",
-                          style: TextStyle(color: Colors.white54),
                         ),
                       ],
                     ),

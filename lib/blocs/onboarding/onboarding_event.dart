@@ -13,10 +13,8 @@ class OnBoardingEvent with _$OnBoardingEvent {
       _PasswordConfirmChanged;
   const factory OnBoardingEvent.fullNameChanged(String fullName) =
       _FullNameChanged;
-  const factory OnBoardingEvent.phoneNumberChanged(
-    String phoneCode,
-    String phoneNumber,
-  ) = _PhoneNumberChanged;
+  const factory OnBoardingEvent.phoneNumberChanged(String phoneNumber) =
+      _PhoneNumberChanged;
   const factory OnBoardingEvent.referrerChanged(String referrer) =
       _ReferrerChanged;
   const factory OnBoardingEvent.signUp() = _SignUp;

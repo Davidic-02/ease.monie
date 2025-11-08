@@ -3,10 +3,12 @@ import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
 import 'package:esae_monie/router/app_routes.dart';
 import 'package:esae_monie/services/theme_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toastification/toastification.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -23,19 +25,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<OnBoardingBloc>(create: (context) => OnBoardingBloc()),
+        BlocProvider<OnBoardingBloc>(
+          create: (context) => OnBoardingBloc(FirebaseAuth.instance),
+        ),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,
-        builder: (_, ThemeMode currentMode, __) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: currentMode,
-
-          title: 'Ease Monie',
-          initialRoute: SplashScreen.routeName,
-          routes: AppRoutes.routes,
+        builder: (_, ThemeMode currentMode, __) => ToastificationWrapper(
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: currentMode,
+            initialRoute: SplashScreen.routeName,
+            routes: AppRoutes.routes,
+          ),
         ),
       ),
     );

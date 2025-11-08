@@ -1,12 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// const myColor = Color(0xFF456EFE);
-// const myColor1 = Color(0xFF23303B);
-// const myColor2 = Color(0xFF4F5962);
-// const myColor3 = Color(0xFF23303B);
-// const myColor4 = Color(0xFF4F5962);
-// const apiKey = '0f7c36d61e2047f5a99fdf6569d563a5';
-
 import 'dart:ui';
 
 class AppColors {
@@ -25,8 +16,8 @@ class AppColors {
   static const yellowWarningColor = Color(0xFFfffc47);
   static const yellowWarningIconColor = Color(0xFFd0b700);
   static const goldColor = Color(0xFFBA9400);
-  static const primaryColor = Color(0xFF5149F7); // Deep blue
-  static const accentNeon = Color(0xFF00FFC6); // Neon Cyan
+  static const primaryColor = Color(0xFF5149F7);
+  static const accentNeon = Color(0xFF00FFC6);
   static const textColor = Color(0xFF1F1F1F);
   static const darkBg = Color(0xFF0A0F1A);
   static const darkSurface = Color(0xFF121826);

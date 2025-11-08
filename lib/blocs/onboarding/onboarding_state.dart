@@ -6,17 +6,14 @@ abstract class OnBoardingState with _$OnBoardingState {
 
   const factory OnBoardingState({
     @Default(FullNameFormz.pure()) FullNameFormz fullName,
-    @Default(UsernameFormz.pure()) UsernameFormz username,
     @Default(EmailFormz.pure()) EmailFormz email,
     @Default(PasswordFormz.pure()) PasswordFormz password,
     @Default(PasswordConfirmFormz.pure()) PasswordConfirmFormz passwordConfirm,
     String? phoneCode,
     String? phoneNumber,
-    String? referrer,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus signUpStatus,
     String? errorMessage,
     @Default(false) acceptTerms,
-    @Default(false) acceptMarketing,
 
     String? fcmToken,
 
@@ -24,13 +21,11 @@ abstract class OnBoardingState with _$OnBoardingState {
   }) = _OnBoardingState;
 
   bool get isSignUpFormValid =>
-      Formz.validate([fullName, username, email, password, passwordConfirm]) &&
+      Formz.validate([fullName, email, password, passwordConfirm]) &&
       phoneNumberValid;
 
   bool get phoneNumberValid =>
-      (phoneCode?.isNotEmpty ?? false) &&
-      (phoneNumber?.isNotEmpty ?? false) &&
-      phoneNumber!.length > 8;
+      (phoneNumber?.isNotEmpty ?? false) && phoneNumber!.length > 8;
 }
 
 //==============================================================================

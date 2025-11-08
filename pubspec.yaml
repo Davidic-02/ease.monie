@@ -50,6 +50,9 @@ dependencies:
   email_validator: ^3.0.0
   bloc: ^9.1.0
   google_fonts: ^6.3.2
+  firebase_auth: ^6.1.2
+  cloud_firestore: ^6.1.0
+  dio: ^5.9.0
 
 
 
