@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/presentation/screens/onboarding/sign_In.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/services/toast_services.dart';
@@ -9,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 class SignUpScreen extends HookWidget {
   const SignUpScreen({super.key});
@@ -207,6 +210,13 @@ class SignUpScreen extends HookWidget {
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        Login.routeName,
+                                      );
+                                    },
                                 ),
                               ],
                             ),
