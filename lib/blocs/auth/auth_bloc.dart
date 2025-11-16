@@ -6,13 +6,14 @@ import 'package:email_validator/email_validator.dart';
 import 'package:esae_monie/enums/validator_error.dart';
 import 'package:esae_monie/services/logging_helper.dart';
 import 'package:esae_monie/services/persistence_services.dart';
+import 'package:esae_monie/services/toast_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'auth_bloc.freezed.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
+part 'auth_bloc.freezed.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _auth;
@@ -20,13 +21,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._auth) : super(const AuthState()) {
     on<_EmailChanged>(_emailChanged);
     on<_PasswordChanged>(_passwordChanged);
-    on<_LoginSubmitted>(_loginSubmitted);
-    on<_ForgotPasswordRequested>(_onForgotPasswordRequested);
-    on<_ClearError>(_clearError);
+    on<_Login>(_login);
+    on<_ForgotPassword>(_onForgotPassword);
+    on<_ErrorMessage>(_errorMessage);
+    on<_LoginFailed>(_loginFailed);
+    on<_LoginSuccessful>(_loginSuccessful);
   }
 
-  void _clearError(_ClearError event, Emitter<AuthState> emit) {
-    emit(state.copyWith(errorMessage: null));
+  FutureOr<void> _errorMessage(_ErrorMessage event, Emitter<AuthState> emit) {
+    emit(state.copyWith(errorMessage: event.message));
   }
 
   void _emailChanged(_EmailChanged event, Emitter<AuthState> emit) {
@@ -50,20 +53,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onForgotPasswordRequested(
-    _ForgotPasswordRequested event,
+  Future<void> _onForgotPassword(
+    _ForgotPassword event,
     Emitter<AuthState> emit,
   ) async {
-    if (!state.email.isValid) return;
-
-    emit(state.copyWith(resetPasswordStatus: FormzSubmissionStatus.inProgress));
-
+    if (state.resetStatus == FormzSubmissionStatus.inProgress) return;
+    if (!state.email.isValid) {
+      emit(
+        state.copyWith(
+          email: EmailFormz.dirty(state.email.value),
+          errorMessage: 'Please fill in your mail correctly',
+        ),
+      );
+      return;
+    }
+    emit(state.copyWith(resetStatus: FormzSubmissionStatus.inProgress));
     try {
       await _auth.sendPasswordResetEmail(email: event.email);
       emit(
         state.copyWith(
-          isResetEmailSent: true,
-          resetPasswordStatus: FormzSubmissionStatus.success,
+          resetStatus: FormzSubmissionStatus.success,
           errorMessage: null,
         ),
       );
@@ -71,16 +80,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(
         state.copyWith(
           errorMessage: e.message,
-          resetPasswordStatus: FormzSubmissionStatus.failure,
-          isResetEmailSent: false,
+          resetStatus: FormzSubmissionStatus.failure,
         ),
       );
-    } finally {
-      emit(state.copyWith(resetPasswordStatus: FormzSubmissionStatus.initial));
     }
   }
 
-  void _loginSubmitted(_LoginSubmitted event, Emitter<AuthState> emit) async {
+  void _login(_Login event, Emitter<AuthState> emit) async {
     if (state.loginStatus == FormzSubmissionStatus.inProgress) return;
 
     if (!state.isLoginFormValid) {
@@ -125,5 +131,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ),
       );
     }
+  }
+
+  void _loginSuccessful(_LoginSuccessful event, Emitter<AuthState> emit) {
+    ToastService.toast('Login Successful');
+  }
+
+  void _loginFailed(_LoginFailed event, Emitter<AuthState> emit) {
+    ToastService.toast('${state.errorMessage}', ToastType.error);
+    emit(state.copyWith(errorMessage: null));
   }
 }

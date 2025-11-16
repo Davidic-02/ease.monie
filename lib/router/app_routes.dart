@@ -1,10 +1,10 @@
 //import 'package:esae_monie/presentation/screens/onboarding/forgot_password.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
-import 'package:esae_monie/presentation/screens/onboarding/sign_In.dart';
+import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:esae_monie/presentation/screens/forgot_password.dart';
+import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
 
 class AppRoutes {
   static Map<String, Widget Function(BuildContext)> get routes => {

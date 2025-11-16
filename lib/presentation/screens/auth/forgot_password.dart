@@ -19,16 +19,9 @@ class ForgotPasswordScreen extends HookWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF23303B),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state.isResetEmailSent) {
-            ToastService.toast('Password reset email sent successfully!');
-          }
-
-          if (state.errorMessage != null) {
-            ToastService.toast(state.errorMessage!, ToastType.error);
-            context.read<AuthBloc>().add(AuthEvent.clearError(null));
-          }
+      body: BlocBuilder<AuthBloc, AuthState>(
+        buildWhen: (previous, current) {
+          return _buildWhen(context, previous, current);
         },
         builder: (context, state) {
           return Stack(
@@ -66,15 +59,11 @@ class ForgotPasswordScreen extends HookWidget {
                     Button(
                       'Send Reset Email',
                       busy:
-                          state.resetPasswordStatus ==
-                          FormzSubmissionStatus.inProgress,
+                          state.resetStatus == FormzSubmissionStatus.inProgress,
                       onPressed: state.email.isValid
                           ? () {
-                              //  final email = emailController.text.trim();
                               context.read<AuthBloc>().add(
-                                AuthEvent.forgotPasswordRequested(
-                                  state.email.value,
-                                ),
+                                AuthEvent.forgotPassword(state.email.value),
                               );
                             }
                           : null,
@@ -92,5 +81,33 @@ class ForgotPasswordScreen extends HookWidget {
         },
       ),
     );
+  }
+
+  bool _buildWhen(BuildContext context, AuthState previous, AuthState current) {
+    if (previous.resetStatus != current.resetStatus &&
+        current.resetStatus.isSuccess) {
+      ToastService.toast('Password reset email sent!');
+      final navigator = Navigator.of(context);
+      Future.delayed(const Duration(seconds: 2), () {
+        navigator.pop();
+      });
+      return true;
+    }
+
+    if (previous.errorMessage != current.errorMessage &&
+        current.errorMessage != null) {
+      ToastService.toast('${current.errorMessage}', ToastType.error);
+      context.read<AuthBloc>().add(const AuthEvent.errorMessage(null));
+      return true;
+    }
+    if (previous.resetStatus != current.resetStatus) {
+      return true;
+    }
+
+    if (previous.email != current.email) {
+      return true;
+    }
+
+    return false;
   }
 }

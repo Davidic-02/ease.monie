@@ -12,7 +12,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
-import 'package:esae_monie/presentation/screens/forgot_password.dart';
+import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
 
 class Login extends HookWidget {
   const Login({super.key});
@@ -104,7 +104,7 @@ class Login extends HookWidget {
                           'Login',
                           onPressed: () {
                             context.read<AuthBloc>().add(
-                              const AuthEvent.loginSubmitted(),
+                              const AuthEvent.login(),
                             );
                           },
                           busy:
@@ -121,10 +121,7 @@ class Login extends HookWidget {
                                   text: "Forgot user / ",
                                   style: const TextStyle(color: Colors.white),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      // If you want a Forgot Username page later
-                                      print('Forgot user tapped');
-                                    },
+                                    ..onTap = () {},
                                 ),
                                 TextSpan(
                                   text: "Forgot Password?",
@@ -146,12 +143,9 @@ class Login extends HookWidget {
                           ),
                         ),
 
-                        AppSpacing.verticalSpaceMassive,
-                        AppSpacing.verticalSpaceMassive,
-                        AppSpacing.verticalSpaceMassive,
-                        AppSpacing.verticalSpaceMassive,
-                        AppSpacing.verticalSpaceMassive,
-                        AppSpacing.verticalSpaceMassive,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * .3,
+                        ),
                         Center(
                           child: RichText(
                             text: TextSpan(
@@ -201,14 +195,13 @@ class Login extends HookWidget {
   ) {
     if (previous.loginStatus != current.loginStatus &&
         current.loginStatus.isSuccess) {
-      ToastService.toast('Login In Successful');
+      context.read<AuthBloc>().add(const AuthEvent.loginsuccessful());
       return true;
     }
 
     if (previous.errorMessage != current.errorMessage &&
         current.errorMessage != null) {
-      ToastService.toast('${current.errorMessage}', ToastType.error);
-      context.read<AuthBloc>().add(AuthEvent.clearError(null));
+      context.read<AuthBloc>().add(const AuthEvent.loginFailed());
       return true;
     }
     if (previous.loginStatus != current.loginStatus) {

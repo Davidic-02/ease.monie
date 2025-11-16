@@ -8,10 +8,8 @@ abstract class AuthState with _$AuthState {
     @Default(EmailFormz.pure()) EmailFormz email,
     @Default(PasswordFormz.pure()) PasswordFormz password,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus loginStatus,
-    @Default(FormzSubmissionStatus.initial)
-    FormzSubmissionStatus resetPasswordStatus,
+    @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus resetStatus,
     String? errorMessage,
-    @Default(false) bool isResetEmailSent,
   }) = _AuthState;
 
   bool get isLoginFormValid => email.isValid && password.isValid;
