@@ -16,11 +16,8 @@ class Onboarding extends HookWidget {
     final controller = useAnimationController(
       duration: const Duration(seconds: 3),
     )..repeat(reverse: true);
-
-    // Page controller for PageView
     final pageController = usePageController();
 
-    // animations
     final img1Offset =
         Tween<Offset>(
           begin: Offset.zero,
@@ -164,8 +161,6 @@ class Onboarding extends HookWidget {
                 ),
               ),
             ),
-
-            // 👇 SmoothPageIndicator + Button row
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Row(
@@ -185,9 +180,7 @@ class Onboarding extends HookWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          12,
-                        ), // 👈 rounded corners
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       backgroundColor: const Color(0xFF4F5962),
                     ),
