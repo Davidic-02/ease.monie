@@ -7,8 +7,11 @@ abstract class AuthState with _$AuthState {
   const factory AuthState({
     @Default(EmailFormz.pure()) EmailFormz email,
     @Default(PasswordFormz.pure()) PasswordFormz password,
+    @Default(ForgotPasswordFormz.pure())
+    ForgotPasswordFormz forgotPasswordEmail,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus loginStatus,
-    @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus resetStatus,
+    @Default(FormzSubmissionStatus.initial)
+    FormzSubmissionStatus forgotPasswordStatus,
     String? errorMessage,
   }) = _AuthState;
 
@@ -42,6 +45,26 @@ class EmailFormz extends FormzInput<String, ValidationError> {
 class PasswordFormz extends FormzInput<String, ValidationError> {
   const PasswordFormz.pure([super.value = '']) : super.pure();
   const PasswordFormz.dirty([super.value = '']) : super.dirty();
+
+  @override
+  ValidationError? validator(String? value) {
+    if (value == null || value.isEmpty) return ValidationError.empty;
+
+    if (value.length < 6) {
+      return ValidationError.short;
+    }
+
+    return null;
+  }
+}
+
+//==============================================================================
+// FORMZ -  ForgotPassword
+//==============================================================================
+
+class ForgotPasswordFormz extends FormzInput<String, ValidationError> {
+  const ForgotPasswordFormz.pure([super.value = '']) : super.pure();
+  const ForgotPasswordFormz.dirty([super.value = '']) : super.dirty();
 
   @override
   ValidationError? validator(String? value) {

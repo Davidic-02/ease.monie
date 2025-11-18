@@ -42,11 +42,12 @@ class ForgotPasswordScreen extends HookWidget {
                     AppSpacing.verticalSpaceSmall,
 
                     CustomTextFormField(
-                      //  controller: emailController,
                       onChanged: (value) => context.read<AuthBloc>().add(
-                        AuthEvent.emailChanged(value),
+                        AuthEvent.forgotPasswordEmailChanged(value),
                       ),
-                      errorText: !state.email.isPure && state.email.isNotValid
+                      errorText:
+                          !state.forgotPasswordEmail.isPure &&
+                              state.forgotPasswordEmail.isNotValid
                           ? "Please enter a valid email address"
                           : null,
                       focusNode: emailFocusNode,
@@ -59,11 +60,12 @@ class ForgotPasswordScreen extends HookWidget {
                     Button(
                       'Send Reset Email',
                       busy:
-                          state.resetStatus == FormzSubmissionStatus.inProgress,
+                          state.forgotPasswordStatus ==
+                          FormzSubmissionStatus.inProgress,
                       onPressed: state.email.isValid
                           ? () {
                               context.read<AuthBloc>().add(
-                                AuthEvent.forgotPassword(state.email.value),
+                                AuthEvent.forgotPassword(),
                               );
                             }
                           : null,
@@ -84,8 +86,8 @@ class ForgotPasswordScreen extends HookWidget {
   }
 
   bool _buildWhen(BuildContext context, AuthState previous, AuthState current) {
-    if (previous.resetStatus != current.resetStatus &&
-        current.resetStatus.isSuccess) {
+    if (previous.forgotPasswordStatus != current.forgotPasswordStatus &&
+        current.forgotPasswordStatus.isSuccess) {
       ToastService.toast('Password reset email sent!');
       final navigator = Navigator.of(context);
       Future.delayed(const Duration(seconds: 2), () {
@@ -100,7 +102,7 @@ class ForgotPasswordScreen extends HookWidget {
       context.read<AuthBloc>().add(const AuthEvent.errorMessage(null));
       return true;
     }
-    if (previous.resetStatus != current.resetStatus) {
+    if (previous.forgotPasswordStatus != current.forgotPasswordStatus) {
       return true;
     }
 

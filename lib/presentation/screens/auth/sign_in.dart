@@ -7,7 +7,6 @@ import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/services/toast_services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +16,7 @@ import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
 class Login extends HookWidget {
   const Login({super.key});
 
-  static const String routeName = 'Login';
+  static const String routeName = 'login';
   @override
   Widget build(BuildContext context) {
     final emailFocusNode = useFocusNode();
@@ -56,8 +55,6 @@ class Login extends HookWidget {
                           ),
                         ),
                         AppSpacing.verticalSpaceSmall,
-
-                        // EMAIL FIELD
                         CustomTextFormField(
                           focusNode: emailFocusNode,
                           hintText: 'Email',
@@ -75,10 +72,9 @@ class Login extends HookWidget {
 
                         AppSpacing.verticalSpaceSmall,
 
-                        // PASSWORD FIELD
                         CustomTextFormField(
                           focusNode: passwordFocusNode,
-                          textInputAction: TextInputAction.done,
+                          textInputAction: TextInputAction.send,
                           hintText: 'Password',
                           keyboardType: TextInputType.text,
                           fillColor: AppColors.whiteColor,
@@ -92,6 +88,9 @@ class Login extends HookWidget {
                           onSuffixIconPressed: () {
                             obscurePassword.value = !obscurePassword.value;
                           },
+                          onFieldSubmitted: (_) => context.read<AuthBloc>().add(
+                            const AuthEvent.login(),
+                          ),
                           onChanged: (value) => context.read<AuthBloc>().add(
                             AuthEvent.passwordChanged(value),
                           ),
@@ -99,50 +98,32 @@ class Login extends HookWidget {
 
                         AppSpacing.verticalSpaceLarge,
 
-                        // LOGIN BUTTON
                         Button(
                           'Login',
-                          onPressed: () {
-                            context.read<AuthBloc>().add(
-                              const AuthEvent.login(),
-                            );
-                          },
+                          onPressed: () => context.read<AuthBloc>().add(
+                            const AuthEvent.login(),
+                          ),
+
                           busy:
                               state.loginStatus ==
                               FormzSubmissionStatus.inProgress,
                         ),
                         AppSpacing.verticalSpaceHuge,
-
                         Center(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Forgot user / ",
-                                  style: const TextStyle(color: Colors.white),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {},
-                                ),
-                                TextSpan(
-                                  text: "Forgot Password?",
-                                  style: const TextStyle(
-                                    color: AppColors.primaryColor,
-                                    decoration: TextDecoration.underline,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        ForgotPasswordScreen.routeName,
-                                      );
-                                    },
-                                ),
-                              ],
+                          child: GestureDetector(
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              ForgotPasswordScreen.routeName,
+                            ),
+                            child: Text(
+                              "Forgot Password?",
+                              style: const TextStyle(
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-
                         SizedBox(
                           height: MediaQuery.of(context).size.height * .3,
                         ),
@@ -150,7 +131,7 @@ class Login extends HookWidget {
                           child: RichText(
                             text: TextSpan(
                               children: [
-                                const TextSpan(text: "Don’t have an account? "),
+                                const TextSpan(text: "Don't have an account? "),
                                 TextSpan(
                                   text: "Sign Up",
                                   style: const TextStyle(
@@ -195,13 +176,16 @@ class Login extends HookWidget {
   ) {
     if (previous.loginStatus != current.loginStatus &&
         current.loginStatus.isSuccess) {
-      context.read<AuthBloc>().add(const AuthEvent.loginsuccessful());
+      ToastService.toast('Welcome!');
       return true;
     }
 
     if (previous.errorMessage != current.errorMessage &&
         current.errorMessage != null) {
-      context.read<AuthBloc>().add(const AuthEvent.loginFailed());
+      ToastService.toast(
+        current.errorMessage ?? 'Something went wrong',
+        ToastType.error,
+      );
       return true;
     }
     if (previous.loginStatus != current.loginStatus) {
