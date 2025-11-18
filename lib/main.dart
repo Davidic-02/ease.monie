@@ -1,3 +1,4 @@
+import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<OnBoardingBloc>(
           create: (context) => OnBoardingBloc(FirebaseAuth.instance),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(FirebaseAuth.instance),
         ),
       ],
       child: ValueListenableBuilder<ThemeMode>(
