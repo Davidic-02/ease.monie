@@ -1,3 +1,4 @@
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/services/toast_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,9 @@ class ForgotPasswordScreen extends HookWidget {
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       fillColor: AppColors.whiteColor,
+                      onFieldSubmitted: (_) => context.read<AuthBloc>().add(
+                        AuthEvent.forgotPassword(),
+                      ),
                     ),
                     AppSpacing.verticalSpaceMedium,
                     Button(
@@ -62,13 +66,11 @@ class ForgotPasswordScreen extends HookWidget {
                       busy:
                           state.forgotPasswordStatus ==
                           FormzSubmissionStatus.inProgress,
-                      onPressed: state.email.isValid
-                          ? () {
-                              context.read<AuthBloc>().add(
-                                AuthEvent.forgotPassword(),
-                              );
-                            }
-                          : null,
+                      onPressed: () {
+                        context.read<AuthBloc>().add(
+                          AuthEvent.forgotPassword(),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -88,11 +90,11 @@ class ForgotPasswordScreen extends HookWidget {
   bool _buildWhen(BuildContext context, AuthState previous, AuthState current) {
     if (previous.forgotPasswordStatus != current.forgotPasswordStatus &&
         current.forgotPasswordStatus.isSuccess) {
-      ToastService.toast('Password reset email sent!');
-      final navigator = Navigator.of(context);
-      Future.delayed(const Duration(seconds: 2), () {
-        navigator.pop();
-      });
+      ToastService.toast(
+        'If an account exists with this mail, a password reset link has been sent.',
+        ToastType.success,
+      );
+      context.navigator.pop();
       return true;
     }
 
