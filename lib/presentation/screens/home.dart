@@ -1,6 +1,7 @@
-import 'package:esae_monie/blocs/user/user_bloc.dart';
+import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontalscroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
@@ -9,6 +10,8 @@ import 'package:esae_monie/presentation/widgets/custom_verticalscrolls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:formz/formz.dart';
 
 class Home extends HookWidget {
   static const String routeName = 'Home';
@@ -22,128 +25,101 @@ class Home extends HookWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height * .2),
                 CustomTopbar(
                   leading: const CircleAvatar(
                     radius: 20,
-                    backgroundImage: AssetImage('assets/profilepic.png'),
+                    backgroundImage: AssetImage('assets/images/profilepic.png'),
                   ),
-                  title: 'FIntech',
+                  title: 'Fintech',
                 ),
                 AppSpacing.verticalSpaceMedium,
                 SizedBox(
-                  height: 220,
+                  height: 228,
                   child: PageView.builder(
                     controller: pageController,
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          clipBehavior: Clip.hardEdge,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: index == 0
+                                  ? EdgeInsets.only(right: 10.0)
+                                  : EdgeInsets.only(left: 10.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/home_card.svg',
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
                             ),
-                            child: Stack(
-                              children: [
-                                Image.asset(
-                                  'assets/fourth.png',
-                                  width: 340,
-                                  height: 215,
-                                  fit: BoxFit.cover,
-                                ),
+                            if (index == 0)
+                              Positioned(
+                                left: 16,
+                                top: 16,
+                                child: BlocBuilder<AuthBloc, AuthState>(
+                                  builder: (context, state) {
+                                    if (state.loginStatus.isInProgress) {
+                                      return const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      );
+                                    }
 
-                                if (index == 0)
-                                  Positioned(
-                                    left: 16,
-                                    top: 16,
-                                    child: BlocBuilder<UserBloc, UserState>(
-                                      builder: (context, state) {
-                                        if (state.isLoading) {
-                                          return const CircularProgressIndicator(
-                                            color: Colors.white,
-                                          );
-                                        }
+                                    if (state.user == null) {
+                                      return const Text(
+                                        "Loading user...",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
 
-                                        if (state.user == null) {
-                                          return const Text(
-                                            "Loading user...",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          );
-                                        }
-
-                                        final user = state.user!;
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              'Card Holder',
-                                              style: TextStyle(
-                                                color: AppColors.lighterWhite,
-                                                fontSize: 12,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 4,
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            AppSpacing.verticalSpaceSmall,
-                                            Text(
-                                              user.name,
-                                              style: const TextStyle(
-                                                color: AppColors.lighterWhite,
+                                    final user = state.user!;
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text('Card Holder'),
+                                        AppSpacing.verticalSpaceSmall,
+                                        Text(
+                                          user.displayName ?? 'User',
+                                          style: context.textTheme.bodyLarge
+                                              ?.copyWith(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 4,
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
                                               ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  )
-                                else
-                                  Positioned(
-                                    left: 16,
-                                    bottom: 16,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              )
+                            else
+                              Positioned(
+                                left: 16,
+                                bottom: 16,
 
-                                    child: Text(
-                                      "Savings Account",
-                                      style: TextStyle(
-                                        color: AppColors.lighterWhite,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        shadows: [
-                                          Shadow(
-                                            blurRadius: 4,
-                                            color: Colors.black,
-                                          ),
-                                        ],
+                                child: Text(
+                                  "Savings Account",
+                                  style: TextStyle(
+                                    color: AppColors.lighterWhite,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 4,
+                                        color: Colors.black,
                                       ),
-                                    ),
+                                    ],
                                   ),
-                              ],
-                            ),
-                          ),
+                                ),
+                              ),
+                          ],
                         ),
                       );
                     },
@@ -223,14 +199,12 @@ class Home extends HookWidget {
                   'Services',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-
                 AppSpacing.verticalSpaceMedium,
-
                 CustomHorizontalscroll(
                   itemCount: icons1.length,
                   itemBuilder: (index) {
                     final isSelected = selectedService.value == index;
-                    return Container(
+                    return SizedBox(
                       width: 80,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

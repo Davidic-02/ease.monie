@@ -22,11 +22,11 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    bodyLarge: GoogleFonts.manrope(color: AppColors.textColor),
-    bodyMedium: GoogleFonts.manrope(color: AppColors.textColor),
-    bodySmall: GoogleFonts.manrope(color: AppColors.greyColor),
-    displaySmall: GoogleFonts.manrope(color: AppColors.textColor),
-    headlineSmall: GoogleFonts.manrope(
+    bodyLarge: GoogleFonts.sofiaSans(color: AppColors.textColor),
+    bodyMedium: GoogleFonts.sofiaSans(color: AppColors.textColor),
+    bodySmall: GoogleFonts.sofiaSans(color: AppColors.greyColor),
+    displaySmall: GoogleFonts.sofiaSans(color: AppColors.textColor),
+    headlineSmall: GoogleFonts.sofiaSans(
       color: AppColors.textColor,
       fontWeight: FontWeight.bold,
     ),
@@ -77,14 +77,14 @@ final ThemeData darkTheme = ThemeData(
     ),
   ),
   textTheme: TextTheme(
-    bodyLarge: GoogleFonts.manrope(color: Colors.white),
-    bodyMedium: GoogleFonts.manrope(color: AppColors.whiteColor),
-    bodySmall: GoogleFonts.manrope(color: AppColors.whiteColor),
-    displaySmall: GoogleFonts.manrope(
+    bodyLarge: GoogleFonts.sofiaSans(color: Colors.white),
+    bodyMedium: GoogleFonts.sofiaSans(color: AppColors.whiteColor),
+    bodySmall: GoogleFonts.sofiaSans(color: AppColors.whiteColor),
+    displaySmall: GoogleFonts.sofiaSans(
       color: AppColors.accentNeon,
       fontSize: 18,
     ),
-    headlineSmall: GoogleFonts.manrope(
+    headlineSmall: GoogleFonts.sofiaSans(
       color: AppColors.whiteColor,
       fontWeight: FontWeight.bold,
     ),

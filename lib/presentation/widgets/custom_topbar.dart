@@ -1,3 +1,4 @@
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:flutter/material.dart';
 
 class CustomTopbar extends StatelessWidget {
@@ -39,7 +40,11 @@ class CustomTopbar extends StatelessWidget {
           leading,
           Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            // style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: context.textTheme.bodyLarge?.copyWith(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
           GestureDetector(
