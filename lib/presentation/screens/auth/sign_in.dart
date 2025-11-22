@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
+import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/services/toast_services.dart';
@@ -100,9 +101,15 @@ class Login extends HookWidget {
 
                         Button(
                           'Login',
-                          onPressed: () => context.read<AuthBloc>().add(
-                            const AuthEvent.login(),
-                          ),
+                          onPressed: () {
+                            context.read<AuthBloc>().add(
+                              const AuthEvent.login(),
+                            );
+                            Navigator.pushReplacementNamed(
+                              context,
+                              MainScreen.routeName,
+                            );
+                          },
 
                           busy:
                               state.loginStatus ==

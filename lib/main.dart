@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
+import 'package:esae_monie/blocs/user/user_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
 import 'package:esae_monie/router/app_routes.dart';
@@ -31,6 +33,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(FirebaseAuth.instance),
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) =>
+              UserBloc(FirebaseFirestore.instance)..add(UserEvent.loadUser()),
         ),
       ],
       child: ValueListenableBuilder<ThemeMode>(

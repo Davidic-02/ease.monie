@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppColors {
   static const secondaryColor = Color(0xFF004186);
   static const greenColor = Color(0xFF34C759);
@@ -23,4 +25,5 @@ class AppColors {
   static const darkSurface = Color(0xFF121826);
   static const lightBg = Color(0xFFF9FAFB);
   static const mutedText = Color(0xFFB0B3B8);
+  static const lighterWhite = Colors.white70;
 }
