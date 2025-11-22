@@ -115,6 +115,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       state.copyWith(
         loginStatus: FormzSubmissionStatus.success,
         errorMessage: null,
+        user: _auth.currentUser,
+        userEmail: _auth.currentUser?.email,
       ),
     );
   }

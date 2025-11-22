@@ -16,19 +16,20 @@ final labels1 = ["Recharge", "Charity", "Loan", "Gift", "Insurance"];
 
 final List<ScheduledPayment> scheduledPayments = [
   ScheduledPayment(
-    image: 'assets/netflix.png',
+    // image: 'assets/netflix.png',
+    image: 'assets/images/netflix.png',
     name: 'Netflix',
     amount: '\$15.99',
     dueDate: 'Due in 3 days',
   ),
   ScheduledPayment(
-    image: 'assets/paypal.png',
+    image: 'assets/images/paypal.png',
     name: 'PayPal',
     amount: '\$25.00',
     dueDate: 'Due tomorrow',
   ),
   ScheduledPayment(
-    image: 'assets/spotify.png',
+    image: 'assets/images/spotify.png',
     name: 'Spotify',
     amount: '\$9.99',
     dueDate: 'Due in 1 week',

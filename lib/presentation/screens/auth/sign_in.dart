@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
 import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
@@ -105,10 +106,6 @@ class Login extends HookWidget {
                             context.read<AuthBloc>().add(
                               const AuthEvent.login(),
                             );
-                            Navigator.pushReplacementNamed(
-                              context,
-                              MainScreen.routeName,
-                            );
                           },
 
                           busy:
@@ -184,6 +181,16 @@ class Login extends HookWidget {
     if (previous.loginStatus != current.loginStatus &&
         current.loginStatus.isSuccess) {
       ToastService.toast('Welcome!');
+
+      // Navigator.pushReplacementNamed(
+      //                         context,
+      //                         MainScreen.routeName,
+      //                       );
+
+      context.navigator.pushNamedAndRemoveUntil(
+        MainScreen.routeName,
+        (route) => false,
+      );
       return true;
     }
 

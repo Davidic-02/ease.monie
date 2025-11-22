@@ -14,19 +14,35 @@ class CustomHorizontalScrollbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(itemCount, (index) {
-          return Padding(
-            padding: EdgeInsets.only(right: index == itemCount - 1 ? 0 : 10),
-            child: InkWell(
-              onTap: onTap != null ? () => onTap!(index) : null,
-              borderRadius: BorderRadius.circular(12),
-              child: itemBuilder(index),
-            ),
-          );
-        }),
+    final ScrollController scrollController = ScrollController();
+
+    return RawScrollbar(
+      scrollbarOrientation: ScrollbarOrientation.bottom,
+      thumbVisibility: true,
+      thickness: 6.0,
+      radius: const Radius.circular(3.0),
+      controller: scrollController,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: SingleChildScrollView(
+          controller: scrollController,
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(itemCount, (index) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  right: index == itemCount - 1 ? 0 : 10,
+                ),
+                child: InkWell(
+                  onTap: onTap != null ? () => onTap!(index) : null,
+                  borderRadius: BorderRadius.circular(12),
+                  child: itemBuilder(index),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
     );
   }

@@ -5,6 +5,8 @@ abstract class AuthState with _$AuthState {
   const AuthState._();
 
   const factory AuthState({
+    User? user,
+    String? userEmail,
     @Default(EmailFormz.pure()) EmailFormz email,
     @Default(PasswordFormz.pure()) PasswordFormz password,
     @Default(ForgotPasswordFormz.pure())
