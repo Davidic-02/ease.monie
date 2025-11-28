@@ -1,4 +1,5 @@
 //import 'package:esae_monie/presentation/screens/onboarding/forgot_password.dart';
+import 'package:esae_monie/presentation/screens/cards.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
@@ -15,5 +16,6 @@ class AppRoutes {
     ForgotPasswordScreen.routeName: (context) => const ForgotPasswordScreen(),
     Login.routeName: (context) => const Login(),
     MainScreen.routeName: (_) => const MainScreen(),
+    Cards.routeName: (context) => Cards(),
   };
 }

@@ -20,7 +20,6 @@ final labels1 = ["Recharge", "Charity", "Loan", "Gift", "Insurance"];
 
 final List<ScheduledPayment> scheduledPayments = [
   ScheduledPayment(
-    // image: 'assets/netflix.png',
     image: 'assets/images/netflix.png',
     name: 'Netflix',
     amount: '\$15.99',

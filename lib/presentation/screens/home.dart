@@ -3,6 +3,7 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/cards.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scrollbar.dart';
@@ -15,6 +16,8 @@ import 'package:formz/formz.dart';
 
 class Home extends HookWidget {
   static const String routeName = 'Home';
+
+  const Home({super.key});
   @override
   Widget build(BuildContext context) {
     final pageController = usePageController();
@@ -40,10 +43,17 @@ class Home extends HookWidget {
                 SizedBox(
                   height: 228,
                   child: PageView.builder(
+                    onPageChanged: (value) {
+                      currentPage.value = value;
+                    },
                     controller: pageController,
+
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, Cards.routeName);
+                        },
                         child: Stack(
                           children: [
                             Padding(
@@ -103,19 +113,11 @@ class Home extends HookWidget {
                               Positioned(
                                 left: 16,
                                 bottom: 16,
-
                                 child: Text(
                                   "Savings Account",
-                                  style: TextStyle(
-                                    color: AppColors.lighterWhite,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 4,
-                                        color: Colors.black,
-                                      ),
-                                    ],
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -129,14 +131,14 @@ class Home extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(2, (index) {
-                    return Container(
+                    final isSelected = currentPage.value == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: currentPage.value == index ? 24 : 8,
-                      height: 5,
+                      width: isSelected ? 24 : 8,
+                      height: 6,
                       decoration: BoxDecoration(
-                        color: currentPage.value == index
-                            ? Colors.blue
-                            : AppColors.greyColor,
+                        color: isSelected ? Colors.blue : Colors.grey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     );
@@ -151,13 +153,16 @@ class Home extends HookWidget {
                 CustomHorizontalScrollbar(
                   itemCount: 3,
                   itemBuilder: (index) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 3;
+
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: SizedBox(
-                        width: 120,
-                        height: 120,
+                        width: cardWidth,
+                        height: 200,
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -206,15 +211,17 @@ class Home extends HookWidget {
                 CustomHorizontalscroll(
                   itemCount: icons1.length,
                   itemBuilder: (index) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 4;
                     final isSelected = selectedService.value == index;
                     Color imageColor = isSelected ? Colors.white : Colors.blue;
                     return SizedBox(
-                      width: 80,
+                      // width: double.infinity,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            width: 56,
+                            width: cardWidth,
                             height: 56,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),

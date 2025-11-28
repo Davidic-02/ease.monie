@@ -182,11 +182,6 @@ class Login extends HookWidget {
         current.loginStatus.isSuccess) {
       ToastService.toast('Welcome!');
 
-      // Navigator.pushReplacementNamed(
-      //                         context,
-      //                         MainScreen.routeName,
-      //                       );
-
       context.navigator.pushNamedAndRemoveUntil(
         MainScreen.routeName,
         (route) => false,
