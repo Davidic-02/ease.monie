@@ -4,6 +4,7 @@ import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
+import 'package:esae_monie/services/logging_helper.dart';
 import 'package:esae_monie/services/toast_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,6 @@ class SignUpScreen extends HookWidget {
     final confirmPasswordFocusNode = useFocusNode();
     final obscurePassword = useState(false);
     final obscureConfirmPassword = useState(false);
-    final isChecked = useState(false);
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
@@ -160,11 +160,17 @@ class SignUpScreen extends HookWidget {
                         Row(
                           children: [
                             Checkbox(
-                              value: isChecked.value,
+                              value: state.acceptTerms,
                               activeColor: Colors.blue,
                               checkColor: Colors.white,
-                              onChanged: (bool? newValue) {
-                                isChecked.value = newValue ?? false;
+                              onChanged: (newValue) {
+                                context.read<OnBoardingBloc>().add(
+                                  OnBoardingEvent.acceptTermsChanged(
+                                    newValue ?? false,
+                                  ),
+                                );
+
+                                logInfo(state.acceptTerms);
                               },
                             ),
                             RichText(
@@ -257,9 +263,9 @@ class SignUpScreen extends HookWidget {
       return true;
     }
 
-    if (previous.signUpStatus != current.signUpStatus) {
-      return true;
-    }
+    if (previous.acceptTerms != current.acceptTerms) return true;
+
+    if (previous.signUpStatus != current.signUpStatus) return true;
 
     if (previous.email != current.email ||
         previous.fullName != current.fullName ||

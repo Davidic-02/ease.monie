@@ -20,6 +20,7 @@ class OnBoardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
     on<_EmailChanged>(_emailChanged);
     on<_FullNameChanged>(_fullNameChanged);
     on<_PasswordChanged>(_passwordChanged);
+    on<_AcceptTermsChanged>(_acceptTermsChanged);
     on<_PasswordConfirmChanged>(_passwordConfirmChanged);
     on<_PhoneNumberChanged>(_phoneNumberChanged);
     on<_SignUp>(_signUp);
@@ -90,6 +91,13 @@ class OnBoardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
     );
   }
 
+  void _acceptTermsChanged(
+    _AcceptTermsChanged event,
+    Emitter<OnBoardingState> emit,
+  ) {
+    emit(state.copyWith(acceptTerms: event.acceptTerms));
+  }
+
   void _signUp(_SignUp event, Emitter<OnBoardingState> emit) async {
     if (state.signUpStatus == FormzSubmissionStatus.inProgress) return;
 
@@ -103,6 +111,15 @@ class OnBoardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
             state.passwordConfirm.value,
           ),
           errorMessage: 'Please fill in all fields correctly.',
+        ),
+      );
+      return;
+    }
+
+    if (state.acceptTerms == false) {
+      emit(
+        state.copyWith(
+          errorMessage: 'You must accept the terms and conditions to proceed.',
         ),
       );
       return;
