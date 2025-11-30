@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
+import 'package:esae_monie/presentation/widgets/card_actions.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/price_action_card.dart';
@@ -132,7 +133,7 @@ class Cards extends HookWidget {
                     child: PriceActionCard(
                       label: 'Credit Limit',
                       label2: '271.00',
-                      color: Colors.green,
+                      color: AppColors.greenColor,
                       onTap: () {},
                     ),
                   ),
@@ -156,7 +157,7 @@ class Cards extends HookWidget {
               BuildActionButton(
                 image: 'assets/svgs/changePin.svg',
                 label: 'Change Pin',
-                color: Colors.blue,
+                color: AppColors.blueColor,
                 onTap: () {},
                 useToggle: false,
               ),
@@ -174,11 +175,7 @@ class Cards extends HookWidget {
                 useToggle: true,
               ),
               AppSpacing.verticalSpaceMassive,
-              Button(
-                'Save',
-                onPressed: () {},
-                color: const Color.fromARGB(255, 7, 115, 203),
-              ),
+              Button('Save', onPressed: () {}, color: Colors.blueAccent),
             ],
           ),
         ),
@@ -187,61 +184,61 @@ class Cards extends HookWidget {
   }
 }
 
-class BuildActionButton extends HookWidget {
-  final String image;
+class ActionContainer extends StatelessWidget {
   final String label;
-  final Color? color;
-  final VoidCallback? onTap;
-  final bool useToggle;
-
-  const BuildActionButton({
+  final String label2;
+  final Color color;
+  final VoidCallback onTap;
+  const ActionContainer({
     super.key,
-    required this.image,
     required this.label,
-    this.color,
-    this.onTap,
-    required this.useToggle,
+    required this.label2,
+    required this.color,
+    required this.onTap,
   });
-
   @override
   Widget build(BuildContext context) {
-    final isToggled = useState(false);
     return GestureDetector(
-      onTap: useToggle ? null : onTap,
+      onTap: onTap,
       child: Container(
-        width: double.infinity,
-        height: 60,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          color: context.theme.cardColor,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset(image),
-            AppSpacing.horizontalSpaceHuge,
             Text(
               label,
-              //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),\
-              style: context.textTheme.bodyMedium?.copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            Spacer(),
-            useToggle
-                ? Switch(
-                    value: isToggled.value,
-                    onChanged: (value) {
-                      isToggled.value = value;
-                    },
-                    activeColor: Colors.white,
-                    activeTrackColor: Colors.blue,
-                    inactiveThumbColor: Colors.grey,
-                    inactiveTrackColor: Colors.white54,
-                  )
-                : Icon(Icons.arrow_forward_ios, color: color, size: 20),
+            AppSpacing.verticalSpaceSmall,
+            Row(
+              children: [
+                Text(
+                  label2,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: color,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'USD',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: color,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

@@ -8,6 +8,7 @@ import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scrollbar.dart';
 import 'package:esae_monie/presentation/widgets/custom_vertical_scrolls.dart';
+import 'package:esae_monie/services/toast_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -79,14 +80,7 @@ class Home extends HookWidget {
                                     }
 
                                     if (state.user == null) {
-                                      return const Text(
-                                        "Loading user...",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      );
+                                      return const CircularProgressIndicator.adaptive();
                                     }
 
                                     final user = state.user!;
@@ -97,6 +91,7 @@ class Home extends HookWidget {
                                         const Text('Card Holder'),
                                         AppSpacing.verticalSpaceSmall,
                                         Text(
+                                          // show persisted user name if available
                                           user.displayName ?? 'User',
                                           style: context.textTheme.bodyLarge
                                               ?.copyWith(
@@ -153,52 +148,54 @@ class Home extends HookWidget {
                 CustomHorizontalScrollbar(
                   itemCount: 3,
                   itemBuilder: (index) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 3;
-
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 180,
+                      margin: const EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: context.theme.cardColor,
                       ),
-                      child: SizedBox(
-                        width: cardWidth,
-                        height: 200,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: 80,
-                                  height: 80,
-
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      icons[index],
-                                      fit: BoxFit.none,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: colors[index],
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                icons[index],
+                                width: 22,
+                                height: 22,
                               ),
-                              Text(
-                                labels[index],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          AppSpacing.verticalSpaceMedium,
+                          Expanded(
+                            flex: 9,
+                            child: Text(
+                              labels[index],
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
                   onTap: (index) {
                     debugPrint("Tapped on ${labels[index]}");
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("You tapped ${labels[index]}")),
+                    ToastService.toast("You tapped ${labels[index]}");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => quickActionScreens[index],
+                      ),
                     );
                   },
                 ),
@@ -214,9 +211,10 @@ class Home extends HookWidget {
                     final screenWidth = MediaQuery.of(context).size.width;
                     final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 4;
                     final isSelected = selectedService.value == index;
-                    Color imageColor = isSelected ? Colors.white : Colors.blue;
+                    Color imageColor = isSelected
+                        ? Colors.white
+                        : AppColors.blueColor;
                     return SizedBox(
-                      // width: double.infinity,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -226,8 +224,8 @@ class Home extends HookWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               color: isSelected
-                                  ? Colors.blue
-                                  : Colors.grey.shade200,
+                                  ? AppColors.blueColor
+                                  : AppColors.greyShade,
                             ),
                             child: Center(
                               child: SvgPicture.asset(
@@ -257,7 +255,6 @@ class Home extends HookWidget {
                 ),
 
                 AppSpacing.verticalSpaceMassive,
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
