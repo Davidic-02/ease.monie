@@ -31,6 +31,7 @@ final ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
+  cardColor: AppColors.whiteColor,
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
     fillColor: AppColors.primaryColor.withValues(alpha: .04),
@@ -76,6 +77,7 @@ final ThemeData darkTheme = ThemeData(
       color: Colors.white,
     ),
   ),
+  cardColor: AppColors.darkSurface,
   textTheme: TextTheme(
     bodyLarge: GoogleFonts.sofiaSans(color: Colors.white),
     bodyMedium: GoogleFonts.sofiaSans(color: AppColors.whiteColor),

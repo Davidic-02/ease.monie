@@ -4,6 +4,7 @@ import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
+import 'package:esae_monie/presentation/widgets/price_action_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,6 +13,8 @@ import 'package:formz/formz.dart';
 
 class Cards extends HookWidget {
   static const String routeName = 'Cards';
+
+  const Cards({super.key});
   @override
   Widget build(BuildContext context) {
     final pageController = usePageController();
@@ -63,18 +66,9 @@ class Cards extends HookWidget {
                                       color: Colors.white,
                                     );
                                   }
-
                                   if (state.user == null) {
-                                    return const Text(
-                                      "Loading user...",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    );
+                                    return CircularProgressIndicator.adaptive();
                                   }
-
                                   final user = state.user!;
                                   return Column(
                                     crossAxisAlignment:
@@ -135,7 +129,7 @@ class Cards extends HookWidget {
               Row(
                 children: [
                   Expanded(
-                    child: ActionContainer(
+                    child: PriceActionCard(
                       label: 'Credit Limit',
                       label2: '271.00',
                       color: Colors.green,
@@ -144,7 +138,7 @@ class Cards extends HookWidget {
                   ),
                   AppSpacing.horizontalSpaceMedium,
                   Expanded(
-                    child: ActionContainer(
+                    child: PriceActionCard(
                       label: 'Card Status',
                       label2: 'Active',
                       color: AppColors.redColor,
@@ -193,68 +187,6 @@ class Cards extends HookWidget {
   }
 }
 
-class ActionContainer extends StatelessWidget {
-  final String label;
-  final String label2;
-  final Color color;
-  final VoidCallback onTap;
-  const ActionContainer({
-    super.key,
-    required this.label,
-    required this.label2,
-    required this.color,
-    required this.onTap,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: color,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            AppSpacing.verticalSpaceSmall,
-            Row(
-              children: [
-                Text(
-                  label2,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'USD',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class BuildActionButton extends HookWidget {
   final String image;
   final String label;
@@ -281,7 +213,7 @@ class BuildActionButton extends HookWidget {
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.grey.shade100,
+          color: context.theme.cardColor,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -291,7 +223,11 @@ class BuildActionButton extends HookWidget {
             AppSpacing.horizontalSpaceHuge,
             Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),\
+              style: context.textTheme.bodyMedium?.copyWith(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             Spacer(),
             useToggle
