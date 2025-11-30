@@ -8,7 +8,6 @@ import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:formz/formz.dart';
 
 class PayBill extends HookWidget {
@@ -48,7 +47,7 @@ class PayBill extends HookWidget {
                     AppSpacing.verticalSpaceMedium,
                     BillOption(
                       selected: state.selectedBill == 'Internet',
-                      image: 'assets/svgs/internetbill.svg',
+                      image: 'assets/svgs/internet_bill.svg',
                       label: 'Internet Bill',
                       onTap: () {
                         context.read<PayBillBloc>().add(
@@ -60,7 +59,7 @@ class PayBill extends HookWidget {
 
                     BillOption(
                       selected: state.selectedBill == 'Electricity',
-                      image: 'assets/svgs/eletricity.svg',
+                      image: 'assets/svgs/electricity.svg',
                       label: 'Electricity Bill',
                       onTap: () {
                         context.read<PayBillBloc>().add(
@@ -72,7 +71,7 @@ class PayBill extends HookWidget {
 
                     BillOption(
                       selected: state.selectedBill == 'Water',
-                      image: 'assets/svgs/waterbill.svg',
+                      image: 'assets/svgs/water_bill.svg',
                       label: 'Water Bill',
                       onTap: () {
                         context.read<PayBillBloc>().add(

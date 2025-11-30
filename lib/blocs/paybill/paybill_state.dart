@@ -23,8 +23,7 @@ abstract class PayBillState with _$PayBillState {
     @Default(BillTypeFormz.pure()) BillTypeFormz billType,
     // Form submission status
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
-   @Default(null) String? errorMessage,
-
+    @Default(null) String? errorMessage,
   }) = _PayBillState;
 
   bool get isInternetFormValid =>

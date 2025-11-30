@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final colors = [Colors.blue[200], Colors.green[200], Colors.orange[200]];
 final icons = [
-  'assets/svgs/moneyTransfer.svg',
+  'assets/svgs/money_transfer.svg',
   'assets/svgs/paybill.svg',
-  'assets/svgs/bankTobank.svg',
+  'assets/svgs/bank_to_bank.svg',
 ];
 final labels = ["Money Transfer", "Pay Bill", "Bank to Bank"];
 

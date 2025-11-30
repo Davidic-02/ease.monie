@@ -66,7 +66,7 @@ class MainScreen extends HookWidget {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              'assets/svgs/upwardStat.svg',
+              'assets/svgs/upward_Stat.svg',
               width: 24,
               height: 24,
               colorFilter: ColorFilter.mode(
