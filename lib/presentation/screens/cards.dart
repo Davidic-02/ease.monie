@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
+import 'package:esae_monie/presentation/widgets/card_actions.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ import 'package:formz/formz.dart';
 
 class Cards extends HookWidget {
   static const String routeName = 'Cards';
+
+  const Cards({super.key});
   @override
   Widget build(BuildContext context) {
     final pageController = usePageController();
@@ -138,7 +141,7 @@ class Cards extends HookWidget {
                     child: ActionContainer(
                       label: 'Credit Limit',
                       label2: '271.00',
-                      color: Colors.green,
+                      color: AppColors.greenColor,
                       onTap: () {},
                     ),
                   ),
@@ -162,7 +165,7 @@ class Cards extends HookWidget {
               BuildActionButton(
                 image: 'assets/svgs/changePin.svg',
                 label: 'Change Pin',
-                color: Colors.blue,
+                color: AppColors.blueColor,
                 onTap: () {},
                 useToggle: false,
               ),
@@ -180,11 +183,7 @@ class Cards extends HookWidget {
                 useToggle: true,
               ),
               AppSpacing.verticalSpaceMassive,
-              Button(
-                'Save',
-                onPressed: () {},
-                color: const Color.fromARGB(255, 7, 115, 203),
-              ),
+              Button('Save', onPressed: () {}, color: Colors.blueAccent),
             ],
           ),
         ),
@@ -248,64 +247,6 @@ class ActionContainer extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BuildActionButton extends HookWidget {
-  final String image;
-  final String label;
-  final Color? color;
-  final VoidCallback? onTap;
-  final bool useToggle;
-
-  const BuildActionButton({
-    super.key,
-    required this.image,
-    required this.label,
-    this.color,
-    this.onTap,
-    required this.useToggle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isToggled = useState(false);
-    return GestureDetector(
-      onTap: useToggle ? null : onTap,
-      child: Container(
-        width: double.infinity,
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.grey.shade100,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SvgPicture.asset(image),
-            AppSpacing.horizontalSpaceHuge,
-            Text(
-              label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            Spacer(),
-            useToggle
-                ? Switch(
-                    value: isToggled.value,
-                    onChanged: (value) {
-                      isToggled.value = value;
-                    },
-                    activeColor: Colors.white,
-                    activeTrackColor: Colors.blue,
-                    inactiveThumbColor: Colors.grey,
-                    inactiveTrackColor: Colors.white54,
-                  )
-                : Icon(Icons.arrow_forward_ios, color: color, size: 20),
           ],
         ),
       ),

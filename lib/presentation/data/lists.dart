@@ -1,5 +1,8 @@
+import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
+import 'package:esae_monie/presentation/screens/quick_actions/pay_bill.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final colors = [Colors.blue[200], Colors.green[200], Colors.orange[200]];
 final icons = [
@@ -37,4 +40,17 @@ final List<ScheduledPayment> scheduledPayments = [
     amount: '\$9.99',
     dueDate: 'Due in 1 week',
   ),
+];
+final providers = [
+  "Ikeja Electric",
+  "Eko Electric",
+  "Abuja Disco",
+  "Kano Disco",
+  "Port Harcourt Disco",
+];
+
+final List<Widget> quickActionScreens = [
+  BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
+  BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
+  BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
 ];

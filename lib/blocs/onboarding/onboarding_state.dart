@@ -12,9 +12,9 @@ abstract class OnBoardingState with _$OnBoardingState {
     String? phoneCode,
     String? phoneNumber,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus signUpStatus,
-    String? errorMessage,
+  
+  String? errorMessage,
     @Default(false) acceptTerms,
-
     String? fcmToken,
 
     @Default(false) bool hasPersistedCredentialsInBiometricDevice,

@@ -24,4 +24,6 @@ class AppColors {
   static const lightBg = Color(0xFFF9FAFB);
   static const mutedText = Color(0xFFB0B3B8);
   static const lighterWhite = Colors.white70;
+  static const blueColor = Colors.blue;
+  static final greyShade = Colors.grey.shade200;
 }
