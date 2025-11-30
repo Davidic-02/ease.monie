@@ -5,6 +5,7 @@ import 'package:esae_monie/presentation/widgets/bill_options.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
+import 'package:esae_monie/services/logging_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,7 +13,7 @@ import 'package:formz/formz.dart';
 
 class PayBill extends HookWidget {
   const PayBill({super.key});
-  static const String routeName = 'PayBill';
+  static const String routeName = 'pay_bill';
   @override
   Widget build(BuildContext context) {
     final nameFocus = useFocusNode();
@@ -29,7 +30,7 @@ class PayBill extends HookWidget {
         child: BlocBuilder<PayBillBloc, PayBillState>(
           builder: (context, state) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(AppSpacing.horizontalSpacing),
               child: Form(
                 key: formKey,
                 child: Column(
@@ -47,23 +48,24 @@ class PayBill extends HookWidget {
                     AppSpacing.verticalSpaceMedium,
                     BillOption(
                       selected: state.selectedBill == 'Internet',
-                      image: 'assets/svgs/internet_bill.svg',
+                      image: 'internet_bill',
                       label: 'Internet Bill',
                       onTap: () {
+                        logInfo(state.selectedBill);
                         context.read<PayBillBloc>().add(
-                          const PayBillEvent.billTypeChanged('Internet'),
+                          PayBillEvent.billTypeChanged('Internet'),
                         );
                       },
                     ),
                     AppSpacing.verticalSpaceSmall,
-
                     BillOption(
                       selected: state.selectedBill == 'Electricity',
-                      image: 'assets/svgs/electricity.svg',
+                      image: 'electricity',
                       label: 'Electricity Bill',
                       onTap: () {
+                        logInfo(state.selectedBill);
                         context.read<PayBillBloc>().add(
-                          const PayBillEvent.billTypeChanged('Electricity'),
+                          PayBillEvent.billTypeChanged('Electricity'),
                         );
                       },
                     ),
@@ -71,11 +73,12 @@ class PayBill extends HookWidget {
 
                     BillOption(
                       selected: state.selectedBill == 'Water',
-                      image: 'assets/svgs/water_bill.svg',
+                      image: 'water_bill',
                       label: 'Water Bill',
                       onTap: () {
+                        logInfo(state.selectedBill);
                         context.read<PayBillBloc>().add(
-                          const PayBillEvent.billTypeChanged('Water'),
+                          PayBillEvent.billTypeChanged('Water'),
                         );
                       },
                     ),
@@ -83,11 +86,12 @@ class PayBill extends HookWidget {
 
                     BillOption(
                       selected: state.selectedBill == 'Others',
-                      image: 'assets/svgs/category.svg',
+                      image: 'category',
                       label: 'Others',
                       onTap: () {
+                        logInfo(state.selectedBill);
                         context.read<PayBillBloc>().add(
-                          const PayBillEvent.billTypeChanged('Others'),
+                          PayBillEvent.billTypeChanged('Others'),
                         );
                       },
                     ),
@@ -116,7 +120,9 @@ class PayBill extends HookWidget {
                             PayBillEvent.nameChanged(value),
                           );
                         },
-                        errorText: !state.name.isPure && state.name.isNotValid
+                        errorText:
+                            !state.internetName.isPure &&
+                                state.internetName.isNotValid
                             ? "Name is required"
                             : null,
                         onFieldSubmitted: (_) => accountFocus.requestFocus(),
@@ -255,7 +261,9 @@ class PayBill extends HookWidget {
                         onChanged: (value) => context.read<PayBillBloc>().add(
                           PayBillEvent.nameChanged(value),
                         ),
-                        errorText: !state.name.isPure && state.name.isNotValid
+                        errorText:
+                            !state.internetName.isPure &&
+                                state.internetName.isNotValid
                             ? "Name is required"
                             : null,
                       ),
@@ -271,7 +279,9 @@ class PayBill extends HookWidget {
                         );
                       },
                       color: Colors.blueAccent,
-                      busy: state.status == FormzSubmissionStatus.inProgress,
+                      busy:
+                          state.billSubmissionStatus ==
+                          FormzSubmissionStatus.inProgress,
                     ),
                   ],
                 ),

@@ -80,14 +80,7 @@ class Home extends HookWidget {
                                     }
 
                                     if (state.user == null) {
-                                      return const Text(
-                                        "Loading user...",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      );
+                                      return const CircularProgressIndicator.adaptive();
                                     }
 
                                     final user = state.user!;
@@ -98,6 +91,7 @@ class Home extends HookWidget {
                                         const Text('Card Holder'),
                                         AppSpacing.verticalSpaceSmall,
                                         Text(
+                                          // show persisted user name if available
                                           user.displayName ?? 'User',
                                           style: context.textTheme.bodyLarge
                                               ?.copyWith(
@@ -154,44 +148,43 @@ class Home extends HookWidget {
                 CustomHorizontalScrollbar(
                   itemCount: 3,
                   itemBuilder: (index) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 3;
-
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 180,
+                      margin: const EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: context.theme.cardColor,
                       ),
-                      child: SizedBox(
-                        width: cardWidth,
-                        height: 100,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: 80,
-                                  height: 80,
-                                  child: Center(
-                                    child: SvgPicture.asset(
-                                      icons[index],
-                                      fit: BoxFit.none,
-                                      alignment: Alignment.center,
-                                    ),
-                                  ),
-                                ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: colors[index],
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                icons[index],
+                                width: 22,
+                                height: 22,
                               ),
-                              Text(
-                                labels[index],
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                          AppSpacing.verticalSpaceMedium,
+                          Expanded(
+                            flex: 9,
+                            child: Text(
+                              labels[index],
+                              style: context.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },

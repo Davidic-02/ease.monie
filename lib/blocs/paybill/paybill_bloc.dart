@@ -1,3 +1,4 @@
+import 'package:esae_monie/enums/validator_error.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:formz/formz.dart';
@@ -5,9 +6,6 @@ import 'package:formz/formz.dart';
 part 'paybill_event.dart';
 part 'paybill_state.dart';
 part 'paybill_bloc.freezed.dart';
-
-// Validation error enum (used by Formz classes in paybill_state.dart)
-enum ValidationError { empty, short, invalid }
 
 class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
   PayBillBloc() : super(const PayBillState()) {
@@ -19,7 +17,7 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
     on<_MeterNumberChanged>(_meterNumberChanged);
     on<_CustomerIdChanged>(_customerIdChanged);
     on<_Submit>(_submit);
-    on<_SubmitSuccessfull>(_submitSuccessfull);
+    on<_SubmitSuccessful>(_submitSuccessful);
     on<_SubmitFailed>(_submitFailed);
     on<_ErrorMessage>(_errorMessage);
   }
@@ -39,7 +37,9 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
   void _nameChanged(_NameChanged event, Emitter<PayBillState> emit) {
     final name = NameFormz.dirty(event.name);
     emit(
-      state.copyWith(name: name.isValid ? name : NameFormz.pure(event.name)),
+      state.copyWith(
+        internetName: name.isValid ? name : NameFormz.pure(event.name),
+      ),
     );
   }
 
@@ -108,7 +108,7 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
   }
 
   void _submit(_Submit event, Emitter<PayBillState> emit) {
-    if (state.status == FormzSubmissionStatus.inProgress) return;
+    if (state.billSubmissionStatus == FormzSubmissionStatus.inProgress) return;
 
     bool isValid;
     switch (state.selectedBill) {
@@ -132,11 +132,11 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
       if (state.selectedBill == 'Internet') {
         emit(
           state.copyWith(
-            name: NameFormz.dirty(state.name.value),
+            internetName: NameFormz.dirty(state.internetName.value),
             accountNumber: AccountNumberFormz.dirty(state.accountNumber.value),
             password: BillPasswordFormz.dirty(state.password.value),
             errorMessage: "Fix highlighted errors",
-            status: FormzSubmissionStatus.failure,
+            billSubmissionStatus: FormzSubmissionStatus.failure,
           ),
         );
         return;
@@ -148,7 +148,7 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
             provider: ProviderFormz.dirty(state.provider.value),
             meterNumber: MeterNumberFormz.dirty(state.meterNumber.value),
             errorMessage: "Fix highlighted errors",
-            status: FormzSubmissionStatus.failure,
+            billSubmissionStatus: FormzSubmissionStatus.failure,
           ),
         );
         return;
@@ -159,7 +159,7 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
           state.copyWith(
             customerId: CustomerIdFormz.dirty(state.customerId.value),
             errorMessage: "Fix highlighted errors",
-            status: FormzSubmissionStatus.failure,
+            billSubmissionStatus: FormzSubmissionStatus.failure,
           ),
         );
         return;
@@ -168,38 +168,40 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
       if (state.selectedBill == 'Others') {
         emit(
           state.copyWith(
-            name: NameFormz.dirty(state.name.value),
+            internetName: NameFormz.dirty(state.internetName.value),
             errorMessage: "Fix highlighted errors",
-            status: FormzSubmissionStatus.failure,
+            billSubmissionStatus: FormzSubmissionStatus.failure,
           ),
         );
         return;
       }
     }
 
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-    add(const PayBillEvent.submitSuccessfull());
+    emit(
+      state.copyWith(billSubmissionStatus: FormzSubmissionStatus.inProgress),
+    );
+    add(const PayBillEvent.submitSuccessful());
   }
 
-  void _submitSuccessfull(
-    _SubmitSuccessfull event,
-    Emitter<PayBillState> emit,
-  ) {
+  void _submitSuccessful(_SubmitSuccessful event, Emitter<PayBillState> emit) {
     emit(
-      state.copyWith(status: FormzSubmissionStatus.success, errorMessage: null),
+      state.copyWith(
+        billSubmissionStatus: FormzSubmissionStatus.success,
+        errorMessage: null,
+      ),
     );
   }
 
   void _submitFailed(_SubmitFailed event, Emitter<PayBillState> emit) {
     emit(
       state.copyWith(
-        status: FormzSubmissionStatus.failure,
+        billSubmissionStatus: FormzSubmissionStatus.failure,
         errorMessage: 'Please fill in all field correctly',
       ),
     );
   }
 
   void _errorMessage(_ErrorMessage event, Emitter<PayBillState> emit) {
-    emit(state.copyWith(status: FormzSubmissionStatus.failure));
+    emit(state.copyWith(billSubmissionStatus: FormzSubmissionStatus.failure));
   }
 }

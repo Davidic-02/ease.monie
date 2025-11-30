@@ -8,7 +8,7 @@ abstract class PayBillState with _$PayBillState {
     String? selectedBill,
 
     // INTERNET BILL
-    @Default(NameFormz.pure()) NameFormz name,
+    @Default(NameFormz.pure()) NameFormz internetName,
     @Default(AccountNumberFormz.pure()) AccountNumberFormz accountNumber,
     @Default(BillPasswordFormz.pure()) BillPasswordFormz password,
 
@@ -21,13 +21,15 @@ abstract class PayBillState with _$PayBillState {
 
     // OTHERS BILL
     @Default(BillTypeFormz.pure()) BillTypeFormz billType,
+
     // Form submission status
-    @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default(FormzSubmissionStatus.initial)
+    FormzSubmissionStatus billSubmissionStatus,
     @Default(null) String? errorMessage,
   }) = _PayBillState;
 
   bool get isInternetFormValid =>
-      name.isValid && accountNumber.isValid && password.isValid;
+      internetName.isValid && accountNumber.isValid && password.isValid;
   bool get isElectricityFormValid => provider.isValid && meterNumber.isValid;
   bool get isWaterFormValid => customerId.isValid;
   bool get isOthersFormValid => billType.isValid;
@@ -111,6 +113,7 @@ class CustomerIdFormz extends FormzInput<String, ValidationError> {
     return null;
   }
 }
+
 //==============================================================================
 // OTHERS BILL FORMZ
 //==============================================================================

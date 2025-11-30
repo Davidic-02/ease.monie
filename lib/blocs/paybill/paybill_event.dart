@@ -24,6 +24,6 @@ class PayBillEvent with _$PayBillEvent {
 
   const factory PayBillEvent.errorMessage([String? message]) = _ErrorMessage;
   const factory PayBillEvent.submit() = _Submit;
-  const factory PayBillEvent.submitSuccessfull() = _SubmitSuccessfull;
+  const factory PayBillEvent.submitSuccessful() = _SubmitSuccessful;
   const factory PayBillEvent.submitFailed() = _SubmitFailed;
 }

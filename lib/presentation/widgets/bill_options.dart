@@ -32,7 +32,7 @@ class BillOption extends HookWidget {
         ),
         child: Row(
           children: [
-            SvgPicture.asset(image, height: 24, width: 24),
+            SvgPicture.asset('assets/svgs/$image.svg', height: 24, width: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Text(

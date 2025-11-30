@@ -1,15 +1,21 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
+import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/presentation/screens/quick_actions/pay_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-final colors = [Colors.blue[200], Colors.green[200], Colors.orange[200]];
-final icons = [
-  'assets/svgs/money_transfer.svg',
-  'assets/svgs/paybill.svg',
-  'assets/svgs/bank_to_bank.svg',
+final colors = [
+  AppColors.accentNeon.withValues(alpha: 0.4),
+  AppColors.blueColor.withValues(alpha: 0.4),
+  AppColors.greyColor.withValues(alpha: 0.4),
 ];
+final icons = [
+  'assets/svgs/dollar.svg',
+  'assets/svgs/bill.svg',
+  'assets/svgs/bank.svg',
+];
+
 final labels = ["Money Transfer", "Pay Bill", "Bank to Bank"];
 
 final icons1 = [
