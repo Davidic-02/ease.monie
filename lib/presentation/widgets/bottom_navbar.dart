@@ -1,6 +1,7 @@
 import 'package:esae_monie/presentation/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainScreen extends HookWidget {
   static const String routeName = 'main';
@@ -26,21 +27,67 @@ class MainScreen extends HookWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
+            icon: SvgPicture.asset(
+              'assets/svgs/home.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                currentIndex.value == 0 ? Colors.blue : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/svgs/location.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                currentIndex.value == 1 ? Colors.blue : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
             label: "Location",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner),
+            icon: SvgPicture.asset(
+              'assets/svgs/scanner.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                currentIndex.value == 2 ? Colors.blue : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
             label: "Scan",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.trending_up),
+            icon: SvgPicture.asset(
+              'assets/svgs/upwardStat.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                currentIndex.value == 3 ? Colors.blue : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
             label: "Trends",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.more_vert), label: "More"),
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              'assets/svgs/category.svg',
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(
+                currentIndex.value == 4 ? Colors.blue : Colors.grey,
+                BlendMode.srcIn,
+              ),
+            ),
+            label: "Categories",
+          ),
         ],
       ),
     );

@@ -32,10 +32,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(FirebaseAuth.instance),
         ),
-        // BlocProvider<UserBloc>(
-        //   create: (context) =>
-        //       UserBloc(FirebaseFirestore.instance)..add(UserEvent.loadUser()),
-        // ),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,

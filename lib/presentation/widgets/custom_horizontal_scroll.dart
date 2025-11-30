@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CustomHorizontalScrollbar extends StatelessWidget {
+class CustomHorizontalscroll extends StatelessWidget {
   final int itemCount;
   final Widget Function(int index) itemBuilder;
   final void Function(int index)? onTap;
 
-  const CustomHorizontalScrollbar({
+  const CustomHorizontalscroll({
     super.key,
     required this.itemCount,
     required this.itemBuilder,
@@ -15,15 +15,13 @@ class CustomHorizontalScrollbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
-
     return RawScrollbar(
-      scrollbarOrientation: ScrollbarOrientation.bottom,
       thumbVisibility: true,
-      thickness: 6.0,
-      radius: const Radius.circular(3.0),
+      thickness: 4.0,
+      radius: const Radius.circular(2.0),
       controller: scrollController,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
+        padding: const EdgeInsets.only(bottom: 10.0),
         child: SingleChildScrollView(
           controller: scrollController,
           physics: const BouncingScrollPhysics(),
@@ -34,6 +32,7 @@ class CustomHorizontalScrollbar extends StatelessWidget {
                 padding: EdgeInsets.only(
                   right: index == itemCount - 1 ? 0 : 10,
                 ),
+
                 child: InkWell(
                   onTap: onTap != null ? () => onTap!(index) : null,
                   borderRadius: BorderRadius.circular(12),

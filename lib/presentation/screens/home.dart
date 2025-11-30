@@ -3,10 +3,11 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/widgets/custom_horizontalscroll.dart';
-import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
-import 'package:esae_monie/presentation/widgets/custom_horizontalscrollbar.dart';
-import 'package:esae_monie/presentation/widgets/custom_verticalscrolls.dart';
+import 'package:esae_monie/presentation/screens/cards.dart';
+import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
+import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
+import 'package:esae_monie/presentation/widgets/custom_horizontal_scrollbar.dart';
+import 'package:esae_monie/presentation/widgets/custom_vertical_scrolls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +16,8 @@ import 'package:formz/formz.dart';
 
 class Home extends HookWidget {
   static const String routeName = 'Home';
+
+  const Home({super.key});
   @override
   Widget build(BuildContext context) {
     final pageController = usePageController();
@@ -30,7 +33,7 @@ class Home extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTopbar(
-                  leading: const CircleAvatar(
+                  leading: CircleAvatar(
                     radius: 20,
                     backgroundImage: AssetImage('assets/images/profilepic.png'),
                   ),
@@ -40,10 +43,17 @@ class Home extends HookWidget {
                 SizedBox(
                   height: 228,
                   child: PageView.builder(
+                    onPageChanged: (value) {
+                      currentPage.value = value;
+                    },
                     controller: pageController,
+
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, Cards.routeName);
+                        },
                         child: Stack(
                           children: [
                             Padding(
@@ -103,19 +113,11 @@ class Home extends HookWidget {
                               Positioned(
                                 left: 16,
                                 bottom: 16,
-
                                 child: Text(
                                   "Savings Account",
-                                  style: TextStyle(
-                                    color: AppColors.lighterWhite,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 4,
-                                        color: Colors.black,
-                                      ),
-                                    ],
+                                  style: context.textTheme.bodyLarge?.copyWith(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -129,14 +131,14 @@ class Home extends HookWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(2, (index) {
-                    return Container(
+                    final isSelected = currentPage.value == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: currentPage.value == index ? 24 : 8,
-                      height: 5,
+                      width: isSelected ? 24 : 8,
+                      height: 6,
                       decoration: BoxDecoration(
-                        color: currentPage.value == index
-                            ? Colors.blue
-                            : AppColors.greyColor,
+                        color: isSelected ? Colors.blue : Colors.grey,
                         borderRadius: BorderRadius.circular(4),
                       ),
                     );
@@ -151,38 +153,44 @@ class Home extends HookWidget {
                 CustomHorizontalScrollbar(
                   itemCount: 3,
                   itemBuilder: (index) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 3;
+
                     return Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: SizedBox(
-                        width: 130,
-                        height: 130,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: colors[index],
-                                borderRadius: BorderRadius.circular(16),
+                        width: cardWidth,
+                        height: 200,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: SizedBox(
+                                  width: 80,
+                                  height: 80,
+
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      icons[index],
+                                      fit: BoxFit.none,
+                                      alignment: Alignment.center,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              child: Icon(
-                                icons[index],
-                                color: Colors.white,
-                                size: 30,
+                              Text(
+                                labels[index],
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              labels[index],
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -203,27 +211,33 @@ class Home extends HookWidget {
                 CustomHorizontalscroll(
                   itemCount: icons1.length,
                   itemBuilder: (index) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final cardWidth = (screenWidth - 60 - 20 * (3 - 1)) / 4;
                     final isSelected = selectedService.value == index;
+                    Color imageColor = isSelected ? Colors.white : Colors.blue;
                     return SizedBox(
-                      width: 80,
+                      // width: double.infinity,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Container(
-                            width: 56,
+                            width: cardWidth,
                             height: 56,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               color: isSelected
                                   ? Colors.blue
-                                  : AppColors.greyColor,
+                                  : Colors.grey.shade200,
                             ),
                             child: Center(
-                              child: Icon(
+                              child: SvgPicture.asset(
                                 icons1[index],
-                                color: isSelected
-                                    ? AppColors.whiteColor
-                                    : Colors.blue,
+                                colorFilter: ColorFilter.mode(
+                                  imageColor,
+                                  BlendMode.srcIn,
+                                ),
+                                width: 24,
+                                height: 24,
                               ),
                             ),
                           ),
@@ -231,8 +245,7 @@ class Home extends HookWidget {
                           Text(
                             labels1[index],
                             style: const TextStyle(fontSize: 12),
-                            textAlign:
-                                TextAlign.center, // ADDED: Center alignment
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
