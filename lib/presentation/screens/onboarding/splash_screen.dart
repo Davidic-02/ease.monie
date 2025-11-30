@@ -2,7 +2,6 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
-import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:esae_monie/services/persistence_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,7 +20,7 @@ class SplashScreen extends HookWidget {
         final signedIn = await PersistenceService().getSignInStatus();
         if (context.mounted) {
           if (signedIn) {
-            context.navigator.pushReplacementNamed(MainScreen.routeName);
+            context.navigator.pushReplacementNamed(Login.routeName);
           } else {
             context.navigator.pushReplacementNamed(Onboarding.routeName);
           }
