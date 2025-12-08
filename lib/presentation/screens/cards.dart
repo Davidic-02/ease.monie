@@ -155,7 +155,7 @@ class Cards extends HookWidget {
               ),
               AppSpacing.verticalSpaceMedium,
               BuildActionButton(
-                image: 'assets/svgs/changePin.svg',
+                image: 'assets/svgs/change_pin.svg',
                 label: 'Change Pin',
                 color: AppColors.blueColor,
                 onTap: () {},
@@ -163,14 +163,14 @@ class Cards extends HookWidget {
               ),
               AppSpacing.verticalSpaceMedium,
               BuildActionButton(
-                image: 'assets/svgs/lockCard.svg',
+                image: 'assets/svgs/lock_card.svg',
                 label: 'Lock Card',
                 onTap: () {},
                 useToggle: true,
               ),
               AppSpacing.verticalSpaceMedium,
               BuildActionButton(
-                image: 'assets/svgs/deactivateCard.svg',
+                image: 'assets/svgs/deactivate_card.svg',
                 label: 'Deactivate Card',
                 useToggle: true,
               ),

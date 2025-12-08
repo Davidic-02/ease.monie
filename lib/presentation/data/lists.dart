@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
+import 'package:esae_monie/presentation/screens/quick_actions/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/quick_actions/pay_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,7 +57,34 @@ final providers = [
 ];
 
 final List<Widget> quickActionScreens = [
+  MoneyTransfer(),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
-  BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
+];
+
+final List<RecentTransfer> recentTransfer = [
+  RecentTransfer(
+    image: 'assets/images/profilepicture.png',
+    //image: 'assets/svgs/profile_pic1.svg',
+    name: 'Dr Kamal',
+    amount: '\$15.99',
+  ),
+  RecentTransfer(
+    image: 'assets/images/profilepicture.png',
+    // image: 'assets/svgs/profile_pic2.svg',
+    name: 'Jonathan',
+    amount: '\$15.99',
+  ),
+  RecentTransfer(
+    image: 'assets/images/profilepicture.png',
+    //image: 'assets/svgs/profile_pic3.svg',
+    name: 'Will Happier',
+    amount: '\$15.99',
+  ),
+  RecentTransfer(
+    image: 'assets/images/profilepicture.png',
+    // image: 'assets/svgs/profile_pic2.svg',
+    name: 'Adekoya david',
+    amount: '\$15.99',
+  ),
 ];

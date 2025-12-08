@@ -22,6 +22,9 @@ class PayBillEvent with _$PayBillEvent {
   const factory PayBillEvent.customerIdChanged(String customerId) =
       _CustomerIdChanged;
 
+  const factory PayBillEvent.otherBillChanged(String otherBill) =
+      _OtherBillChanged;
+
   const factory PayBillEvent.errorMessage([String? message]) = _ErrorMessage;
   const factory PayBillEvent.submit() = _Submit;
   const factory PayBillEvent.submitSuccessful() = _SubmitSuccessful;

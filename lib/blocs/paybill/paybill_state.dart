@@ -20,7 +20,7 @@ abstract class PayBillState with _$PayBillState {
     @Default(CustomerIdFormz.pure()) CustomerIdFormz customerId,
 
     // OTHERS BILL
-    @Default(BillTypeFormz.pure()) BillTypeFormz billType,
+    @Default(OtherBillFormz.pure()) OtherBillFormz otherBill,
 
     // Form submission status
     @Default(FormzSubmissionStatus.initial)
@@ -32,7 +32,7 @@ abstract class PayBillState with _$PayBillState {
       internetName.isValid && accountNumber.isValid && password.isValid;
   bool get isElectricityFormValid => provider.isValid && meterNumber.isValid;
   bool get isWaterFormValid => customerId.isValid;
-  bool get isOthersFormValid => billType.isValid;
+  bool get isOthersFormValid => otherBill.isValid;
 }
 
 //==============================================================================
@@ -118,9 +118,9 @@ class CustomerIdFormz extends FormzInput<String, ValidationError> {
 // OTHERS BILL FORMZ
 //==============================================================================
 
-class BillTypeFormz extends FormzInput<String, ValidationError> {
-  const BillTypeFormz.pure([super.value = '']) : super.pure();
-  const BillTypeFormz.dirty([super.value = '']) : super.dirty();
+class OtherBillFormz extends FormzInput<String, ValidationError> {
+  const OtherBillFormz.pure([super.value = '']) : super.pure();
+  const OtherBillFormz.dirty([super.value = '']) : super.dirty();
 
   @override
   ValidationError? validator(String? value) {

@@ -1,4 +1,5 @@
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
@@ -29,7 +30,7 @@ class BuildActionButton extends HookWidget {
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.grey.shade100,
+          color: context.theme.cardColor,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(

@@ -20,18 +20,34 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
     on<_SubmitSuccessful>(_submitSuccessful);
     on<_SubmitFailed>(_submitFailed);
     on<_ErrorMessage>(_errorMessage);
+    on<_OtherBillChanged>(_otherBill);
   }
 
   void _billTypeChanged(_BillTypeChanged event, Emitter<PayBillState> emit) {
-    final billType = BillTypeFormz.dirty(event.billType);
-    emit(
-      state.copyWith(
-        selectedBill: event.billType,
-        billType: billType.isValid
-            ? billType
-            : BillTypeFormz.pure(event.billType),
-      ),
-    );
+    var newState = state.copyWith(selectedBill: event.billType);
+
+    switch (state.selectedBill) {
+      case 'Internet':
+        newState = newState.copyWith(
+          internetName: NameFormz.pure(''),
+          accountNumber: AccountNumberFormz.pure(''),
+          password: BillPasswordFormz.pure(''),
+        );
+        break;
+      case 'Electricity':
+        newState = newState.copyWith(
+          provider: ProviderFormz.pure(''),
+          meterNumber: MeterNumberFormz.pure(''),
+        );
+        break;
+      case 'Water':
+        newState = newState.copyWith(customerId: CustomerIdFormz.pure(''));
+        break;
+      case 'Others':
+        newState = newState.copyWith(otherBill: OtherBillFormz.pure(''));
+        break;
+    }
+    emit(newState);
   }
 
   void _nameChanged(_NameChanged event, Emitter<PayBillState> emit) {
@@ -105,6 +121,11 @@ class PayBillBloc extends Bloc<PayBillEvent, PayBillState> {
             : CustomerIdFormz.pure(event.customerId),
       ),
     );
+  }
+
+  void _otherBill(_OtherBillChanged event, Emitter<PayBillState> emit) {
+    final otherBill = OtherBillFormz.dirty(event.otherBill);
+    emit(state.copyWith(otherBill: otherBill));
   }
 
   void _submit(_Submit event, Emitter<PayBillState> emit) {

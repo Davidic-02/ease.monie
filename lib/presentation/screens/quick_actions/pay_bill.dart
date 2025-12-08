@@ -36,7 +36,10 @@ class PayBill extends HookWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTopbar(title: 'Pay Bill'),
+                    CustomTopbar(
+                      title: 'Pay Bill',
+                      onTap: () => Navigator.pop(context),
+                    ),
                     AppSpacing.verticalSpaceHuge,
                     const Text(
                       "Select Bill Type",
@@ -110,6 +113,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceMedium,
 
                       CustomTextFormField(
+                        key: ValueKey("name-${state.selectedBill}"),
                         focusNode: nameFocus,
                         hintText: "Name",
                         textInputAction: TextInputAction.next,
@@ -130,6 +134,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceSmall,
 
                       CustomTextFormField(
+                        key: ValueKey("account-${state.selectedBill}"),
                         focusNode: accountFocus,
                         hintText: "Account Number",
                         textInputAction: TextInputAction.next,
@@ -150,6 +155,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceSmall,
 
                       CustomTextFormField(
+                        key: ValueKey("password-${state.selectedBill}"),
                         focusNode: passwordFocus,
                         hintText: "Password",
                         keyboardType: TextInputType.text,
@@ -181,6 +187,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceMedium,
 
                       CustomTextFormField(
+                        key: ValueKey("provider-${state.selectedBill}"),
                         focusNode: providerFocus,
                         keyboardType: TextInputType.text,
                         hintText: "Provider",
@@ -198,6 +205,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceSmall,
 
                       CustomTextFormField(
+                        key: ValueKey("meter-${state.selectedBill}"),
                         focusNode: meterFocus,
                         hintText: "Meter Number",
                         keyboardType: TextInputType.number,
@@ -225,6 +233,7 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceMedium,
 
                       CustomTextFormField(
+                        key: ValueKey("customer-${state.selectedBill}"),
                         keyboardType: TextInputType.number,
                         focusNode: customerFocus,
                         hintText: "Customer ID",
@@ -241,7 +250,6 @@ class PayBill extends HookWidget {
                       ),
                     ],
 
-                    // Others Form
                     if (state.selectedBill == "Others") ...[
                       const Text(
                         "Other Bill Details",
@@ -253,13 +261,14 @@ class PayBill extends HookWidget {
                       AppSpacing.verticalSpaceMedium,
 
                       CustomTextFormField(
+                        key: ValueKey("others-name-${state.selectedBill}"),
                         keyboardType: TextInputType.text,
                         focusNode: nameFocus,
                         hintText: "Name",
                         textInputAction: TextInputAction.done,
                         fillColor: AppColors.whiteColor,
                         onChanged: (value) => context.read<PayBillBloc>().add(
-                          PayBillEvent.nameChanged(value),
+                          PayBillEvent.otherBillChanged(value),
                         ),
                         errorText:
                             !state.internetName.isPure &&

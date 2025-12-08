@@ -225,7 +225,7 @@ class Home extends HookWidget {
                               borderRadius: BorderRadius.circular(16),
                               color: isSelected
                                   ? AppColors.blueColor
-                                  : AppColors.greyShade,
+                                  : context.theme.cardColor,
                             ),
                             child: Center(
                               child: SvgPicture.asset(
@@ -291,7 +291,7 @@ class Home extends HookWidget {
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: context.theme.cardColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
