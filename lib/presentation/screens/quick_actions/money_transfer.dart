@@ -24,7 +24,7 @@ class MoneyTransfer extends HookWidget {
     useEffect(() {
       final bloc = context.read<VerificationBloc>();
       if (bloc.state.banks.isEmpty) {
-        bloc.add(const VerificationEvent.loadBanks());
+        bloc.add(const VerificationEvent.getBanks());
       }
       return null;
     }, []);
@@ -34,7 +34,7 @@ class MoneyTransfer extends HookWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -122,10 +122,6 @@ class MoneyTransfer extends HookWidget {
                     ),
                   );
                 },
-                onTap: (index) {
-                  final tapped = recentTransfer[index];
-                  //     ToastService.toast(tapped);
-                },
               ),
 
               AppSpacing.verticalSpaceHuge,
@@ -169,42 +165,49 @@ class MoneyTransfer extends HookWidget {
                       ),
 
                       AppSpacing.verticalSpaceMedium,
-                      Focus(
-                        focusNode: bankFocusNode,
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: DropdownButtonFormField<Bank>(
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: AppColors.whiteColor,
-                              border: OutlineInputBorder(),
-                            ),
-                            value: state.selectedBank.value,
-                            items: state.banks.map((bank) {
-                              return DropdownMenuItem(
-                                value: bank,
-                                child: Text(
-                                  bank.name,
-                                  overflow: TextOverflow.ellipsis, // ADD THIS
-                                  maxLines: 1,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                context.read<VerificationBloc>().add(
-                                  VerificationEvent.bankChanged(value),
+                      GestureDetector(
+                        onTap: () {
+                          context.read<VerificationBloc>().add(
+                            VerificationEvent.getBanks(),
+                          );
+                        },
+                        child: Focus(
+                          focusNode: bankFocusNode,
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: DropdownButtonFormField<Bank>(
+                              isExpanded: true,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.whiteColor,
+                                border: OutlineInputBorder(),
+                              ),
+                              value: state.selectedBank.value,
+                              items: state.banks.map((bank) {
+                                return DropdownMenuItem(
+                                  value: bank,
+                                  child: Text(
+                                    bank.name,
+                                    overflow: TextOverflow.ellipsis, // ADD THIS
+                                    maxLines: 1,
+                                  ),
                                 );
-                              }
-                            },
-                            validator: (_) {
-                              if (!state.selectedBank.isPure &&
-                                  state.selectedBank.isNotValid) {
-                                return "Please select a bank.";
-                              }
-                              return null;
-                            },
+                              }).toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  context.read<VerificationBloc>().add(
+                                    VerificationEvent.bankChanged(value),
+                                  );
+                                }
+                              },
+                              validator: (_) {
+                                if (!state.selectedBank.isPure &&
+                                    state.selectedBank.isNotValid) {
+                                  return "Please select a bank.";
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                         ),
                       ),

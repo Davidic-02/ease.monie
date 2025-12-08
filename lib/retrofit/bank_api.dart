@@ -6,13 +6,14 @@ import 'package:dio/dio.dart';
 
 part 'bank_api.g.dart';
 
-@RestApi(baseUrl: "https://api.flutterwave.com/v3")
+@RestApi()
 abstract class BankApi {
-  factory BankApi(Dio dio, {String baseUrl}) = _BankApi;
+  factory BankApi(Dio dio, {String? baseUrl}) = _BankApi;
 
-  @GET("/banks/NG")
+  @GET("banks/NG")
   Future<BankResponse> getBanks();
-  @POST("/accounts/resolve")
+
+  @POST("accounts/resolve")
   Future<ResolveAccountResponse> resolveAccount(
     @Body() ResolveAccountRequest request,
   );

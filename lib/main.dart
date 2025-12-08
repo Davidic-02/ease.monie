@@ -2,9 +2,11 @@ import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/blocs/bank_verification/verification_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
+import 'package:esae_monie/presentation/screens/home.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
-import 'package:esae_monie/repository/bank_verification_repo.dart';
+import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:esae_monie/router/app_routes.dart';
+import 'package:esae_monie/services/service_locator.dart';
 import 'package:esae_monie/services/theme_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,7 +19,8 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
+  await dotenv.load();
+  await setupServiceLocator();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
@@ -38,9 +41,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<VerificationBloc>(
           create: (context) => VerificationBloc(
-            repo: BankVerificationRepo(
-              secretKey: dotenv.env['FLUTTERWAVE_SECRET_KEY']!,
-            ),
+            // repo: BankVerificationRepo(
+            //   secretKey: dotenv.env['FLUTTERWAVE_SECRET_KEY']!,
+            // ),
           ),
         ),
       ],
@@ -52,7 +55,7 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: currentMode,
-            initialRoute: SplashScreen.routeName,
+            initialRoute: MainScreen.routeName,
             routes: AppRoutes.routes,
           ),
         ),

@@ -3,14 +3,18 @@ part of 'verification_bloc.dart';
 @freezed
 abstract class VerificationState with _$VerificationState {
   const VerificationState._();
+
   const factory VerificationState({
     @Default(BankAccountFormz.pure()) BankAccountFormz bankAccount,
     @Default(BankInput.pure()) BankInput selectedBank,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus formzStatus,
+    @Default(FormzSubmissionStatus.initial)
+    FormzSubmissionStatus getBanksStatus,
     @Default([]) List<Bank> banks,
     dynamic verificationResult,
     String? errorMessage,
   }) = _VerificationState;
+
   bool get isFormValid => bankAccount.isValid && selectedBank.isValid;
 }
 
