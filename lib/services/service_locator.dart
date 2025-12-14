@@ -10,9 +10,11 @@ import 'package:get_it/get_it.dart';
 GetIt locator = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
-  Dio dio = Dio(BaseOptions(headers: baseHeaders));
+  final baseUrl = dotenv.env[EnvKeys.baseUrl] ?? '';
+  Dio dio = Dio(BaseOptions(baseUrl: baseUrl, headers: baseHeaders));
 
   if (kDebugMode) {
+    print('DEBUG BASE_URL => ${dotenv.env[EnvKeys.baseUrl]}');
     dio.interceptors.add(ResponseLoggingInterceptor());
   }
 

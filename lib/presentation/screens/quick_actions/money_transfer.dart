@@ -1,4 +1,4 @@
-import 'package:esae_monie/blocs/bank_verification/verification_bloc.dart';
+import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
@@ -31,6 +31,7 @@ class MoneyTransfer extends HookWidget {
 
     final accountNumberFocusNode = useFocusNode();
     final bankFocusNode = useFocusNode();
+    final modalFocusNode = useFocusNode();
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -138,6 +139,8 @@ class MoneyTransfer extends HookWidget {
                   return _verificationBuildWhen(context, previous, current);
                 },
                 builder: (context, state) {
+                  final accountName = state.verifiedAccountName;
+
                   return Column(
                     children: [
                       CustomTextFormField(
@@ -156,7 +159,6 @@ class MoneyTransfer extends HookWidget {
                             VerificationEvent.bankAccountChanged(value),
                           );
                         },
-
                         errorText:
                             !state.bankAccount.isPure &&
                                 state.bankAccount.isNotValid
@@ -165,54 +167,124 @@ class MoneyTransfer extends HookWidget {
                       ),
 
                       AppSpacing.verticalSpaceMedium,
+
                       GestureDetector(
-                        onTap: () {
-                          context.read<VerificationBloc>().add(
-                            VerificationEvent.getBanks(),
+                        onTap: () async {
+                          print(
+                            'DEBUG: Opening modal, banks count: ${state.banks.length}',
                           );
-                        },
-                        child: Focus(
-                          focusNode: bankFocusNode,
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: DropdownButtonFormField<Bank>(
-                              isExpanded: true,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: AppColors.whiteColor,
-                                border: OutlineInputBorder(),
+
+                          final selectedBank = await showModalBottomSheet<Bank>(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16),
                               ),
-                              value: state.selectedBank.value,
-                              items: state.banks.map((bank) {
-                                return DropdownMenuItem(
-                                  value: bank,
-                                  child: Text(
-                                    bank.name,
-                                    overflow: TextOverflow.ellipsis, // ADD THIS
-                                    maxLines: 1,
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  context.read<VerificationBloc>().add(
-                                    VerificationEvent.bankChanged(value),
-                                  );
-                                }
-                              },
-                              validator: (_) {
-                                if (!state.selectedBank.isPure &&
-                                    state.selectedBank.isNotValid) {
-                                  return "Please select a bank.";
-                                }
-                                return null;
-                              },
                             ),
+                            builder: (modalContent) {
+                              return BlocProvider.value(
+                                value: context.read<VerificationBloc>(),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      CustomTextFormField(
+                                        focusNode: modalFocusNode,
+                                        hintText: 'Search Banks...',
+                                        keyboardType: TextInputType.text,
+                                        onChanged: (value) {
+                                          modalContent
+                                              .read<VerificationBloc>()
+                                              .add(
+                                                VerificationEvent.searchBanks(
+                                                  value,
+                                                ),
+                                              );
+                                        },
+                                      ),
+                                      AppSpacing.horizontalSpaceMedium,
+                                      Expanded(
+                                        child:
+                                            BlocBuilder<
+                                              VerificationBloc,
+                                              VerificationState
+                                            >(
+                                              builder: (context, state) {
+                                                final banks = state.banks;
+
+                                                if (banks.isEmpty) {
+                                                  return const Center(
+                                                    child: Text(
+                                                      'No banks found.',
+                                                    ),
+                                                  );
+                                                }
+                                                return ListView.builder(
+                                                  itemCount: banks.length,
+                                                  itemBuilder: (_, index) {
+                                                    final bank = banks[index];
+                                                    return ListTile(
+                                                      title: Text(bank.name),
+                                                      onTap: () {
+                                                        Navigator.pop(
+                                                          context,
+                                                          bank,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                          if (selectedBank != null && context.mounted) {
+                            context.read<VerificationBloc>().add(
+                              VerificationEvent.bankChanged(selectedBank),
+                            );
+                          }
+                        },
+
+                        child: AbsorbPointer(
+                          child: CustomTextFormField(
+                            focusNode: bankFocusNode,
+                            keyboardType: TextInputType.name,
+                            hintText:
+                                state.selectedBank.value?.name ?? 'Select Bank',
                           ),
                         ),
                       ),
 
+                      if (accountName != null) AppSpacing.verticalSpaceSmall,
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              'Account Name: $accountName',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       AppSpacing.verticalSpaceMassive,
+
                       Button(
                         'Verify',
                         onPressed: () {
@@ -244,27 +316,28 @@ class MoneyTransfer extends HookWidget {
     if (previous.formzStatus != current.formzStatus &&
         current.formzStatus.isSuccess &&
         current.bankAccount.isValid) {
-      ToastService.toast('Account Verified Successfully!');
+      // Schedule toast to show AFTER build completes
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ToastService.toast('Account Verified Successfully!');
+      });
       return true;
     }
 
     if (previous.errorMessage != current.errorMessage &&
         current.errorMessage != null) {
-      ToastService.toast('${current.errorMessage}', ToastType.error);
-
-      context.read<VerificationBloc>().add(
-        const VerificationEvent.submitFailed('Failed to verify Account'),
-      );
-
+      // Schedule toast to show AFTER build completes
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ToastService.toast('${current.errorMessage}', ToastType.error);
+      });
       return true;
     }
 
     if (previous.bankAccount != current.bankAccount) return true;
     if (previous.selectedBank != current.selectedBank) return true;
 
-    // REBUILD FOR IN-PROGRESS
     if (previous.formzStatus != current.formzStatus) return true;
 
+    if (previous.banks != current.banks) return true;
     return false;
   }
 }

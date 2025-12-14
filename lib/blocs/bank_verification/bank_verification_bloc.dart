@@ -10,9 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:esae_monie/models/bank_model.dart';
 
-part 'verification_event.dart';
-part 'verification_state.dart';
-part 'verification_bloc.freezed.dart';
+part 'bank_verification_event.dart';
+part 'bank_verification_state.dart';
+part 'bank_verification_bloc.freezed.dart';
 
 class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
   VerificationBloc() : super(const VerificationState()) {
@@ -24,6 +24,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     on<_GetBanks>(_getBanks);
     on<_GetBanksSuccessful>(_getBanksSuccessful);
     on<_GetBanksFailed>(_getBanksFailed);
+    on<_SearchBanks>(_searchBanks);
   }
 
   void _bankAccountChanged(
@@ -90,6 +91,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     emit(
       state.copyWith(
         verificationResult: event.result,
+        verifiedAccountName: event.result.data.account_name,
         formzStatus: FormzSubmissionStatus.success,
       ),
     );
@@ -126,7 +128,8 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     emit(
       state.copyWith(
         banks: event.response.data,
-        formzStatus: FormzSubmissionStatus.success,
+        unFilteredBanks: event.response.data,
+        getBanksStatus: FormzSubmissionStatus.success,
       ),
     );
   }
@@ -135,8 +138,17 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     emit(
       state.copyWith(
         errorMessage: event.message,
-        formzStatus: FormzSubmissionStatus.failure,
+        getBanksStatus: FormzSubmissionStatus.failure,
       ),
     );
+  }
+
+  void _searchBanks(_SearchBanks event, Emitter<VerificationState> emit) {
+    final query = event.query;
+    final filteredList = state.unFilteredBanks
+        .where((bank) => bank.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    filteredList.sort((a, b) => a.name.compareTo(b.name));
+    emit(state.copyWith(banks: filteredList));
   }
 }

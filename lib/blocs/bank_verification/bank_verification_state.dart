@@ -1,4 +1,4 @@
-part of 'verification_bloc.dart';
+part of 'bank_verification_bloc.dart';
 
 @freezed
 abstract class VerificationState with _$VerificationState {
@@ -11,8 +11,10 @@ abstract class VerificationState with _$VerificationState {
     @Default(FormzSubmissionStatus.initial)
     FormzSubmissionStatus getBanksStatus,
     @Default([]) List<Bank> banks,
+    @Default([]) List<Bank> unFilteredBanks,
     dynamic verificationResult,
     String? errorMessage,
+    String? verifiedAccountName,
   }) = _VerificationState;
 
   bool get isFormValid => bankAccount.isValid && selectedBank.isValid;

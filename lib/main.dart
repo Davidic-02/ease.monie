@@ -1,10 +1,9 @@
 import 'package:esae_monie/blocs/auth/auth_bloc.dart';
-import 'package:esae_monie/blocs/bank_verification/verification_bloc.dart';
+import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
-import 'package:esae_monie/presentation/screens/home.dart';
-import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
-import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
+import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
+import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/router/app_routes.dart';
 import 'package:esae_monie/services/service_locator.dart';
 import 'package:esae_monie/services/theme_services.dart';
@@ -39,13 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(FirebaseAuth.instance),
         ),
-        BlocProvider<VerificationBloc>(
-          create: (context) => VerificationBloc(
-            // repo: BankVerificationRepo(
-            //   secretKey: dotenv.env['FLUTTERWAVE_SECRET_KEY']!,
-            // ),
-          ),
-        ),
+        BlocProvider<VerificationBloc>(create: (context) => VerificationBloc()),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,
@@ -55,7 +48,7 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: currentMode,
-            initialRoute: MainScreen.routeName,
+            initialRoute: Login.routeName,
             routes: AppRoutes.routes,
           ),
         ),
