@@ -88,3 +88,5 @@ final List<RecentTransfer> recentTransfer = [
     amount: '\$15.99',
   ),
 ];
+
+final presetAmounts = [1000.0, 2000.0, 3000.0];

@@ -4,6 +4,7 @@ import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/models/bank_model.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/quick_actions/payment_amount/amounts.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
@@ -148,7 +149,6 @@ class MoneyTransfer extends HookWidget {
                         textInputAction: TextInputAction.next,
                         hintText: "Account Number",
                         keyboardType: TextInputType.number,
-                        fillColor: AppColors.whiteColor,
 
                         onFieldSubmitted: (_) {
                           bankFocusNode.requestFocus(); // go to bank dropdown
@@ -170,10 +170,6 @@ class MoneyTransfer extends HookWidget {
 
                       GestureDetector(
                         onTap: () async {
-                          print(
-                            'DEBUG: Opening modal, banks count: ${state.banks.length}',
-                          );
-
                           final selectedBank = await showModalBottomSheet<Bank>(
                             context: context,
                             shape: const RoundedRectangleBorder(
@@ -316,9 +312,9 @@ class MoneyTransfer extends HookWidget {
     if (previous.formzStatus != current.formzStatus &&
         current.formzStatus.isSuccess &&
         current.bankAccount.isValid) {
-      // Schedule toast to show AFTER build completes
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ToastService.toast('Account Verified Successfully!');
+        Navigator.pushNamed(context, Amount.routeName);
       });
       return true;
     }
