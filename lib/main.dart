@@ -3,7 +3,6 @@ import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
-import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/router/app_routes.dart';
 import 'package:esae_monie/services/service_locator.dart';
 import 'package:esae_monie/services/theme_services.dart';

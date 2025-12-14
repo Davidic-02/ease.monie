@@ -113,11 +113,11 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
 
     try {
       final response = await locator<BankApi>().getBanks();
-      add(VerificationEvent.getBanksSuccessful(response));
+      add(_GetBanksSuccessful(response));
       logInfo(response);
     } catch (error, trace) {
       logError(error, trace);
-      add(VerificationEvent.getBanksFailed(error.toString()));
+      add(_GetBanksFailed(error.toString()));
     }
   }
 
