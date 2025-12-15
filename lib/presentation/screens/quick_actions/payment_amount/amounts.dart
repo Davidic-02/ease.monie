@@ -1,5 +1,7 @@
+import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/quick_actions/payment_amount/confirmation.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
@@ -15,7 +17,6 @@ class Amount extends HookWidget {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
     final accountName = args['accountName'];
     final bankName = args['bankName'];
     final accountNumber = args['accountNumber'];
@@ -27,6 +28,7 @@ class Amount extends HookWidget {
       symbol: '₦',
       decimalDigits: 2,
     );
+    double screenHeight = MediaQuery.of(context).size.height;
 
     useEffect(() {
       amountFocusNode.requestFocus();
@@ -40,8 +42,13 @@ class Amount extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTopbar(title: 'Amount'),
-              AppSpacing.verticalSpaceMedium,
+              CustomTopbar(
+                title: 'Amount',
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              AppSpacing.verticalSpaceMassive,
               Text('Enter Amount'),
               CustomTextFormField(
                 controller: controller,
@@ -53,48 +60,72 @@ class Amount extends HookWidget {
                 onChanged: (value) {
                   final clean = value.replaceAll(RegExp(r'[^0-9.]'), '');
                   final parsed = double.tryParse(clean) ?? 0.0;
-                  amount.value = parsed; // keep numeric value updated
+                  amount.value = parsed;
                 },
                 onFieldSubmitted: (_) {
-                  // Format only when user finishes typing
                   final parsed = amount.value;
                   controller.text = formatter.format(parsed);
                 },
               ),
-
-              AppSpacing.verticalSpaceMedium,
+              AppSpacing.verticalSpaceHuge,
               Text('Quick Actions'),
-              AppSpacing.verticalSpaceMedium,
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: presetAmounts.map((amt) {
-                  return GestureDetector(
-                    onTap: () {
-                      amount.value = amt;
-                      controller.text = formatter.format(amt);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 24,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade100,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        formatter.format(amt),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+              AppSpacing.verticalSpaceSmall,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: presetAmounts.map((amt) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        right: 8.0,
+                      ), // spacing between buttons
+                      child: GestureDetector(
+                        onTap: () {
+                          amount.value = amt;
+                          controller.text = formatter.format(amt);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 24,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer, // theme-aware color
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            formatter.format(amt),
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color, // theme-aware text
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
-              Button('Next', onPressed: () {}),
+              SizedBox(height: screenHeight * 0.3),
+              Button(
+                'Next',
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    Confirmation.routeName,
+                    arguments: {
+                      'accountName': accountName,
+                      'bankName': bankName,
+                      'accountNumber': accountNumber,
+                      'amount': amount.value,
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

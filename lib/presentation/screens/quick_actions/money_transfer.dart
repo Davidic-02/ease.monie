@@ -314,7 +314,19 @@ class MoneyTransfer extends HookWidget {
         current.bankAccount.isValid) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ToastService.toast('Account Verified Successfully!');
-        Navigator.pushNamed(context, Amount.routeName);
+        final accountName = current.verifiedAccountName;
+        final bankName = current.selectedBank.value?.name;
+        final accountNumber = current.bankAccount.value;
+
+        Navigator.pushNamed(
+          context,
+          Amount.routeName,
+          arguments: {
+            'accountName': accountName,
+            'bankName': bankName,
+            'accountNumber': accountNumber,
+          },
+        );
       });
       return true;
     }

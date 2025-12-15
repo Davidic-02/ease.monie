@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: currentMode,
-            initialRoute: Onboarding.routeName,
+            initialRoute: Login.routeName,
             routes: AppRoutes.routes,
           ),
         ),
