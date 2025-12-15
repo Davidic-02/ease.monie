@@ -1,5 +1,6 @@
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,12 @@ class Amount extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    final accountName = args['accountName'];
+    final bankName = args['bankName'];
+    final accountNumber = args['accountNumber'];
     final amountFocusNode = useFocusNode();
     final controller = useTextEditingController();
     final amount = useState<double>(0.0);
@@ -87,6 +94,7 @@ class Amount extends HookWidget {
                   );
                 }).toList(),
               ),
+              Button('Next', onPressed: () {}),
             ],
           ),
         ),
