@@ -1,5 +1,5 @@
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/transaction_successful.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class Confirmation extends HookWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final accountName = args['accountName'];
-    final bankName = args['bankName'];
+
     final accountNumber = args['accountNumber'];
     final amountDouble = args['amount'] as double;
     final amount = amountDouble.toStringAsFixed(2);

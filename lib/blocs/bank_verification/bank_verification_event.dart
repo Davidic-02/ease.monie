@@ -14,7 +14,6 @@ class VerificationEvent with _$VerificationEvent {
   const factory VerificationEvent.submitFailed(String message) = _SubmitFailed;
 
   const factory VerificationEvent.getBanks() = _GetBanks;
-  const factory VerificationEvent.searchBanks(String query) = _SearchBanks;
   const factory VerificationEvent.getBanksSuccessful(BankResponse response) =
       _GetBanksSuccessful;
   const factory VerificationEvent.getBanksFailed(String message) =

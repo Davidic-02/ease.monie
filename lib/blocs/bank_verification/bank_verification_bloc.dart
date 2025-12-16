@@ -24,7 +24,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     on<_GetBanks>(_getBanks);
     on<_GetBanksSuccessful>(_getBanksSuccessful);
     on<_GetBanksFailed>(_getBanksFailed);
-    on<_SearchBanks>(_searchBanks);
+
     on<_SearchBankString>(_searchBankString);
   }
 
@@ -129,7 +129,6 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     emit(
       state.copyWith(
         banks: event.response.data,
-        unFilteredBanks: event.response.data,
         getBanksStatus: FormzSubmissionStatus.success,
       ),
     );
@@ -142,15 +141,6 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
         getBanksStatus: FormzSubmissionStatus.failure,
       ),
     );
-  }
-
-  void _searchBanks(_SearchBanks event, Emitter<VerificationState> emit) {
-    final query = event.query;
-    final filteredList = state.unFilteredBanks
-        .where((bank) => bank.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    filteredList.sort((a, b) => a.name.compareTo(b.name));
-    emit(state.copyWith(banks: filteredList));
   }
 
   void _searchBankString(

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/widgets/b_sheets/transfer_money_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,11 +7,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:formz/formz.dart';
 
 import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
-import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
