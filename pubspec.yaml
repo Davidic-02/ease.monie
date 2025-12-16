@@ -56,6 +56,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   retrofit: ^4.9.1
   retrofit_generator: ^10.2.0
+  intl: ^0.20.2
+
 
 
 
@@ -75,6 +77,7 @@ dev_dependencies:
   json_serializable: ^6.11.1
   freezed: ^3.2.3
   build_runner: ^2.10.1
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

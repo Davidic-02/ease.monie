@@ -1,11 +1,14 @@
 //import 'package:esae_monie/presentation/screens/onboarding/forgot_password.dart';
-import 'package:esae_monie/presentation/screens/cards.dart';
+import 'package:esae_monie/presentation/screens/home/cards.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
 import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
-import 'package:esae_monie/presentation/screens/quick_actions/money_transfer.dart';
-import 'package:esae_monie/presentation/screens/quick_actions/pay_bill.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/amounts.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/confirmation.dart';
 import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
@@ -21,5 +24,8 @@ class AppRoutes {
     Cards.routeName: (context) => Cards(),
     PayBill.routeName: (context) => PayBill(),
     MoneyTransfer.routeName: (context) => MoneyTransfer(),
+    Amount.routeName: (context) => Amount(),
+    Confirmation.routeName: (context) => Confirmation(),
+    TransactionSuccessful.routeName: (context) => TransactionSuccessful(),
   };
 }
