@@ -70,9 +70,12 @@ class CustomTextFormField extends StatelessWidget {
           onChanged: onChanged,
           readOnly: readOnly,
 
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: AppColors.blackColor),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+          ),
+
           focusNode: focusNode,
           textInputAction: textInputAction,
           controller: controller,

@@ -48,6 +48,7 @@ app.*.map.json
 firebase.json
 lib/firebase_options.dart
 ios/GoogleService-Info.plist
+.env
 
 # Generated Files.
 *.g.dart

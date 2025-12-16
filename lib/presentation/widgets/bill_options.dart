@@ -1,3 +1,4 @@
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,7 +24,7 @@ class BillOption extends HookWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: selected ? Colors.blue.shade50 : Colors.white,
+          color: selected ? Colors.blue.shade50 : context.theme.cardColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: selected ? Colors.blue : Colors.grey.shade300,
@@ -40,7 +41,6 @@ class BillOption extends HookWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black,
                 ),
               ),
             ),
