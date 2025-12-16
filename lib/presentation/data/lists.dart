@@ -1,8 +1,8 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
-import 'package:esae_monie/presentation/screens/quick_actions/money_transfer.dart';
-import 'package:esae_monie/presentation/screens/quick_actions/pay_bill.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

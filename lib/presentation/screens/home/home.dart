@@ -3,7 +3,7 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/screens/cards.dart';
+import 'package:esae_monie/presentation/screens/home/cards.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scrollbar.dart';

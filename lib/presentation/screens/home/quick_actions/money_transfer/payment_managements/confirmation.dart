@@ -1,4 +1,5 @@
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +200,15 @@ class Confirmation extends HookWidget {
                     ],
                   ),
                   AppSpacing.verticalSpaceHuge,
-                  Button('Send Money', onPressed: () {}),
+                  Button(
+                    'Send Money',
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        TransactionSuccessful.routeName,
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

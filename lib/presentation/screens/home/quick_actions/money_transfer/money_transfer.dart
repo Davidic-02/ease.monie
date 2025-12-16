@@ -4,7 +4,7 @@ import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/models/bank_model.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/screens/quick_actions/payment_amount/amounts.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
