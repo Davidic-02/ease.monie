@@ -25,6 +25,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     on<_GetBanksSuccessful>(_getBanksSuccessful);
     on<_GetBanksFailed>(_getBanksFailed);
     on<_SearchBanks>(_searchBanks);
+    on<_SearchBankString>(_searchBankString);
   }
 
   void _bankAccountChanged(
@@ -150,5 +151,12 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
         .toList();
     filteredList.sort((a, b) => a.name.compareTo(b.name));
     emit(state.copyWith(banks: filteredList));
+  }
+
+  void _searchBankString(
+    _SearchBankString event,
+    Emitter<VerificationState> emit,
+  ) {
+    emit(state.copyWith(searchBankString: event.searchBankString));
   }
 }

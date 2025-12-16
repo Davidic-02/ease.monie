@@ -1,18 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:esae_monie/presentation/widgets/b_sheets/transfer_money_bottom_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:formz/formz.dart';
+
 import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
-import 'package:esae_monie/models/bank_model.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:esae_monie/services/toast_services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:formz/formz.dart';
 
 class MoneyTransfer extends HookWidget {
   static const String routeName = 'MoneyTransfer';
@@ -32,6 +34,8 @@ class MoneyTransfer extends HookWidget {
     final accountNumberFocusNode = useFocusNode();
     final bankFocusNode = useFocusNode();
     final modalFocusNode = useFocusNode();
+    final searchStringController = useTextEditingController();
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -169,88 +173,21 @@ class MoneyTransfer extends HookWidget {
                       AppSpacing.verticalSpaceMedium,
 
                       GestureDetector(
-                        onTap: () async {
-                          print(
-                            'DEBUG: Opening modal, banks count: ${state.banks.length}',
-                          );
-
-                          final selectedBank = await showModalBottomSheet<Bank>(
-                            context: context,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16),
+                        onTap: () =>
+                            showModalBottomSheet(
+                              useSafeArea: true,
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (_) => TransferMoneyBottomSheet(
+                                modalFocusNode: modalFocusNode,
+                                searchStringController: searchStringController,
                               ),
-                            ),
-                            builder: (modalContent) {
-                              return BlocProvider.value(
-                                value: context.read<VerificationBloc>(),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      CustomTextFormField(
-                                        focusNode: modalFocusNode,
-                                        hintText: 'Search Banks...',
-                                        keyboardType: TextInputType.text,
-                                        onChanged: (value) {
-                                          modalContent
-                                              .read<VerificationBloc>()
-                                              .add(
-                                                VerificationEvent.searchBanks(
-                                                  value,
-                                                ),
-                                              );
-                                        },
-                                      ),
-                                      AppSpacing.horizontalSpaceMedium,
-                                      Expanded(
-                                        child:
-                                            BlocBuilder<
-                                              VerificationBloc,
-                                              VerificationState
-                                            >(
-                                              builder: (context, state) {
-                                                final banks = state.banks;
-
-                                                if (banks.isEmpty) {
-                                                  return const Center(
-                                                    child: Text(
-                                                      'No banks found.',
-                                                    ),
-                                                  );
-                                                }
-                                                return ListView.builder(
-                                                  itemCount: banks.length,
-                                                  itemBuilder: (_, index) {
-                                                    final bank = banks[index];
-                                                    return ListTile(
-                                                      title: Text(bank.name),
-                                                      onTap: () {
-                                                        Navigator.pop(
-                                                          context,
-                                                          bank,
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                            ).whenComplete(() {
+                              searchStringController.clear();
+                              context.read<VerificationBloc>().add(
+                                const VerificationEvent.searchBankString(''),
                               );
-                            },
-                          );
-
-                          if (selectedBank != null && context.mounted) {
-                            context.read<VerificationBloc>().add(
-                              VerificationEvent.bankChanged(selectedBank),
-                            );
-                          }
-                        },
+                            }),
 
                         child: AbsorbPointer(
                           child: CustomTextFormField(
@@ -265,26 +202,27 @@ class MoneyTransfer extends HookWidget {
                       if (accountName != null) AppSpacing.verticalSpaceSmall,
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
+                        child: (accountName?.isNotEmpty ?? false)
+                            ? Card(
+                                elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
 
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              'Account Name: $accountName',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'Account Name: $accountName',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
                       ),
                       AppSpacing.verticalSpaceMassive,
-
                       Button(
                         'Verify',
                         onPressed: () {

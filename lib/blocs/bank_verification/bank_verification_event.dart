@@ -19,4 +19,7 @@ class VerificationEvent with _$VerificationEvent {
       _GetBanksSuccessful;
   const factory VerificationEvent.getBanksFailed(String message) =
       _GetBanksFailed;
+
+  const factory VerificationEvent.searchBankString(String searchBankString) =
+      _SearchBankString;
 }

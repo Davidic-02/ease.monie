@@ -11,13 +11,26 @@ abstract class VerificationState with _$VerificationState {
     @Default(FormzSubmissionStatus.initial)
     FormzSubmissionStatus getBanksStatus,
     @Default([]) List<Bank> banks,
-    @Default([]) List<Bank> unFilteredBanks,
     dynamic verificationResult,
     String? errorMessage,
     String? verifiedAccountName,
+    String? searchBankString,
   }) = _VerificationState;
 
   bool get isFormValid => bankAccount.isValid && selectedBank.isValid;
+}
+
+extension BankExtension on VerificationState {
+  List<Bank> get bankSearchResult {
+    if (searchBankString?.isEmpty ?? true) return [];
+
+    final query = searchBankString!.toLowerCase();
+
+    return banks.where((e) => e.name.toLowerCase().startsWith(query)).toList();
+  }
+
+  List<Bank> get computedBanks =>
+      (searchBankString?.isEmpty ?? true) ? banks : bankSearchResult;
 }
 
 class BankAccountFormz extends FormzInput<String, ValidationError> {
