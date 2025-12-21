@@ -4,6 +4,7 @@ import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
+import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,6 +62,14 @@ final List<Widget> quickActionScreens = [
   MoneyTransfer(),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
+];
+
+final List servicesScreen = [
+  Charity(),
+  Charity(),
+  Charity(),
+  Charity(),
+  Charity(),
 ];
 
 final List<RecentTransfer> recentTransfer = [

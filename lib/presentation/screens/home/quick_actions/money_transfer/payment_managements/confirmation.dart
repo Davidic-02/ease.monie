@@ -12,6 +12,7 @@ class Confirmation extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final accountName = args['accountName'];
@@ -188,8 +189,8 @@ class Confirmation extends HookWidget {
                           radius: 30,
                           backgroundColor: Colors.white,
                           child: ClipOval(
-                            child: SvgPicture.asset(
-                              'assets/svgs/profile_pic2.svg',
+                            child: Image.asset(
+                              'assets/images/profile3.png',
                               width: 56,
                               height: 56,
                               fit: BoxFit.cover,
@@ -199,7 +200,7 @@ class Confirmation extends HookWidget {
                       ),
                     ],
                   ),
-                  AppSpacing.verticalSpaceHuge,
+                  SizedBox(height: screenHeight * 0.1),
                   Button(
                     'Send Money',
                     onPressed: () {

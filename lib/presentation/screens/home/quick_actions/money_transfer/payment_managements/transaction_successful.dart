@@ -49,16 +49,15 @@ class TransactionSuccessful extends StatelessWidget {
                   AppSpacing.verticalSpaceMassive,
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: SvgPicture.asset(
-                      'assets/svgs/successful.svg',
+                    child: Image.asset(
+                      'assets/images/success.png',
                       width: double.infinity,
                       height: screenHeight * 0.35,
                       fit: BoxFit.contain,
                     ),
                   ),
 
-                  SizedBox(height: screenHeight * 0 * 4),
-
+                  SizedBox(height: screenHeight * 0.1),
                   Button('View Receipts', onPressed: () {}),
                 ],
               ),
