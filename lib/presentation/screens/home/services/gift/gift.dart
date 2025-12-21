@@ -1,38 +1,49 @@
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
+import 'package:esae_monie/presentation/widgets/services_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class Charity extends HookWidget {
-  static const String routeName = 'Charity';
-  const Charity({super.key});
+class Gift extends HookWidget {
+  static const String routeName = 'Gift';
+  const Gift({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final charity1 = useState(
+    final gift1 = useState(
       ServicesModel(
-        imagePath: 'assets/images/child_education.png',
-        title: 'Donate For Child Education',
-        organizer: 'Arrange by HEADS Foundation',
-        targetAmount: 1000000,
-        donatedAmount: 25000,
+        imagePath: 'assets/images/gitf1.png',
+        title: 'Eid Gift',
+        organizer: 'Send Eid Gift to your loved ones',
+        targetAmount: 0,
+        donatedAmount: 0,
       ),
     );
 
-    final charity2 = useState(
+    final gift2 = useState(
       ServicesModel(
-        imagePath: 'assets/images/cancer_patient.png',
-        title: 'Donate For Cancer Patients',
-        organizer: 'Arrange by Care Club',
-        targetAmount: 1000000,
-        donatedAmount: 15000,
+        imagePath: 'assets/images/gitf2.png',
+        title: 'Birthday Gift',
+        organizer: 'Send Birthday Gift to your loved ones',
+        targetAmount: 0,
+        donatedAmount: 0,
       ),
     );
 
-    final color = charity1.value.getDonationColor(context);
-    final color2 = charity2.value.getDonationColor(context);
+    final gift3 = useState(
+      ServicesModel(
+        imagePath: 'assets/images/gitf3.png',
+        title: 'Marriage Gift',
+        organizer: 'Send Marriage Gift to your loved ones',
+        targetAmount: 0,
+        donatedAmount: 0,
+      ),
+    );
+
+    final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));
+    final birthdayOfferDeadline = DateTime.now().add(const Duration(days: 10));
 
     return Scaffold(
       body: SafeArea(
@@ -41,7 +52,7 @@ class Charity extends HookWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: CustomTopbar(
-                title: 'Charity',
+                title: 'Gift',
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -54,43 +65,75 @@ class Charity extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSpacing.verticalSpaceHuge,
-                    Material(
-                      elevation: 2,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 180,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.primary.withOpacity(0.08),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
 
-                              child: Image.asset(
-                                charity1.value.imagePath,
-                                width: double.infinity,
-                                height: 180,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            AppSpacing.verticalSpaceMedium,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [],
-                            ),
-                          ],
-                        ),
-                      ),
+                    ServiceCard(
+                      service: gift1.value,
+                      deadlineDate: eidOfferDeadline,
+                      showProgressBar: false,
+                      showPercentageBadge: false,
+                      buttonText: 'Send Gift',
+                      bottomLeftText: '🎁 Get 10% Cashback',
+                      onButtonPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          TypeOfGift.routeName,
+                          arguments: gift1.value,
+                        );
+                      },
+                    ),
+
+                    AppSpacing.verticalSpaceHuge,
+
+                    ServiceCard(
+                      service: gift2.value,
+                      deadlineDate: birthdayOfferDeadline,
+                      showProgressBar: false,
+                      showPercentageBadge: false,
+                      buttonText: 'Send Gift',
+                      bottomLeftText: 'Get 10% Cashback',
+                      onButtonPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          TypeOfGift.routeName,
+                          arguments: gift2.value,
+                        );
+                      },
+                    ),
+
+                    AppSpacing.verticalSpaceHuge,
+
+                    ServiceCard(
+                      service: gift3.value,
+                      showProgressBar: false,
+                      showPercentageBadge: false,
+                      showDaysLeftBadge: false,
+                      buttonText: 'Send Gift',
+                      bottomLeftText: 'Get 20% CashBack',
+                      onButtonPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          TypeOfGift.routeName,
+                          arguments: gift3.value,
+                        );
+                      },
+                    ),
+
+                    AppSpacing.verticalSpaceMedium,
+
+                    ServiceCard(
+                      service: gift1.value,
+                      deadlineDate: eidOfferDeadline,
+                      showProgressBar: false,
+                      showPercentageBadge: false,
+                      buttonText: 'Send Gift',
+                      bottomLeftText: '🎁 Get 10% Cashback',
+                      onButtonPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          TypeOfGift.routeName,
+                          arguments: gift1.value,
+                        );
+                      },
                     ),
                   ],
                 ),

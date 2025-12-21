@@ -5,6 +5,7 @@ import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfe
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
 import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
+import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -67,7 +68,7 @@ final List<Widget> quickActionScreens = [
 final List servicesScreen = [
   Charity(),
   Charity(),
-  Charity(),
+  Gift(),
   Charity(),
   Charity(),
 ];
