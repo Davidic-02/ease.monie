@@ -91,7 +91,6 @@ class Home extends HookWidget {
                                         const Text('Card Holder'),
                                         AppSpacing.verticalSpaceSmall,
                                         Text(
-                                          // show persisted user name if available
                                           user.displayName ?? 'User',
                                           style: context.textTheme.bodyLarge
                                               ?.copyWith(
@@ -251,6 +250,12 @@ class Home extends HookWidget {
                   },
                   onTap: (index) {
                     selectedService.value = index;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => servicesScreen[index],
+                      ),
+                    );
                   },
                 ),
 

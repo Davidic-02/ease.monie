@@ -6,6 +6,10 @@ import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfe
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
+import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
+import 'package:esae_monie/presentation/screens/home/services/charity/charity_amount.dart';
+import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
+import 'package:esae_monie/presentation/screens/home/services/charity/charity_transaction_success.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
@@ -14,6 +18,7 @@ import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
 import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
+import 'package:esae_monie/presentation/screens/home/services/charity/donation.dart';
 
 class AppRoutes {
   static Map<String, Widget Function(BuildContext)> get routes => {
@@ -29,5 +34,11 @@ class AppRoutes {
     Amount.routeName: (context) => Amount(),
     Confirmation.routeName: (context) => Confirmation(),
     TransactionSuccessful.routeName: (context) => TransactionSuccessful(),
+    Charity.routeName: (context) => Charity(),
+    Donation.routeName: (context) => Donation(),
+    CharityAmount.routeName: (context) => CharityAmount(),
+    CharityConfirmation.routeName: (context) => CharityConfirmation(),
+    CharityTransactionSuccess.routeName: (context) =>
+        CharityTransactionSuccess(),
   };
 }
