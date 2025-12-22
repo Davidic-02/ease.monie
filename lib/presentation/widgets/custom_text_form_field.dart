@@ -68,7 +68,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         AppSpacing.verticalSpaceSmall,
         TextFormField(
-          maxLines: maxLines,
+          maxLines: obscureText ? 1 : null,
           minLines: minLines,
           cursorColor: AppColors.primaryColor,
           maxLength: maxLength,

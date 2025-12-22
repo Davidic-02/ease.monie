@@ -2,7 +2,6 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
 
 import 'package:esae_monie/presentation/widgets/button.dart';

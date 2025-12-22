@@ -11,6 +11,7 @@ import 'package:esae_monie/presentation/screens/home/services/charity/charity_am
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_transaction_success.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
+import 'package:esae_monie/presentation/screens/home/services/gift/gift_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
@@ -44,5 +45,6 @@ class AppRoutes {
         CharityTransactionSuccess(),
     Gift.routeName: (context) => Gift(),
     TypeOfGift.routeName: (context) => TypeOfGift(),
+    GiftConfirmation.routeName: (context) => GiftConfirmation(),
   };
 }

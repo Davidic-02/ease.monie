@@ -1,7 +1,10 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/models/gift_model.dart';
 import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/home/services/gift/gift_confirmation.dart';
+import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +113,6 @@ class TypeOfGift extends HookWidget {
                         color: AppColors.blueColor.shade300,
                       ),
                     ),
-                    AppSpacing.verticalSpaceMedium,
 
                     CustomTextFormField(
                       key: const ValueKey("name"),
@@ -118,7 +120,6 @@ class TypeOfGift extends HookWidget {
                       hintText: "Name",
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
-                      fillColor: AppColors.whiteColor,
 
                       onChanged: (value) {
                         nameController.text = value;
@@ -131,15 +132,13 @@ class TypeOfGift extends HookWidget {
                       onFieldSubmitted: (_) => accountFocus.requestFocus(),
                     ),
 
-                    AppSpacing.verticalSpaceMedium,
-
                     CustomTextFormField(
                       key: const ValueKey("account"),
                       focusNode: accountFocus,
                       hintText: "Account Number",
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
-                      fillColor: AppColors.whiteColor,
+
                       controller: accountController,
                       onChanged: (value) {
                         accountController.text = value;
@@ -150,15 +149,13 @@ class TypeOfGift extends HookWidget {
                       onFieldSubmitted: (_) => purposeFocus.requestFocus(),
                     ),
 
-                    AppSpacing.verticalSpaceMedium,
-
                     CustomTextFormField(
                       key: const ValueKey("purpose"),
                       focusNode: purposeFocus,
                       hintText: "Purpose",
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
-                      fillColor: AppColors.whiteColor,
+
                       controller: purposeController,
                       onChanged: (value) {
                         purposeController.text = value;
@@ -176,7 +173,7 @@ class TypeOfGift extends HookWidget {
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true, // hide password
-                      fillColor: AppColors.whiteColor,
+
                       controller: passwordController,
                       onChanged: (value) {
                         passwordController.text = value;
@@ -198,8 +195,6 @@ class TypeOfGift extends HookWidget {
                       ),
                     ),
 
-                    AppSpacing.verticalSpaceMedium,
-
                     CustomTextFormField(
                       controller: controller,
                       focusNode: amountFocusNode,
@@ -219,7 +214,6 @@ class TypeOfGift extends HookWidget {
                       },
                     ),
 
-                    AppSpacing.verticalSpaceSmall,
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -266,6 +260,7 @@ class TypeOfGift extends HookWidget {
                       ),
                     ),
 
+                    AppSpacing.verticalSpaceMassive,
                     Text(
                       'Enter Gift Message',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -274,7 +269,6 @@ class TypeOfGift extends HookWidget {
                       ),
                     ),
 
-                    AppSpacing.verticalSpaceSmall,
                     CustomTextFormField(
                       key: const ValueKey("gift_message"),
                       controller: giftMessageController,
@@ -282,11 +276,9 @@ class TypeOfGift extends HookWidget {
                       hintText: "Write your gift message here...",
                       keyboardType: TextInputType.multiline,
                       textInputAction: TextInputAction.newline,
-                      fillColor: AppColors.whiteColor,
 
                       minLines: 4,
                       maxLines: 6,
-
                       onChanged: (value) {
                         giftMessageController.text = value;
                       },
@@ -294,6 +286,28 @@ class TypeOfGift extends HookWidget {
                       errorText: giftMessageController.text.isEmpty
                           ? "Gift message cannot be empty"
                           : null,
+                    ),
+                    AppSpacing.verticalSpaceMedium,
+                    Button(
+                      'Send',
+                      color: AppColors.blueColor,
+                      onPressed: () {
+                        final payload = GiftPayload(
+                          service: services,
+                          name: nameController.text,
+                          accountNumber: accountController.text,
+                          purpose: purposeController.text,
+                          password: passwordController.text,
+                          amount: amount.value,
+                          giftMessage: giftMessageController.text,
+                        );
+
+                        Navigator.pushNamed(
+                          context,
+                          GiftConfirmation.routeName,
+                          arguments: payload,
+                        );
+                      },
                     ),
                   ],
                 ),

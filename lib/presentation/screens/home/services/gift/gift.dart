@@ -14,7 +14,7 @@ class Gift extends HookWidget {
   Widget build(BuildContext context) {
     final gift1 = useState(
       ServicesModel(
-        imagePath: 'assets/images/gitf1.png',
+        imagePath: 'assets/images/gift1.png',
         title: 'Eid Gift',
         organizer: 'Send Eid Gift to your loved ones',
         targetAmount: 0,
@@ -24,7 +24,7 @@ class Gift extends HookWidget {
 
     final gift2 = useState(
       ServicesModel(
-        imagePath: 'assets/images/gitf2.png',
+        imagePath: 'assets/images/gift2.png',
         title: 'Birthday Gift',
         organizer: 'Send Birthday Gift to your loved ones',
         targetAmount: 0,
@@ -34,7 +34,7 @@ class Gift extends HookWidget {
 
     final gift3 = useState(
       ServicesModel(
-        imagePath: 'assets/images/gitf3.png',
+        imagePath: 'assets/images/gift3.png',
         title: 'Marriage Gift',
         organizer: 'Send Marriage Gift to your loved ones',
         targetAmount: 0,
@@ -71,7 +71,7 @@ class Gift extends HookWidget {
                       deadlineDate: eidOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
-                      buttonText: 'Send Gift',
+                      buttonText: 'Send',
                       bottomLeftText: '🎁 Get 10% Cashback',
                       onButtonPressed: () {
                         Navigator.pushNamed(
@@ -89,8 +89,8 @@ class Gift extends HookWidget {
                       deadlineDate: birthdayOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
-                      buttonText: 'Send Gift',
-                      bottomLeftText: 'Get 10% Cashback',
+                      buttonText: 'Send',
+                      bottomLeftText: '🎁 Get 30% Cashback',
                       onButtonPressed: () {
                         Navigator.pushNamed(
                           context,
@@ -107,8 +107,8 @@ class Gift extends HookWidget {
                       showProgressBar: false,
                       showPercentageBadge: false,
                       showDaysLeftBadge: false,
-                      buttonText: 'Send Gift',
-                      bottomLeftText: 'Get 20% CashBack',
+                      buttonText: 'Send',
+                      bottomLeftText: '🎁 Get 20% Cashback',
                       onButtonPressed: () {
                         Navigator.pushNamed(
                           context,
@@ -125,7 +125,7 @@ class Gift extends HookWidget {
                       deadlineDate: eidOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
-                      buttonText: 'Send Gift',
+                      buttonText: 'Send',
                       bottomLeftText: '🎁 Get 10% Cashback',
                       onButtonPressed: () {
                         Navigator.pushNamed(

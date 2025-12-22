@@ -68,8 +68,8 @@ final List<Widget> quickActionScreens = [
 final List servicesScreen = [
   Charity(),
   Charity(),
-  Gift(),
   Charity(),
+  Gift(),
   Charity(),
 ];
 
