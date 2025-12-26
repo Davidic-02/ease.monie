@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/gift_model.dart';
@@ -7,6 +5,7 @@ import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
+import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -79,6 +78,9 @@ class GiftConfirmation extends HookWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               AppSpacing.verticalSpaceMassive,
+
+                              TextTitle(text: myService.title),
+
                               Text(
                                 accountName,
                                 style: Theme.of(context).textTheme.titleMedium
@@ -194,13 +196,13 @@ class GiftConfirmation extends HookWidget {
                       Positioned(
                         top: -40,
                         child: CircleAvatar(
-                          radius: 30,
+                          radius: 40,
                           backgroundColor: Colors.white,
                           child: ClipOval(
                             child: Image.asset(
                               imagePath,
-                              width: 56,
-                              height: 56,
+                              width: 70,
+                              height: 70,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -215,7 +217,7 @@ class GiftConfirmation extends HookWidget {
                     onPressed: () async {
                       final result = await Navigator.pushNamed(
                         context,
-                        GiftTransactionSuccess.routeName,
+                        GiftTransactionSuccessful.routeName,
                         arguments: {
                           'service': myService, // your ServicesModel instance
                           'name': accountName,

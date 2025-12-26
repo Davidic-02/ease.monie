@@ -4,11 +4,12 @@ import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/giftsuccessful_bottom_sheet.dart';
+import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
 
-class GiftTransactionSuccess extends StatelessWidget {
-  static const String routeName = 'CharityTransactionSuccess';
-  const GiftTransactionSuccess({super.key});
+class GiftTransactionSuccessful extends StatelessWidget {
+  static const String routeName = 'GiftTransactionSuccessful';
+  const GiftTransactionSuccessful({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,15 +39,10 @@ class GiftTransactionSuccess extends StatelessWidget {
                     },
                   ),
                   AppSpacing.verticalSpaceMassive,
-                  Text(
-                    'Transaction Successful!',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.blueColor.shade300,
-                      fontSize: 25,
-                    ),
+                  TextTitle(
+                    text: 'Transaction successful',
+                    color: AppColors.blackColor,
                   ),
-
                   AppSpacing.verticalSpaceMedium,
                   Padding(
                     padding: EdgeInsets.symmetric(
@@ -75,21 +71,22 @@ class GiftTransactionSuccess extends StatelessWidget {
                     'View Receipts',
                     color: AppColors.blueColor,
                     onPressed: () {
+                      print('Button pressed!');
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         useRootNavigator: true,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(16),
+                            top: Radius.circular(30),
                           ),
                         ),
                         builder: (_) => GiftSuccessBottomSheet(
                           amount: amountDouble,
-                          accountName:
-                              accountName, // pass the values from your screen
+                          accountName: accountName,
                           accountNumber: accountNumber,
                           imagePath: imagePath,
+                          giftTitle: service.title,
                         ),
                       );
                     },

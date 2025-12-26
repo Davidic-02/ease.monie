@@ -1,11 +1,13 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
 import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
+import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -70,8 +72,16 @@ final List servicesScreen = [
   Charity(),
   Charity(),
   Gift(),
-  Charity(),
+  Insurance(),
 ];
+
+final List<InsuranceModel> insuranceModel = [
+  InsuranceModel(plan: 'Monthly Plan', time: 'month', amount: '2300.00'),
+  InsuranceModel(plan: 'One Time Plan', time: 'year', amount: '2000.00'),
+  InsuranceModel(plan: 'Yearly Plan', time: 'year', amount: '3000.00'),
+];
+
+final List<String> paymentPlans = ['Monthly', 'Quarterly', 'Yearly'];
 
 final List<RecentTransfer> recentTransfer = [
   RecentTransfer(
@@ -109,3 +119,4 @@ final presetAmounts = [
   10000.0,
   20000.0,
 ];
+final paymentPlan = ['Monthly', 'Quartly', 'Yearly'];

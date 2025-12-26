@@ -1,6 +1,7 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
+import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
 
 class GiftSuccessBottomSheet extends StatelessWidget {
@@ -8,6 +9,7 @@ class GiftSuccessBottomSheet extends StatelessWidget {
   final String accountName;
   final String accountNumber;
   final String imagePath;
+  final String giftTitle;
 
   const GiftSuccessBottomSheet({
     super.key,
@@ -15,6 +17,7 @@ class GiftSuccessBottomSheet extends StatelessWidget {
     required this.accountName,
     required this.accountNumber,
     required this.imagePath,
+    required this.giftTitle,
   });
 
   @override
@@ -53,7 +56,7 @@ class GiftSuccessBottomSheet extends StatelessWidget {
                   child: Column(
                     children: [
                       AppSpacing.verticalSpaceLarge,
-
+                      TextTitle(text: giftTitle),
                       Text(
                         accountName,
                         style: Theme.of(context).textTheme.titleMedium
@@ -73,11 +76,20 @@ class GiftSuccessBottomSheet extends StatelessWidget {
                         label: Text(
                           'Transaction Status: Successful',
                           style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.green.shade800,
+                              ),
                         ),
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.primaryContainer,
+                        backgroundColor: Colors.green.shade100,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(color: Colors.transparent),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 6,
+                          horizontal: 12,
+                        ),
                       ),
 
                       AppSpacing.verticalSpaceMedium,
@@ -97,13 +109,13 @@ class GiftSuccessBottomSheet extends StatelessWidget {
               Positioned(
                 top: -35,
                 child: CircleAvatar(
-                  radius: 28,
+                  radius: 40,
                   backgroundColor: Colors.white,
                   child: ClipOval(
                     child: Image.asset(
                       imagePath,
-                      width: 52,
-                      height: 52,
+                      width: 72,
+                      height: 72,
                       fit: BoxFit.cover,
                     ),
                   ),
