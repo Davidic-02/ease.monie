@@ -1,6 +1,5 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
@@ -16,7 +15,6 @@ class InsuranceTransaction extends HookWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Get arguments from previous screen
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final ServicesModel services = args['service'];

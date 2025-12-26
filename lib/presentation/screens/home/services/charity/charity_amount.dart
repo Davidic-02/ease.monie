@@ -1,6 +1,7 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/data/formatter.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
 
@@ -9,7 +10,6 @@ import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:intl/intl.dart';
 
 class CharityAmount extends HookWidget {
   const CharityAmount({super.key});
@@ -27,11 +27,7 @@ class CharityAmount extends HookWidget {
     final amountFocusNode = useFocusNode();
     final controller = useTextEditingController();
     final amount = useState<double>(0.0);
-    final formatter = NumberFormat.currency(
-      locale: 'en_NG',
-      symbol: '₦',
-      decimalDigits: 2,
-    );
+
     double screenHeight = MediaQuery.of(context).size.height;
 
     useEffect(() {
@@ -131,28 +127,34 @@ class CharityAmount extends HookWidget {
                 ),
               ),
               SizedBox(height: screenHeight * 0.3),
-              Button(
-                'Next',
-                color: AppColors.blueColor,
-                onPressed: () async {
-                  final result = await Navigator.pushNamed(
-                    context,
-                    CharityConfirmation.routeName,
-                    arguments: {
-                      'charity': charity,
-                      'accountName': accountName,
-                      'bankName': bankName,
-                      'accountNumber': accountNumber,
-                      'amount': amount.value,
-                      'imagePath': args['imagePath'],
-                      'title': args['title'],
-                    },
-                  );
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 40,
+                ),
+                child: Button(
+                  'Next',
+                  color: AppColors.blueColor,
+                  onPressed: () async {
+                    final result = await Navigator.pushNamed(
+                      context,
+                      CharityConfirmation.routeName,
+                      arguments: {
+                        'charity': charity,
+                        'accountName': accountName,
+                        'bankName': bankName,
+                        'accountNumber': accountNumber,
+                        'amount': amount.value,
+                        'imagePath': args['imagePath'],
+                        'title': args['title'],
+                      },
+                    );
 
-                  if (result != null) {
-                    Navigator.pop(context, result);
-                  }
-                },
+                    if (result != null) {
+                      Navigator.pop(context, result);
+                    }
+                  },
+                ),
               ),
             ],
           ),

@@ -1,26 +1,26 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/giftsuccessful_bottom_sheet.dart';
 import 'package:esae_monie/presentation/widgets/text_child.dart';
 import 'package:flutter/material.dart';
 
-class InsuranceTransactionSuccessful extends StatelessWidget {
-  static const String routeName = 'InsuranceTransactionSuccessful';
-  const InsuranceTransactionSuccessful({super.key});
+class RechargeTransactionSuccessful extends StatelessWidget {
+  static const String routeName = 'RechargeTransactionSuccessful';
+  const RechargeTransactionSuccessful({super.key});
 
   @override
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final ServicesModel service = args['service'];
-    final String paymentType = args['paymentType'] ?? 'Unknown';
-    final String accountNumber = args['accountNumber'];
-    final double amountDouble =
-        double.tryParse(args['amount'].toString()) ?? 0.0;
-    final String imagePath = args['imagePath'];
+    final double amount = args['amount'] ?? 0.0;
+    final String accountName = args['accountName'] ?? '';
+    final String accountNumber = args['accountNumber'] ?? '';
+    final String imagePath = args['imagePath'] ?? '';
+    final String giftTitle = args['giftTitle'] ?? '';
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -87,11 +87,11 @@ class InsuranceTransactionSuccessful extends StatelessWidget {
                           ),
                         ),
                         builder: (_) => GiftSuccessBottomSheet(
-                          amount: amountDouble,
-                          accountName: paymentType,
+                          amount: amount,
+                          accountName: accountName,
                           accountNumber: accountNumber,
                           imagePath: imagePath,
-                          giftTitle: service.title,
+                          giftTitle: giftTitle,
                         ),
                       );
                     },

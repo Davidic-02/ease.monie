@@ -126,12 +126,15 @@ class GiftSuccessBottomSheet extends StatelessWidget {
 
           AppSpacing.verticalSpaceLarge,
 
-          Button(
-            'Done',
-            color: AppColors.blueColor,
-            onPressed: () {
-              Navigator.pop(context); // closes bottom sheet only
-            },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+            child: Button(
+              'Done',
+              color: AppColors.blueColor,
+              onPressed: () {
+                Navigator.pop(context); // closes bottom sheet only
+              },
+            ),
           ),
         ],
       ),

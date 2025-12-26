@@ -20,6 +20,9 @@ import 'package:esae_monie/presentation/screens/home/services/insurance/insuranc
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_insurance.dart';
+import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
+import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
+import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
@@ -62,5 +65,9 @@ class AppRoutes {
     InsuranceTransaction.routeName: (context) => InsuranceTransaction(),
     InsuranceTransactionSuccessful.routeName: (context) =>
         InsuranceTransactionSuccessful(),
+    Recharge.routeName: (context) => Recharge(),
+    RechargeConfirmation.routeName: (context) => RechargeConfirmation(),
+    RechargeTransactionSuccessful.routeName: (context) =>
+        RechargeTransactionSuccessful(),
   };
 }

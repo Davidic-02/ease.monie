@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
+import 'package:esae_monie/models/selected_network.dart';
 import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
@@ -9,6 +10,7 @@ import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_
 import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
+import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -70,7 +72,7 @@ final List<Widget> quickActionScreens = [
 ];
 
 final List servicesScreen = [
-  Charity(),
+  Recharge(),
   Charity(),
   Charity(),
   Gift(),
@@ -112,6 +114,13 @@ final List<RecentTransfer> recentTransfer = [
   ),
 ];
 
+final List<SelectedNetwork> selectedNetwork = [
+  SelectedNetwork(image: 'assets/images/mtn.png', name: 'MTN'),
+  SelectedNetwork(image: 'assets/images/airtel.png', name: 'Airtel'),
+  SelectedNetwork(image: 'assets/images/glo.png', name: 'Glo'),
+  SelectedNetwork(image: 'assets/images/9mobile.png', name: '9mobile'),
+];
+
 final presetAmounts = [
   1000.0,
   2000.0,
@@ -142,3 +151,68 @@ final charity2 = useState(
     donatedAmount: 15000,
   ),
 );
+
+final gift1 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/gift1.png',
+    title: 'Eid Gift',
+    organizer: 'Send Eid Gift to your loved ones',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final gift2 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/gift2.png',
+    title: 'Birthday Gift',
+    organizer: 'Send Birthday Gift to your loved ones',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final gift3 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/gift3.png',
+    title: 'Marriage Gift',
+    organizer: 'Send Marriage Gift to your loved ones',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));
+final birthdayOfferDeadline = DateTime.now().add(const Duration(days: 10));
+final insurance1 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/insurance1.png',
+    title: 'Family Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final insurance2 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/insurance2.png',
+    title: 'House Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final insurance3 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/insurance3.png',
+    title: 'Health Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+);
+
+final familyOfferDeadline = DateTime.now().add(const Duration(days: 3));
+final houseOfferDeadline = DateTime.now().add(const Duration(days: 10));

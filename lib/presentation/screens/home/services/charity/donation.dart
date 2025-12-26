@@ -201,25 +201,31 @@ class Donation extends HookWidget {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.1),
-                    Button(
-                      'Donate Now',
-                      onPressed: () async {
-                        final result = await Navigator.pushNamed(
-                          context,
-                          CharityAmount.routeName,
-                          arguments: {
-                            'charity': charity,
-                            'accountName': charity.organizer,
-                            'bankName': 'Charity Bank',
-                            'accountNumber': '0000000000',
-                          },
-                        );
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 40,
+                      ),
+                      child: Button(
+                        'Donate Now',
+                        onPressed: () async {
+                          final result = await Navigator.pushNamed(
+                            context,
+                            CharityAmount.routeName,
+                            arguments: {
+                              'charity': charity,
+                              'accountName': charity.organizer,
+                              'bankName': 'Charity Bank',
+                              'accountNumber': '0000000000',
+                            },
+                          );
 
-                        if (result != null && result is double) {
-                          donatedAmount.value = donatedAmount.value + result;
-                        }
-                      },
-                      color: AppColors.blueColor,
+                          if (result != null && result is double) {
+                            donatedAmount.value = donatedAmount.value + result;
+                          }
+                        },
+                        color: AppColors.blueColor,
+                      ),
                     ),
                   ],
                 ),

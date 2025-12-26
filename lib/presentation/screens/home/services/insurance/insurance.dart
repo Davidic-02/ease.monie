@@ -1,5 +1,4 @@
 import 'package:esae_monie/constants/app_spacing.dart';
-
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_insurance.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';

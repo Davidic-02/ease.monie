@@ -1,28 +1,28 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
-import 'package:esae_monie/presentation/screens/home/services/charity/charity_transaction_success.dart';
+import 'package:esae_monie/models/selected_network.dart';
+import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CharityConfirmation extends HookWidget {
-  static const String routeName = 'CharityConfirmation';
-  const CharityConfirmation({super.key});
+class RechargeConfirmation extends HookWidget {
+  static const String routeName = 'RechargeConfirmation';
+  const RechargeConfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final accountName = args['accountName'];
-    final charity = args['charity'] as ServicesModel;
 
-    final accountNumber = args['accountNumber'];
-    final amountDouble = args['amount'] as double;
-    final amount = amountDouble.toStringAsFixed(2);
-    final imagePath = charity.imagePath;
+    final String recipientNumber = args['recipientNumber'] ?? '';
+    final SelectedNetwork network = args['network'];
+    final double amount = args['amount'] ?? 0.0;
+
+    final String networkName = network.name;
+    final String imagePath = network.image;
 
     return Scaffold(
       body: SafeArea(
@@ -35,25 +35,19 @@ class CharityConfirmation extends HookWidget {
                 children: [
                   CustomTopbar(
                     title: 'Confirmation',
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                    onTap: () => Navigator.pop(context),
                   ),
                   AppSpacing.verticalSpaceMassive,
                   Text(
-                    'Are You Sure ?',
+                    'Are You Sure?',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.blueColor.shade300,
                       fontSize: 25,
                     ),
                   ),
-
                   AppSpacing.verticalSpaceMedium,
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16.0,
-                      horizontal: 25,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Text(
                       'We care about your privacy. Please make sure you want to transfer money.',
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -76,17 +70,15 @@ class CharityConfirmation extends HookWidget {
                             children: [
                               AppSpacing.verticalSpaceMassive,
                               Text(
-                                accountName,
+                                recipientNumber,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                               AppSpacing.verticalSpaceMedium,
-
                               Text(
-                                accountNumber,
+                                networkName,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
-
                               Chip(
                                 label: Text(
                                   'Transaction Status: Pending',
@@ -100,12 +92,10 @@ class CharityConfirmation extends HookWidget {
                                   color: Theme.of(context).colorScheme.error,
                                 ),
                               ),
-
                               const SizedBox(height: 20),
-
                               RichText(
                                 text: TextSpan(
-                                  text: amount,
+                                  text: amount.toStringAsFixed(2),
                                   style: Theme.of(
                                     context,
                                   ).textTheme.titleMedium,
@@ -119,9 +109,7 @@ class CharityConfirmation extends HookWidget {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(height: 20),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -140,9 +128,7 @@ class CharityConfirmation extends HookWidget {
                                   ),
                                 ],
                               ),
-
                               const Divider(height: 30),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -161,9 +147,7 @@ class CharityConfirmation extends HookWidget {
                                   ),
                                 ],
                               ),
-
                               const SizedBox(height: 10),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -214,18 +198,17 @@ class CharityConfirmation extends HookWidget {
                       color: AppColors.blueColor,
                       'Send Money',
                       onPressed: () async {
-                        final result = await Navigator.pushNamed(
+                        Navigator.pushNamed(
                           context,
-                          CharityTransactionSuccess.routeName,
+                          RechargeTransactionSuccessful.routeName,
                           arguments: {
-                            'amount': amountDouble,
-                            'imagePath': imagePath,
+                            'amount': amount,
+                            'accountName': network.name,
+                            'accountNumber': recipientNumber,
+                            'imagePath': network.image,
+                            'giftTitle': network.name,
                           },
                         );
-
-                        if (result != null) {
-                          Navigator.pop(context, result);
-                        }
                       },
                     ),
                   ),
