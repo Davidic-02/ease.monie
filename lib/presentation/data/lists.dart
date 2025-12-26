@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
+import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
@@ -10,6 +11,7 @@ import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 final colors = [
   AppColors.accentNeon.withValues(alpha: 0.4),
@@ -120,3 +122,23 @@ final presetAmounts = [
   20000.0,
 ];
 final paymentPlan = ['Monthly', 'Quartly', 'Yearly'];
+
+final charity1 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/child_education.png',
+    title: 'Donate For Child Education',
+    organizer: 'Arrange by HEADS Foundation',
+    targetAmount: 1000000,
+    donatedAmount: 25000,
+  ),
+);
+
+final charity2 = useState(
+  ServicesModel(
+    imagePath: 'assets/images/cancer_patient.png',
+    title: 'Donate For Cancer Patients',
+    organizer: 'Arrange by Care Club',
+    targetAmount: 1000000,
+    donatedAmount: 15000,
+  ),
+);

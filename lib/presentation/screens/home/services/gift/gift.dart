@@ -1,5 +1,5 @@
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/services_card.dart';
@@ -12,39 +12,6 @@ class Gift extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gift1 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/gift1.png',
-        title: 'Eid Gift',
-        organizer: 'Send Eid Gift to your loved ones',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final gift2 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/gift2.png',
-        title: 'Birthday Gift',
-        organizer: 'Send Birthday Gift to your loved ones',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final gift3 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/gift3.png',
-        title: 'Marriage Gift',
-        organizer: 'Send Marriage Gift to your loved ones',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));
-    final birthdayOfferDeadline = DateTime.now().add(const Duration(days: 10));
-
     return Scaffold(
       body: SafeArea(
         child: Column(

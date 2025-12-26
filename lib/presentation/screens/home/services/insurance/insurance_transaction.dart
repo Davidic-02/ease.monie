@@ -20,7 +20,6 @@ class InsuranceTransaction extends HookWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final ServicesModel services = args['service'];
-    final InsuranceModel selectedInsurance = args['insurance'];
     final String paymentPlan = args['paymentPlan'];
 
     return Scaffold(

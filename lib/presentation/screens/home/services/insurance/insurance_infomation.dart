@@ -2,7 +2,6 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/services_model.dart';
-import 'package:esae_monie/presentation/data/formatter.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_confirmation.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
@@ -19,9 +18,6 @@ class InsuranceInfomation extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final selectedPlan = useState<String?>(null);
-
-    final controller = useTextEditingController();
-    final amountFocusNode = useFocusNode();
 
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -50,7 +46,6 @@ class InsuranceInfomation extends HookWidget {
     final paymentDetailsFocus = useFocusNode();
     final purposeFocus = useFocusNode();
     final paymentOptionsFocus = useFocusNode();
-    final selectedIndex = useState<int?>(null);
 
     return Scaffold(
       body: SafeArea(

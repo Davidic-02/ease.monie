@@ -1,6 +1,5 @@
-
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/donation.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/services_card.dart';
@@ -14,29 +13,6 @@ class Charity extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final deadline = DateTime.now().add(const Duration(days: 7));
-
-    final charity1 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/child_education.png',
-        title: 'Donate For Child Education',
-        organizer: 'Arrange by HEADS Foundation',
-        targetAmount: 1000000,
-        donatedAmount: 25000,
-      ),
-    );
-
-    final charity2 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/cancer_patient.png',
-        title: 'Donate For Cancer Patients',
-        organizer: 'Arrange by Care Club',
-        targetAmount: 1000000,
-        donatedAmount: 15000,
-      ),
-    );
-
-    final color = charity1.value.getDonationColor(context);
-    final color2 = charity2.value.getDonationColor(context);
 
     return Scaffold(
       body: SafeArea(

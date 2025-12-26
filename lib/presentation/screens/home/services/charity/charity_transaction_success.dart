@@ -13,7 +13,6 @@ class CharityTransactionSuccess extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final double amount = args['amount'] as double;
-    final String imagePath = args['imagePath'] as String;
 
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

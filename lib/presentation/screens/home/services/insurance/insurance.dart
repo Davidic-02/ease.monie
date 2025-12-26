@@ -1,6 +1,6 @@
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
-import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
+
+import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_insurance.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/services_card.dart';
@@ -13,39 +13,6 @@ class Insurance extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final insurance1 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/insurance1.png',
-        title: 'Family Insurance',
-        organizer: 'Family Plans Cover two or more members',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final insurance2 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/insurance2.png',
-        title: 'House Insurance',
-        organizer: 'Family Plans Cover two or more members',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final insurance3 = useState(
-      ServicesModel(
-        imagePath: 'assets/images/insurance3.png',
-        title: 'Health Insurance',
-        organizer: 'Family Plans Cover two or more members',
-        targetAmount: 0,
-        donatedAmount: 0,
-      ),
-    );
-
-    final familyOfferDeadline = DateTime.now().add(const Duration(days: 3));
-    final houseOfferDeadline = DateTime.now().add(const Duration(days: 10));
-
     return Scaffold(
       body: SafeArea(
         child: Column(
