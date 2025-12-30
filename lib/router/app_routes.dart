@@ -23,6 +23,7 @@ import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_
 import 'package:esae_monie/presentation/screens/home/services/loan/loan.dart';
 import 'package:esae_monie/presentation/screens/home/services/loan/loan_payment_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/loan/loan_payment_plans.dart';
+import 'package:esae_monie/presentation/screens/home/services/loan/loan_transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
@@ -75,5 +76,7 @@ class AppRoutes {
     Loan.routeName: (context) => Loan(),
     LoanPaymentPlans.routeName: (context) => LoanPaymentPlans(),
     LoanPaymentConfirmation.routeName: (context) => LoanPaymentConfirmation(),
+    LoanTransactionSuccessful.routeName: (context) =>
+        LoanTransactionSuccessful(),
   };
 }
