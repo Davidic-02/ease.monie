@@ -2,7 +2,6 @@ import 'package:esae_monie/blocs/loan/loan_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/formatter.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction.dart';
 import 'package:esae_monie/presentation/screens/home/services/loan/loan_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';

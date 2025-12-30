@@ -39,7 +39,6 @@ class TypeOfInsurance extends HookWidget {
                   children: [
                     AppSpacing.verticalSpaceHuge,
 
-                    /// SERVICE CARD
                     Material(
                       elevation: 2,
                       borderRadius: BorderRadius.circular(16),

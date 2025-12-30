@@ -87,7 +87,7 @@ class LoanPaymentPlans extends HookWidget {
                                             fontWeight: FontWeight.w600,
                                             color: Theme.of(
                                               context,
-                                            ).colorScheme.onBackground,
+                                            ).colorScheme.onSurface,
                                           ),
                                     ),
                                     const SizedBox(height: 4),
@@ -99,8 +99,8 @@ class LoanPaymentPlans extends HookWidget {
                                           ?.copyWith(
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onBackground
-                                                .withOpacity(0.7), // subtle
+                                                .onSurface
+                                                .withAlpha((0.7 * 255).round()),
                                           ),
                                     ),
                                   ],
@@ -268,7 +268,7 @@ class LoanPaymentPlans extends HookWidget {
                                     final int months = int.parse(
                                       state.selectedPlan!.split('')[0],
                                     );
-                                    const double interest = 0.10;
+
                                     final DateTime now = DateTime.now();
                                     final DateTime dueDate = DateTime(
                                       now.year,
