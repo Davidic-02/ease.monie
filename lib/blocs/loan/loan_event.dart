@@ -8,5 +8,7 @@ abstract class LoanEvent with _$LoanEvent {
   const factory LoanEvent.mobileChanged(String mobile) = _MobileChanged;
   const factory LoanEvent.passwordChanged(String password) = _PasswordChanged;
   const factory LoanEvent.planSelected(String plan) = _PlanSelected;
+  const factory LoanEvent.autoPaymentToggled(bool value) = _AutoPaymentToggled;
+
   const factory LoanEvent.submit() = _Submit;
 }

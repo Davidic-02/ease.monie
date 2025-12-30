@@ -15,6 +15,7 @@ class LoanBloc extends Bloc<LoanEvent, LoanState> {
     on<_PasswordChanged>(_passwordChanged);
     on<_PlanSelected>(_planSelected);
     on<_Submit>(_submit);
+    on<_AutoPaymentToggled>(_autoPaymentToggled);
   }
 
   void _planSelected(_PlanSelected event, Emitter<LoanState> emit) {
@@ -76,5 +77,9 @@ class LoanBloc extends Bloc<LoanEvent, LoanState> {
     }
 
     emit(state.copyWith(submissionStatus: FormzSubmissionStatus.success));
+  }
+
+  void _autoPaymentToggled(_AutoPaymentToggled event, Emitter<LoanState> emit) {
+    emit(state.copyWith(autoPayment: event.value));
   }
 }

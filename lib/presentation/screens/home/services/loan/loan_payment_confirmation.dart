@@ -1,3 +1,4 @@
+import 'package:esae_monie/blocs/loan/loan_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/formatter.dart';
@@ -6,6 +7,7 @@ import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
@@ -190,6 +192,63 @@ class LoanPaymentConfirmation extends HookWidget {
                               ),
                             ],
                           ),
+
+                          BlocBuilder<LoanBloc, LoanState>(
+                            builder: (context, state) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+
+                                decoration: BoxDecoration(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Auto Payment',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Automatically pay on due date',
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.bodySmall,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Switch(
+                                      value: state.autoPayment,
+                                      onChanged: (value) {
+                                        context.read<LoanBloc>().add(
+                                          LoanEvent.autoPaymentToggled(value),
+                                        );
+                                      },
+                                      activeThumbColor: Colors.white,
+                                      activeTrackColor: Colors.blue,
+                                      inactiveThumbColor: Colors.grey,
+                                      inactiveTrackColor: Colors.white54,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -203,13 +262,7 @@ class LoanPaymentConfirmation extends HookWidget {
                       child: Button(
                         color: AppColors.blueColor,
                         'Continue',
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            InsuranceTransaction.routeName,
-                            arguments: {},
-                          );
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ],

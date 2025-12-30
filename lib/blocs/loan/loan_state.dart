@@ -6,6 +6,7 @@ abstract class LoanState with _$LoanState {
 
   const factory LoanState({
     String? selectedPlan,
+    @Default(false) bool autoPayment,
 
     @Default(NameFormz.pure()) NameFormz name,
     @Default(CnicFormz.pure()) CnicFormz cnic,
