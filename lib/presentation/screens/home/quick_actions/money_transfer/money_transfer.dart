@@ -10,6 +10,7 @@ import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+//import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
