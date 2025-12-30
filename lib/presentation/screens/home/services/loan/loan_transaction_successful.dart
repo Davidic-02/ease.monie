@@ -11,9 +11,6 @@ class LoanTransactionSuccessful extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -39,7 +36,6 @@ class LoanTransactionSuccessful extends StatelessWidget {
                     fontSize: 25,
                   ),
                 ),
-
                 AppSpacing.verticalSpaceMedium,
                 TextChild(
                   text:

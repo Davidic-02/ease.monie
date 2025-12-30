@@ -3,13 +3,13 @@ import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/formatter.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction.dart';
+import 'package:esae_monie/presentation/screens/home/services/loan/loan_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:intl/intl.dart';
 
 class LoanPaymentConfirmation extends HookWidget {
   static const String routeName = 'LoanPaymentConfirmation';
@@ -23,8 +23,6 @@ class LoanPaymentConfirmation extends HookWidget {
     final loanAmount = formatter.format(args['principal'] ?? 0);
     final interest = formatter.format(args['Interest'] ?? 0);
     final totalPayment = formatter.format(args['totalPayment'] ?? 0);
-
-    final selectedPlan = args['selectedPlan'] ?? '';
     final dueDate = args['dueDate'] ?? '';
 
     return Scaffold(
@@ -34,7 +32,7 @@ class LoanPaymentConfirmation extends HookWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: CustomTopbar(
-                title: 'Insurance',
+                title: 'Payment Plan',
                 onTap: () => Navigator.pop(context),
               ),
             ),
@@ -262,7 +260,13 @@ class LoanPaymentConfirmation extends HookWidget {
                       child: Button(
                         color: AppColors.blueColor,
                         'Continue',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            LoanTransactionSuccessful.routeName,
+                            arguments: {},
+                          );
+                        },
                       ),
                     ),
                   ],
