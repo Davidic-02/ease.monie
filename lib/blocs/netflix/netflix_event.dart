@@ -9,6 +9,7 @@ abstract class NetflixEvent with _$NetflixEvent {
   const factory NetflixEvent.addressChanged(String address) = _AddressChanged;
   const factory NetflixEvent.postalCodeChanged(String postalCode) =
       _PostalCodeChanged;
+  const factory NetflixEvent.stateChanged(String state) = _StateChanged;
   const factory NetflixEvent.cityChanged(String city) = _CityChanged;
   const factory NetflixEvent.countryChanged(String country) = _CountryChanged;
 

@@ -1,5 +1,6 @@
 //import 'package:esae_monie/presentation/screens/onboarding/forgot_password.dart';
 import 'package:esae_monie/presentation/screens/home/cards.dart';
+import 'package:esae_monie/presentation/screens/home/netflix/netflix.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/confirmation.dart';
@@ -78,5 +79,6 @@ class AppRoutes {
     LoanPaymentConfirmation.routeName: (context) => LoanPaymentConfirmation(),
     LoanTransactionSuccessful.routeName: (context) =>
         LoanTransactionSuccessful(),
+    Netflix.routeName: (context) => Netflix(),
   };
 }

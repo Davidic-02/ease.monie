@@ -9,6 +9,7 @@ abstract class NetflixState with _$NetflixState {
     @Default(LastNameFormz.pure()) LastNameFormz lastName,
     @Default(AddressFormz.pure()) AddressFormz address,
     @Default(PostalCodeFormz.pure()) PostalCodeFormz postalCode,
+    @Default(StateFormz.pure()) StateFormz state,
     @Default(CityFormz.pure()) CityFormz city,
     @Default(CountryFormz.pure()) CountryFormz country,
     @Default(CardHolderFormz.pure()) CardHolderFormz cardHolderName,
@@ -24,6 +25,7 @@ abstract class NetflixState with _$NetflixState {
       lastName.isValid &&
       address.isValid &&
       postalCode.isValid &&
+      state.isValid &&
       city.isValid &&
       country.isValid &&
       cardHolderName.isValid &&
@@ -80,6 +82,17 @@ class PostalCodeFormz extends FormzInput<String, ValidationError> {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
     if (!RegExp(r'^\d{4,6}$').hasMatch(value.trim()))
       return ValidationError.invalid;
+    return null;
+  }
+}
+
+class StateFormz extends FormzInput<String, ValidationError> {
+  const StateFormz.pure([super.value = '']) : super.pure();
+  const StateFormz.dirty([super.value = '']) : super.dirty();
+
+  @override
+  ValidationError? validator(String? value) {
+    if (value == null || value.trim().isEmpty) return ValidationError.empty;
     return null;
   }
 }
