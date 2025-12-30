@@ -56,10 +56,10 @@ class CharityTransactionSuccess extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: SizedBox(
-                      width: screenWidth * 0.8, // 80% of screen width
+                      width: screenWidth * 0.8, 
                       child: AspectRatio(
                         aspectRatio:
-                            1, // keep it square, or use real ratio of the image
+                            1, 
                         child: Image.asset(
                           'assets/images/success.png',
                           fit: BoxFit.contain,

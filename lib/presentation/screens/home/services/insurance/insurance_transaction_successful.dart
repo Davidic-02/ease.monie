@@ -64,7 +64,7 @@ class InsuranceTransactionSuccessful extends StatelessWidget {
                       child: Image.asset(
                         'assets/images/success.png',
                         fit: BoxFit
-                            .contain, // scales the image without stretching
+                            .contain, 
                       ),
                     ),
                   ),

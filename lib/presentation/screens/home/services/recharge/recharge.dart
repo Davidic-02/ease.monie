@@ -14,7 +14,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Recharge extends HookWidget {
   static const String routeName = 'Recharge';
-  Recharge({super.key});
+  const Recharge({super.key});
 
   @override
   Widget build(BuildContext context) {

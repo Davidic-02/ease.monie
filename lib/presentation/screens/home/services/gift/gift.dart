@@ -34,7 +34,7 @@ class Gift extends HookWidget {
                     AppSpacing.verticalSpaceHuge,
 
                     ServiceCard(
-                      service: gift1.value,
+                      service: gift1, // ✅ .value is correct here
                       deadlineDate: eidOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -44,7 +44,7 @@ class Gift extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfGift.routeName,
-                          arguments: gift1.value,
+                          arguments: gift1, // ✅ .value is correct here
                         );
                       },
                     ),
@@ -52,7 +52,7 @@ class Gift extends HookWidget {
                     AppSpacing.verticalSpaceHuge,
 
                     ServiceCard(
-                      service: gift2.value,
+                      service: gift2,
                       deadlineDate: birthdayOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -62,7 +62,7 @@ class Gift extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfGift.routeName,
-                          arguments: gift2.value,
+                          arguments: gift2,
                         );
                       },
                     ),
@@ -70,7 +70,7 @@ class Gift extends HookWidget {
                     AppSpacing.verticalSpaceHuge,
 
                     ServiceCard(
-                      service: gift3.value,
+                      service: gift3,
                       showProgressBar: false,
                       showPercentageBadge: false,
                       showDaysLeftBadge: false,
@@ -80,7 +80,7 @@ class Gift extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfGift.routeName,
-                          arguments: gift3.value,
+                          arguments: gift3,
                         );
                       },
                     ),
@@ -88,7 +88,7 @@ class Gift extends HookWidget {
                     AppSpacing.verticalSpaceMedium,
 
                     ServiceCard(
-                      service: gift1.value,
+                      service: gift1,
                       deadlineDate: eidOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -98,7 +98,7 @@ class Gift extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfGift.routeName,
-                          arguments: gift1.value,
+                          arguments: gift1,
                         );
                       },
                     ),

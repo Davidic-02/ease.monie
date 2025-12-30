@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/models/insurance_model.dart';
+import 'package:esae_monie/models/loan_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/models/selected_network.dart';
 import 'package:esae_monie/models/services_model.dart';
@@ -10,10 +11,13 @@ import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_
 import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
+import 'package:esae_monie/presentation/screens/home/services/loan/loan.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
+final double interestRate = 0.05;
 
 final colors = [
   AppColors.accentNeon.withValues(alpha: 0.4),
@@ -65,6 +69,15 @@ final providers = [
   "Port Harcourt Disco",
 ];
 
+final List durations = [
+  '6 Month',
+  '8 Month',
+  '10 Month',
+  '12 Month',
+  '14 Month',
+  '16 Month',
+];
+
 final List<Widget> quickActionScreens = [
   MoneyTransfer(),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
@@ -74,7 +87,7 @@ final List<Widget> quickActionScreens = [
 final List servicesScreen = [
   Recharge(),
   Charity(),
-  Charity(),
+  Loan(),
   Gift(),
   Insurance(),
 ];
@@ -85,7 +98,44 @@ final List<InsuranceModel> insuranceModel = [
   InsuranceModel(plan: 'Yearly Plan', time: 'year', amount: '3000.00'),
 ];
 
+final List<LoanModel> loanModel = [
+  LoanModel(title: 'Paid', amount: 200000),
+  LoanModel(title: 'Due', amount: 150000),
+  LoanModel(title: 'Processing', amount: 50000),
+];
+
 final List<String> paymentPlans = ['Monthly', 'Quarterly', 'Yearly'];
+
+final List<RecommendedLoan> recommendedLoan = [
+  RecommendedLoan(
+    title: 'Home Loan',
+    image: 'assets/svgs/car_loan.svg',
+    amount: 12000.00,
+  ),
+
+  RecommendedLoan(
+    title: 'Business Loan',
+    image: 'assets/svgs/car_loan.svg',
+    amount: 12000.00,
+  ),
+  RecommendedLoan(
+    title: 'Education Loan',
+    image: 'assets/svgs/car_loan.svg',
+    amount: 12000.00,
+  ),
+  RecommendedLoan(
+    title: 'Car Loan',
+    image: 'assets/svgs/car_loan.svg',
+    amount: 12000.00,
+  ),
+  RecommendedLoan(
+    title: 'Home Loan',
+    image: 'assets/svgs/car_loan.svg',
+    amount: 12000.00,
+  ),
+];
+
+final String totalAmount = '8,500';
 
 final List<RecentTransfer> recentTransfer = [
   RecentTransfer(
@@ -152,34 +202,28 @@ final charity2 = useState(
   ),
 );
 
-final gift1 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/gift1.png',
-    title: 'Eid Gift',
-    organizer: 'Send Eid Gift to your loved ones',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final gift1 = ServicesModel(
+  imagePath: 'assets/images/gift1.png',
+  title: 'Eid Gift',
+  organizer: 'Send Eid Gift to your loved ones',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
-final gift2 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/gift2.png',
-    title: 'Birthday Gift',
-    organizer: 'Send Birthday Gift to your loved ones',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final gift2 = ServicesModel(
+  imagePath: 'assets/images/gift2.png',
+  title: 'Birthday Gift',
+  organizer: 'Send Birthday Gift to your loved ones',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
-final gift3 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/gift3.png',
-    title: 'Marriage Gift',
-    organizer: 'Send Marriage Gift to your loved ones',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final gift3 = ServicesModel(
+  imagePath: 'assets/images/gift3.png',
+  title: 'Marriage Gift',
+  organizer: 'Send Marriage Gift to your loved ones',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
 final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));

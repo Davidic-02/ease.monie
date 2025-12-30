@@ -194,9 +194,7 @@ class InsuranceInfomation extends HookWidget {
                           ? "Payment option required"
                           : null,
                     ),
-
                     AppSpacing.verticalSpaceMassive,
-
                     TextTitle(text: 'Add Account Details'),
                     CustomTextFormField(
                       key: const ValueKey("cardName"),
@@ -240,9 +238,7 @@ class InsuranceInfomation extends HookWidget {
                             onFieldSubmitted: (_) => cvvFocus.requestFocus(),
                           ),
                         ),
-
                         SizedBox(width: 12),
-
                         Expanded(
                           child: CustomTextFormField(
                             key: const ValueKey("cvv"),
