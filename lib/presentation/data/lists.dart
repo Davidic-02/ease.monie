@@ -5,6 +5,7 @@ import 'package:esae_monie/models/loan_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/models/selected_network.dart';
 import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/screens/home/netflix/netflix.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
@@ -90,6 +91,12 @@ final List servicesScreen = [
   Loan(),
   Gift(),
   Insurance(),
+];
+
+final List scheduledPaymentsScreen = [
+  Netflix.routeName,
+  Netflix.routeName,
+  Netflix.routeName,
 ];
 
 final List<InsuranceModel> insuranceModel = [

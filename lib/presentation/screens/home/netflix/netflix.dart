@@ -1,5 +1,6 @@
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
@@ -15,6 +16,9 @@ class Netflix extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final payment =
+        ModalRoute.of(context)!.settings.arguments as ScheduledPayment;
+
     final firstNameFocus = useFocusNode();
     final lastNameFocus = useFocusNode();
     final addressFocus = useFocusNode();
@@ -40,60 +44,122 @@ class Netflix extends HookWidget {
                     onTap: () => Navigator.pop(context),
                   ),
                 ),
-
+                AppSpacing.verticalSpaceMedium,
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppSpacing.verticalSpaceHuge,
-                        TextTitle(text: 'Add Infomation'),
-                        AppSpacing.verticalSpaceMedium,
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.grey.shade100,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    payment.image,
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      payment.name,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      payment.dueDate,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                payment.amount,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
 
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomTextFormField(
-                                keyboardType: TextInputType.name,
-                                focusNode: firstNameFocus,
-                                hintText: 'First Name',
-                                textInputAction: TextInputAction.next,
-                                onChanged: (value) => context
-                                    .read<NetflixBloc>()
-                                    .add(NetflixEvent.firstNameChanged(value)),
-                                onFieldSubmitted: (_) =>
-                                    lastNameFocus.requestFocus(),
-                                errorText:
-                                    !state.firstName.isPure &&
-                                        state.firstName.isNotValid
-                                    ? 'Required'
-                                    : null,
-                              ),
-                            ),
-                            AppSpacing.horizontalSpaceSmall,
-                            Expanded(
-                              child: CustomTextFormField(
-                                keyboardType: TextInputType.name,
-                                focusNode: lastNameFocus,
-                                hintText: 'Last Name',
-                                textInputAction: TextInputAction.next,
-                                onChanged: (value) => context
-                                    .read<NetflixBloc>()
-                                    .add(NetflixEvent.lastNameChanged(value)),
-                                onFieldSubmitted: (_) =>
-                                    addressFocus.requestFocus(),
-                                errorText:
-                                    !state.lastName.isPure &&
-                                        state.lastName.isNotValid
-                                    ? 'Required'
-                                    : null,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          'Payment for ${payment.name} is due soon. Make sure to pay on time to avoid service interruptions.',
+                          style: const TextStyle(fontSize: 14),
                         ),
 
-                        AppSpacing.verticalSpaceMedium,
+                        AppSpacing.verticalSpaceHuge,
+                        TextTitle(text: 'Add Infomation'),
+
+                        CustomTextFormField(
+                          keyboardType: TextInputType.name,
+                          focusNode: firstNameFocus,
+                          hintText: 'First Name',
+                          textInputAction: TextInputAction.next,
+                          onChanged: (value) => context.read<NetflixBloc>().add(
+                            NetflixEvent.firstNameChanged(value),
+                          ),
+                          onFieldSubmitted: (_) => lastNameFocus.requestFocus(),
+                          errorText:
+                              !state.firstName.isPure &&
+                                  state.firstName.isNotValid
+                              ? 'Required'
+                              : null,
+                        ),
+
+                        CustomTextFormField(
+                          keyboardType: TextInputType.name,
+                          focusNode: lastNameFocus,
+                          hintText: 'Last Name',
+                          textInputAction: TextInputAction.next,
+                          onChanged: (value) => context.read<NetflixBloc>().add(
+                            NetflixEvent.lastNameChanged(value),
+                          ),
+                          onFieldSubmitted: (_) => addressFocus.requestFocus(),
+                          errorText:
+                              !state.lastName.isPure &&
+                                  state.lastName.isNotValid
+                              ? 'Required'
+                              : null,
+                        ),
 
                         CustomTextFormField(
                           keyboardType: TextInputType.number,
@@ -109,8 +175,6 @@ class Netflix extends HookWidget {
                               ? 'Required'
                               : null,
                         ),
-
-                        AppSpacing.verticalSpaceMedium,
 
                         Row(
                           children: [
@@ -142,8 +206,6 @@ class Netflix extends HookWidget {
                           ],
                         ),
 
-                        AppSpacing.verticalSpaceMedium,
-
                         Row(
                           children: [
                             Expanded(
@@ -174,9 +236,8 @@ class Netflix extends HookWidget {
                           ],
                         ),
 
-                        AppSpacing.verticalSpaceHuge,
+                        AppSpacing.verticalSpaceMassive,
                         TextTitle(text: 'Add Account Details'),
-                        AppSpacing.verticalSpaceMedium,
 
                         CustomTextFormField(
                           keyboardType: TextInputType.name,
@@ -190,8 +251,6 @@ class Netflix extends HookWidget {
                               cardNumberFocus.requestFocus(),
                         ),
 
-                        AppSpacing.verticalSpaceMedium,
-
                         CustomTextFormField(
                           focusNode: cardNumberFocus,
                           hintText: 'Card Number',
@@ -202,8 +261,6 @@ class Netflix extends HookWidget {
                           ),
                           onFieldSubmitted: (_) => expiryFocus.requestFocus(),
                         ),
-
-                        AppSpacing.verticalSpaceMedium,
 
                         Row(
                           children: [
@@ -237,15 +294,17 @@ class Netflix extends HookWidget {
 
                         AppSpacing.verticalSpaceMassive,
 
-                        Button(
-                          'Send',
-                          onPressed: state.isFormValid
-                              ? () => context.read<NetflixBloc>().add(
-                                  const NetflixEvent.submit(),
-                                )
-                              : null,
+                        Padding(
+                          padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                          child: Button(
+                            'Send',
+                            onPressed: state.isFormValid
+                                ? () => context.read<NetflixBloc>().add(
+                                    const NetflixEvent.submit(),
+                                  )
+                                : null,
+                          ),
                         ),
-
                         AppSpacing.verticalSpaceHuge,
                       ],
                     ),

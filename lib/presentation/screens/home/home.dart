@@ -365,7 +365,11 @@ class Home extends HookWidget {
                   },
                   onTap: (index) {
                     final payment = scheduledPayments[index];
-                    debugPrint("Tapped payment: ${payment.name}");
+                    Navigator.pushNamed(
+                      context,
+                      scheduledPaymentsScreen[index],
+                      arguments: payment,
+                    );
                   },
                 ),
               ],
