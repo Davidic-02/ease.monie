@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
+import 'package:esae_monie/presentation/screens/home/netflix/netflix_payment_confirmation.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
@@ -295,13 +296,21 @@ class Netflix extends HookWidget {
                         AppSpacing.verticalSpaceMassive,
 
                         Padding(
-                          padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
+                          padding: EdgeInsets.symmetric(horizontal: 30),
                           child: Button(
                             'Send',
                             onPressed: state.isFormValid
-                                ? () => context.read<NetflixBloc>().add(
-                                    const NetflixEvent.submit(),
-                                  )
+                                ? () {
+                                    context.read<NetflixBloc>().add(
+                                      const NetflixEvent.submit(),
+                                    );
+
+                                    Navigator.pushNamed(
+                                      context,
+                                      NetflixPaymentConfirmation.routeName,
+                                      arguments: payment,
+                                    );
+                                  }
                                 : null,
                           ),
                         ),
