@@ -1,8 +1,8 @@
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/extensions/build_context.dart';
-import 'package:esae_monie/presentation/data/lists.dart';
-import 'package:esae_monie/presentation/widgets/custom_horizontal_scroll.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
+import 'package:esae_monie/presentation/widgets/text_child.dart';
+import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -23,6 +23,9 @@ class BankToBank extends HookWidget {
                 onTap: () => Navigator.pop(context),
               ),
               AppSpacing.verticalSpaceHuge,
+              TextTitle(text: 'Transfer to Bank'),
+              TextChild(text: 'Search or select Receiptient Banks'),
+
               TextField(
                 decoration: InputDecoration(
                   hintText: "Search...",
@@ -43,14 +46,7 @@ class BankToBank extends HookWidget {
                 },
               ),
               AppSpacing.verticalSpaceMassive,
-              Text(
-                'Bank',
-                style: context.textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  //  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
+
               AppSpacing.verticalSpaceSmall,
             ],
           ),
