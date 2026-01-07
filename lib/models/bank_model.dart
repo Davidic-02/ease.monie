@@ -12,3 +12,10 @@ class Bank {
   factory Bank.fromJson(Map<String, dynamic> json) => _$BankFromJson(json);
   Map<String, dynamic> toJson() => _$BankToJson(this);
 }
+
+class BankToBank {
+  final String name;
+  final String imagePath;
+
+  BankToBank({required this.name, required this.imagePath});
+}
