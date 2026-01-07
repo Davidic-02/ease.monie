@@ -1,8 +1,7 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
-import 'package:esae_monie/models/services_model.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction_successful.dart';
+import 'package:esae_monie/presentation/screens/home/netflix/netflix_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +79,6 @@ class NetflixPaymentConfirmation extends HookWidget {
                             ),
                             AppSpacing.verticalSpaceMedium,
 
-                            // Organizer / Account Number
                             Text(
                               payment.name,
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -102,10 +100,9 @@ class NetflixPaymentConfirmation extends HookWidget {
 
                             const SizedBox(height: 20),
 
-                            // Payment Amount (use paymentPlan as amount)
                             RichText(
                               text: TextSpan(
-                                text: payment.amount,
+                                text: payment.amount.toString(),
                                 style: Theme.of(context).textTheme.titleMedium,
                                 children: [
                                   TextSpan(

@@ -6,6 +6,7 @@ import 'package:esae_monie/models/schedule_payments.dart';
 import 'package:esae_monie/models/selected_network.dart';
 import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/netflix/netflix.dart';
+import 'package:esae_monie/presentation/screens/home/quick_actions/bank_to_bank/bank_to_bank.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
@@ -46,22 +47,23 @@ final List<ScheduledPayment> scheduledPayments = [
   ScheduledPayment(
     image: 'assets/images/netflix.png',
     name: 'Netflix',
-    amount: '\$15.99',
+    amount: 15.99, // just a double, no $
     dueDate: 'Due in 3 days',
   ),
   ScheduledPayment(
     image: 'assets/images/paypal.png',
     name: 'PayPal',
-    amount: '\$25.00',
+    amount: 25.00,
     dueDate: 'Due tomorrow',
   ),
   ScheduledPayment(
     image: 'assets/images/spotify.png',
     name: 'Spotify',
-    amount: '\$9.99',
+    amount: 9.99,
     dueDate: 'Due in 1 week',
   ),
 ];
+
 final providers = [
   "Ikeja Electric",
   "Eko Electric",
@@ -82,7 +84,7 @@ final List durations = [
 final List<Widget> quickActionScreens = [
   MoneyTransfer(),
   BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
-  BlocProvider(create: (context) => PayBillBloc(), child: const PayBill()),
+  BankToBank(),
 ];
 
 final List servicesScreen = [

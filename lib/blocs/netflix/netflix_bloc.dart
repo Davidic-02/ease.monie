@@ -12,6 +12,7 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
     on<_FirstNameChanged>(_firstNameChanged);
     on<_LastNameChanged>(_lastNameChanged);
     on<_AddressChanged>(_addressChanged);
+    on<_RegionChanged>(_regionChanged);
     on<_PostalCodeChanged>(_postalCodeChanged);
     on<_CityChanged>(_cityChanged);
     on<_CountryChanged>(_countryChanged);
@@ -49,6 +50,15 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
     emit(
       state.copyWith(
         address: address.isValid ? address : AddressFormz.pure(event.address),
+      ),
+    );
+  }
+
+  void _regionChanged(_RegionChanged event, Emitter<NetflixState> emit) {
+    final region = RegionFormz.dirty(event.region);
+    emit(
+      state.copyWith(
+        state: region.isValid ? region : RegionFormz.pure(event.region),
       ),
     );
   }
@@ -127,7 +137,22 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
 
   Future<void> _submit(_Submit event, Emitter<NetflixState> emit) async {
     if (!state.isFormValid) {
-      emit(state.copyWith(errorMessage: "Please fill all fields correctly."));
+      emit(
+        state.copyWith(
+          firstName: FirstNameFormz.dirty(state.firstName.value),
+          lastName: LastNameFormz.dirty(state.lastName.value),
+          address: AddressFormz.dirty(state.address.value),
+          postalCode: PostalCodeFormz.dirty(state.postalCode.value),
+          state: RegionFormz.dirty(state.state.value),
+          city: CityFormz.dirty(state.city.value),
+          country: CountryFormz.dirty(state.country.value),
+          cardHolderName: CardHolderFormz.dirty(state.cardHolderName.value),
+          cardNumber: CardNumberFormz.dirty(state.cardNumber.value),
+          expiry: ExpiryFormz.dirty(state.expiry.value),
+          cvv: CvvFormz.dirty(state.cvv.value),
+          errorMessage: "Please fill all fields correctly.",
+        ),
+      );
       return;
     }
 

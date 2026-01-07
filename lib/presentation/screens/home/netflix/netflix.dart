@@ -110,7 +110,7 @@ class Netflix extends HookWidget {
                                 ),
                               ),
                               Text(
-                                payment.amount,
+                                payment.amount.toString(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -187,7 +187,8 @@ class Netflix extends HookWidget {
                                 textInputAction: TextInputAction.next,
                                 onChanged: (value) => context
                                     .read<NetflixBloc>()
-                                    .add(NetflixEvent.stateChanged(value)),
+                                    .add(NetflixEvent.regionChanged(value)),
+
                                 onFieldSubmitted: (_) =>
                                     postalFocus.requestFocus(),
                               ),

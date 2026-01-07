@@ -352,7 +352,7 @@ class Home extends HookWidget {
                             ),
                           ),
                           Text(
-                            payments.amount,
+                            payments.amount.toString(),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

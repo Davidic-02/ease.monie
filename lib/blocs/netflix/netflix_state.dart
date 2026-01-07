@@ -9,7 +9,7 @@ abstract class NetflixState with _$NetflixState {
     @Default(LastNameFormz.pure()) LastNameFormz lastName,
     @Default(AddressFormz.pure()) AddressFormz address,
     @Default(PostalCodeFormz.pure()) PostalCodeFormz postalCode,
-    @Default(StateFormz.pure()) StateFormz state,
+    @Default(RegionFormz.pure()) RegionFormz state,
     @Default(CityFormz.pure()) CityFormz city,
     @Default(CountryFormz.pure()) CountryFormz country,
     @Default(CardHolderFormz.pure()) CardHolderFormz cardHolderName,
@@ -20,18 +20,60 @@ abstract class NetflixState with _$NetflixState {
     String? errorMessage,
   }) = _NetflixState;
 
-  bool get isFormValid =>
-      firstName.isValid &&
-      lastName.isValid &&
-      address.isValid &&
-      postalCode.isValid &&
-      state.isValid &&
-      city.isValid &&
-      country.isValid &&
-      cardHolderName.isValid &&
-      cardNumber.isValid &&
-      expiry.isValid &&
-      cvv.isValid;
+  bool get isFormValid {
+    final result = Formz.validate([
+      firstName,
+      lastName,
+      address,
+      postalCode,
+      state,
+      city,
+      country,
+      cardHolderName,
+      cardNumber,
+      expiry,
+      cvv,
+    ]);
+
+    print('=== FORM VALIDATION DEBUG ===');
+    print(
+      'firstName: value="${firstName.value}", isPure=${firstName.isPure}, isValid=${firstName.isValid}',
+    );
+    print(
+      'lastName: value="${lastName.value}", isPure=${lastName.isPure}, isValid=${lastName.isValid}',
+    );
+    print(
+      'address: value="${address.value}", isPure=${address.isPure}, isValid=${address.isValid}',
+    );
+    print(
+      'postalCode: value="${postalCode.value}", isPure=${postalCode.isPure}, isValid=${postalCode.isValid}',
+    );
+    print(
+      'state: value="${state.value}", isPure=${state.isPure}, isValid=${state.isValid}',
+    );
+    print(
+      'city: value="${city.value}", isPure=${city.isPure}, isValid=${city.isValid}',
+    );
+    print(
+      'country: value="${country.value}", isPure=${country.isPure}, isValid=${country.isValid}',
+    );
+    print(
+      'cardHolderName: value="${cardHolderName.value}", isPure=${cardHolderName.isPure}, isValid=${cardHolderName.isValid}',
+    );
+    print(
+      'cardNumber: value="${cardNumber.value}", isPure=${cardNumber.isPure}, isValid=${cardNumber.isValid}',
+    );
+    print(
+      'expiry: value="${expiry.value}", isPure=${expiry.isPure}, isValid=${expiry.isValid}',
+    );
+    print(
+      'cvv: value="${cvv.value}", isPure=${cvv.isPure}, isValid=${cvv.isValid}',
+    );
+    print('Formz.validate() result: $result');
+    print('============================');
+
+    return result;
+  }
 }
 
 // First Name
@@ -47,7 +89,6 @@ class FirstNameFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Last Name
 class LastNameFormz extends FormzInput<String, ValidationError> {
   const LastNameFormz.pure([super.value = '']) : super.pure();
   const LastNameFormz.dirty([super.value = '']) : super.dirty();
@@ -60,7 +101,6 @@ class LastNameFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Address
 class AddressFormz extends FormzInput<String, ValidationError> {
   const AddressFormz.pure([super.value = '']) : super.pure();
   const AddressFormz.dirty([super.value = '']) : super.dirty();
@@ -72,7 +112,6 @@ class AddressFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Postal Code
 class PostalCodeFormz extends FormzInput<String, ValidationError> {
   const PostalCodeFormz.pure([super.value = '']) : super.pure();
   const PostalCodeFormz.dirty([super.value = '']) : super.dirty();
@@ -86,9 +125,9 @@ class PostalCodeFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-class StateFormz extends FormzInput<String, ValidationError> {
-  const StateFormz.pure([super.value = '']) : super.pure();
-  const StateFormz.dirty([super.value = '']) : super.dirty();
+class RegionFormz extends FormzInput<String, ValidationError> {
+  const RegionFormz.pure([super.value = '']) : super.pure();
+  const RegionFormz.dirty([super.value = '']) : super.dirty();
 
   @override
   ValidationError? validator(String? value) {
@@ -97,7 +136,6 @@ class StateFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// City
 class CityFormz extends FormzInput<String, ValidationError> {
   const CityFormz.pure([super.value = '']) : super.pure();
   const CityFormz.dirty([super.value = '']) : super.dirty();
@@ -109,7 +147,6 @@ class CityFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Country
 class CountryFormz extends FormzInput<String, ValidationError> {
   const CountryFormz.pure([super.value = '']) : super.pure();
   const CountryFormz.dirty([super.value = '']) : super.dirty();
@@ -121,7 +158,6 @@ class CountryFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Card Holder Name
 class CardHolderFormz extends FormzInput<String, ValidationError> {
   const CardHolderFormz.pure([super.value = '']) : super.pure();
   const CardHolderFormz.dirty([super.value = '']) : super.dirty();
@@ -133,7 +169,6 @@ class CardHolderFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Card Number
 class CardNumberFormz extends FormzInput<String, ValidationError> {
   const CardNumberFormz.pure([super.value = '']) : super.pure();
   const CardNumberFormz.dirty([super.value = '']) : super.dirty();
@@ -147,7 +182,6 @@ class CardNumberFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// Expiry MM/YY
 class ExpiryFormz extends FormzInput<String, ValidationError> {
   const ExpiryFormz.pure([super.value = '']) : super.pure();
   const ExpiryFormz.dirty([super.value = '']) : super.dirty();
@@ -161,7 +195,6 @@ class ExpiryFormz extends FormzInput<String, ValidationError> {
   }
 }
 
-// CVV
 class CvvFormz extends FormzInput<String, ValidationError> {
   const CvvFormz.pure([super.value = '']) : super.pure();
   const CvvFormz.dirty([super.value = '']) : super.dirty();
