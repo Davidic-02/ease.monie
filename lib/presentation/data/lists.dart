@@ -1,5 +1,6 @@
 import 'package:esae_monie/blocs/paybill/paybill_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/models/bank_transfer.dart';
 import 'package:esae_monie/models/insurance_model.dart';
 import 'package:esae_monie/models/loan_model.dart';
 import 'package:esae_monie/models/schedule_payments.dart';
@@ -142,6 +143,12 @@ final List<RecommendedLoan> recommendedLoan = [
     image: 'assets/svgs/car_loan.svg',
     amount: 12000.00,
   ),
+];
+final List<Banking> banks = [
+  Banking(name: 'Byline Bank', imagePath: 'assets/images/bank1.png'),
+  Banking(name: 'Shamrock Bank', imagePath: 'assets/images/bank2.png'),
+  Banking(name: 'M&T Bank', imagePath: 'assets/images/bank3.png'),
+  Banking(name: 'Trust Financial Bank', imagePath: 'assets/images/bank4.png'),
 ];
 
 final String totalAmount = '8,500';
