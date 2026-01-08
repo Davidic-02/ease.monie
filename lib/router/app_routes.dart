@@ -1,35 +1,11 @@
 //import 'package:esae_monie/presentation/screens/onboarding/forgot_password.dart';
 import 'package:esae_monie/presentation/screens/home/cards.dart';
-import 'package:esae_monie/presentation/screens/home/netflix/netflix.dart';
-import 'package:esae_monie/presentation/screens/home/netflix/netflix_payment_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/netflix/netflix_transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/money_transfer.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/amounts.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/money_transfer/payment_managements/transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/home/quick_actions/pay_bill/pay_bill.dart';
 
-import 'package:esae_monie/presentation/screens/home/services/charity/charity.dart';
-import 'package:esae_monie/presentation/screens/home/services/charity/charity_amount.dart';
-import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/services/charity/charity_transaction_success.dart';
-import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
-import 'package:esae_monie/presentation/screens/home/services/gift/gift_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/services/gift/gift_transaction_successful.dart';
-import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_infomation.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_transaction_successful.dart';
-import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_insurance.dart';
-import 'package:esae_monie/presentation/screens/home/services/loan/loan.dart';
-import 'package:esae_monie/presentation/screens/home/services/loan/loan_payment_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/services/loan/loan_payment_plans.dart';
-import 'package:esae_monie/presentation/screens/home/services/loan/loan_transaction_successful.dart';
-import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
-import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
-import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
@@ -38,7 +14,6 @@ import 'package:esae_monie/presentation/screens/onboarding/splash_screen.dart';
 import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:esae_monie/presentation/screens/auth/forgot_password.dart';
-import 'package:esae_monie/presentation/screens/home/services/charity/donation.dart';
 
 class AppRoutes {
   static Map<String, Widget Function(BuildContext)> get routes => {
@@ -54,37 +29,5 @@ class AppRoutes {
     Amount.routeName: (context) => Amount(),
     Confirmation.routeName: (context) => Confirmation(),
     TransactionSuccessful.routeName: (context) => TransactionSuccessful(),
-    Charity.routeName: (context) => Charity(),
-    Donation.routeName: (context) => Donation(),
-    CharityAmount.routeName: (context) => CharityAmount(),
-    CharityConfirmation.routeName: (context) => CharityConfirmation(),
-    CharityTransactionSuccess.routeName: (context) =>
-        CharityTransactionSuccess(),
-    Gift.routeName: (context) => Gift(),
-    TypeOfGift.routeName: (context) => TypeOfGift(),
-    GiftConfirmation.routeName: (context) => GiftConfirmation(),
-    GiftTransactionSuccessful.routeName: (context) =>
-        GiftTransactionSuccessful(),
-    Insurance.routeName: (contex) => Insurance(),
-    TypeOfInsurance.routeName: (contex) => TypeOfInsurance(),
-    InsuranceInfomation.routeName: (context) => InsuranceInfomation(),
-    InsuranceConfirmation.routeName: (context) => InsuranceConfirmation(),
-    InsuranceTransaction.routeName: (context) => InsuranceTransaction(),
-    InsuranceTransactionSuccessful.routeName: (context) =>
-        InsuranceTransactionSuccessful(),
-    Recharge.routeName: (context) => Recharge(),
-    RechargeConfirmation.routeName: (context) => RechargeConfirmation(),
-    RechargeTransactionSuccessful.routeName: (context) =>
-        RechargeTransactionSuccessful(),
-    Loan.routeName: (context) => Loan(),
-    LoanPaymentPlans.routeName: (context) => LoanPaymentPlans(),
-    LoanPaymentConfirmation.routeName: (context) => LoanPaymentConfirmation(),
-    LoanTransactionSuccessful.routeName: (context) =>
-        LoanTransactionSuccessful(),
-    Netflix.routeName: (context) => Netflix(),
-    NetflixPaymentConfirmation.routeName: (context) =>
-        NetflixPaymentConfirmation(),
-    NetflixTransactionSuccessful.routeName: (context) =>
-        NetflixTransactionSuccessful(),
   };
 }

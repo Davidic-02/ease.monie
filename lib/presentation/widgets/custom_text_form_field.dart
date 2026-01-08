@@ -27,8 +27,6 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.errorText,
-    this.maxLines,
-    this.minLines,
   });
 
   final TextEditingController? controller;
@@ -52,8 +50,6 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
   final ValueChanged<String>? onChanged;
-  final int? maxLines;
-  final int? minLines;
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +64,6 @@ class CustomTextFormField extends StatelessWidget {
         ),
         AppSpacing.verticalSpaceSmall,
         TextFormField(
-          maxLines: obscureText ? 1 : null,
-          minLines: minLines,
           cursorColor: AppColors.primaryColor,
           maxLength: maxLength,
           onFieldSubmitted: onFieldSubmitted,

@@ -54,11 +54,9 @@ dependencies:
   cloud_firestore: ^6.1.0
   dio: ^5.9.0
   flutter_dotenv: ^5.1.0
-  retrofit: ^4.9.2
+  retrofit: ^4.9.1
+  retrofit_generator: ^10.2.0
   intl: ^0.20.2
-  fl_chart: ^1.1.1
-
-
 
 
 
@@ -76,15 +74,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  json_serializable: ^6.6.2
+  json_serializable: ^6.11.1
   freezed: ^3.2.3
-  build_runner: ^2.5.4
-  retrofit_generator: ^10.2.1
-
-dependency_overrides:
-
-  
-
+  build_runner: ^2.10.1
   
 
 # For information on the generic Dart part of this file, see the
@@ -104,7 +96,6 @@ flutter:
     - assets/lottie/
     - assets/images/
     - assets/svgs/
-    
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -2,6 +2,7 @@ import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TransactionSuccessful extends StatelessWidget {
   static const String routeName = 'TransactionSuccessful';
@@ -48,15 +49,16 @@ class TransactionSuccessful extends StatelessWidget {
                   AppSpacing.verticalSpaceMassive,
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/success.png',
+                    child: SvgPicture.asset(
+                      'assets/svgs/successful.svg',
                       width: double.infinity,
                       height: screenHeight * 0.35,
                       fit: BoxFit.contain,
                     ),
                   ),
 
-                  SizedBox(height: screenHeight * 0.1),
+                  SizedBox(height: screenHeight * 0 * 4),
+
                   Button('View Receipts', onPressed: () {}),
                 ],
               ),
