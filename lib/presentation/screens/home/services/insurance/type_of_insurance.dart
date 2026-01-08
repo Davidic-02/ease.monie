@@ -1,0 +1,202 @@
+import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/models/services_model.dart';
+import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/home/services/insurance/insurance_infomation.dart';
+import 'package:esae_monie/presentation/widgets/button.dart';
+import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+class TypeOfInsurance extends HookWidget {
+  static const String routeName = 'TypeOfInsurance';
+  const TypeOfInsurance({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = useState<int?>(null);
+
+    final services =
+        ModalRoute.of(context)!.settings.arguments as ServicesModel;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: CustomTopbar(
+                title: 'Insurance',
+                onTap: () => Navigator.pop(context),
+              ),
+            ),
+
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppSpacing.verticalSpaceHuge,
+
+                    Material(
+                      elevation: 2,
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 180,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.08),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Image.asset(
+                                services.imagePath,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            AppSpacing.verticalSpaceMedium,
+                            Text(
+                              services.title,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              services.organizer,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface.withOpacity(0.6),
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    AppSpacing.verticalSpaceMassive,
+
+                    Text(
+                      'Select Insurance Plan',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.blueColor.shade300,
+                      ),
+                    ),
+
+                    AppSpacing.verticalSpaceMedium,
+
+                    /// INSURANCE OPTIONS
+                    ...List.generate(insuranceModel.length, (index) {
+                      final insurance = insuranceModel[index];
+                      final isSelected = selectedIndex.value == index;
+
+                      return GestureDetector(
+                        onTap: () {
+                          selectedIndex.value = index;
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Material(
+                            elevation: 4,
+                            borderRadius: BorderRadius.circular(12),
+                            color: isSelected
+                                ? AppColors.blueColor.withOpacity(0.08)
+                                : Theme.of(context).cardColor,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 8),
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  /// TEXT
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        insurance.plan,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                      AppSpacing.verticalSpaceTiny,
+                                      Text(
+                                        '${insurance.amount} / ${insurance.time}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+
+                                  /// CIRCULAR CHECKBOX
+                                  Checkbox(
+                                    value: isSelected,
+                                    shape: const CircleBorder(),
+                                    activeColor: AppColors.blueColor,
+                                    onChanged: (value) {
+                                      selectedIndex.value = value == true
+                                          ? index
+                                          : null;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+
+                    AppSpacing.verticalSpaceSmall,
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 24,
+                        horizontal: 40,
+                      ),
+                      child: Button(
+                        color: AppColors.blueColor,
+                        'Continue',
+                        onPressed: selectedIndex.value == null
+                            ? null
+                            : () {
+                                final selectedInsurance =
+                                    insuranceModel[selectedIndex.value!];
+                                Navigator.pushNamed(
+                                  context,
+                                  InsuranceInfomation.routeName,
+                                  arguments: {
+                                    'service': services,
+                                    'insurance': selectedInsurance,
+                                  },
+                                );
+                              },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

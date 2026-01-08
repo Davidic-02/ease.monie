@@ -49,7 +49,7 @@ class BuildActionButton extends HookWidget {
                     onChanged: (value) {
                       isToggled.value = value;
                     },
-                    activeColor: Colors.white,
+                    activeThumbColor: Colors.white,
                     activeTrackColor: Colors.blue,
                     inactiveThumbColor: Colors.grey,
                     inactiveTrackColor: Colors.white54,
