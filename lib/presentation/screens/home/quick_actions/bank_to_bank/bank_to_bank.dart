@@ -106,7 +106,6 @@ class BankToBank extends HookWidget {
                       'Continue',
                       onPressed: state.selectedBank != null
                           ? () {
-                              // Your action when a bank is selected
                               debugPrint(
                                 'Selected bank: ${state.selectedBank}',
                               );

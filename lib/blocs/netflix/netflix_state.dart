@@ -20,60 +20,19 @@ abstract class NetflixState with _$NetflixState {
     String? errorMessage,
   }) = _NetflixState;
 
-  bool get isFormValid {
-    final result = Formz.validate([
-      firstName,
-      lastName,
-      address,
-      postalCode,
-      state,
-      city,
-      country,
-      cardHolderName,
-      cardNumber,
-      expiry,
-      cvv,
-    ]);
-
-    print('=== FORM VALIDATION DEBUG ===');
-    print(
-      'firstName: value="${firstName.value}", isPure=${firstName.isPure}, isValid=${firstName.isValid}',
-    );
-    print(
-      'lastName: value="${lastName.value}", isPure=${lastName.isPure}, isValid=${lastName.isValid}',
-    );
-    print(
-      'address: value="${address.value}", isPure=${address.isPure}, isValid=${address.isValid}',
-    );
-    print(
-      'postalCode: value="${postalCode.value}", isPure=${postalCode.isPure}, isValid=${postalCode.isValid}',
-    );
-    print(
-      'state: value="${state.value}", isPure=${state.isPure}, isValid=${state.isValid}',
-    );
-    print(
-      'city: value="${city.value}", isPure=${city.isPure}, isValid=${city.isValid}',
-    );
-    print(
-      'country: value="${country.value}", isPure=${country.isPure}, isValid=${country.isValid}',
-    );
-    print(
-      'cardHolderName: value="${cardHolderName.value}", isPure=${cardHolderName.isPure}, isValid=${cardHolderName.isValid}',
-    );
-    print(
-      'cardNumber: value="${cardNumber.value}", isPure=${cardNumber.isPure}, isValid=${cardNumber.isValid}',
-    );
-    print(
-      'expiry: value="${expiry.value}", isPure=${expiry.isPure}, isValid=${expiry.isValid}',
-    );
-    print(
-      'cvv: value="${cvv.value}", isPure=${cvv.isPure}, isValid=${cvv.isValid}',
-    );
-    print('Formz.validate() result: $result');
-    print('============================');
-
-    return result;
-  }
+  bool get isFormValid => Formz.validate([
+    firstName,
+    lastName,
+    address,
+    postalCode,
+    state,
+    city,
+    country,
+    cardHolderName,
+    cardNumber,
+    expiry,
+    cvv,
+  ]);
 }
 
 // First Name
