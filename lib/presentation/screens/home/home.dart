@@ -91,7 +91,6 @@ class Home extends HookWidget {
                                         const Text('Card Holder'),
                                         AppSpacing.verticalSpaceSmall,
                                         Text(
-                                          // show persisted user name if available
                                           user.displayName ?? 'User',
                                           style: context.textTheme.bodyLarge
                                               ?.copyWith(
@@ -251,6 +250,12 @@ class Home extends HookWidget {
                   },
                   onTap: (index) {
                     selectedService.value = index;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => servicesScreen[index],
+                      ),
+                    );
                   },
                 ),
 
@@ -347,7 +352,7 @@ class Home extends HookWidget {
                             ),
                           ),
                           Text(
-                            payments.amount,
+                            payments.amount.toString(),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -360,7 +365,11 @@ class Home extends HookWidget {
                   },
                   onTap: (index) {
                     final payment = scheduledPayments[index];
-                    debugPrint("Tapped payment: ${payment.name}");
+                    Navigator.pushNamed(
+                      context,
+                      scheduledPaymentsScreen[index],
+                      arguments: payment,
+                    );
                   },
                 ),
               ],
