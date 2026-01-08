@@ -60,7 +60,7 @@ class Netflix extends HookWidget {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.1),
+                                color: Colors.grey.withValues(alpha: .1),
                                 spreadRadius: 1,
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
@@ -128,7 +128,7 @@ class Netflix extends HookWidget {
                         ),
 
                         AppSpacing.verticalSpaceHuge,
-                        TextTitle(text: 'Add Infomation'),
+                        TextTitle(text: 'Add Information'),
 
                         CustomTextFormField(
                           keyboardType: TextInputType.name,

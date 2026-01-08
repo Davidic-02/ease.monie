@@ -35,43 +35,6 @@ abstract class NetflixState with _$NetflixState {
       cvv,
     ]);
 
-    print('=== FORM VALIDATION DEBUG ===');
-    print(
-      'firstName: value="${firstName.value}", isPure=${firstName.isPure}, isValid=${firstName.isValid}',
-    );
-    print(
-      'lastName: value="${lastName.value}", isPure=${lastName.isPure}, isValid=${lastName.isValid}',
-    );
-    print(
-      'address: value="${address.value}", isPure=${address.isPure}, isValid=${address.isValid}',
-    );
-    print(
-      'postalCode: value="${postalCode.value}", isPure=${postalCode.isPure}, isValid=${postalCode.isValid}',
-    );
-    print(
-      'state: value="${state.value}", isPure=${state.isPure}, isValid=${state.isValid}',
-    );
-    print(
-      'city: value="${city.value}", isPure=${city.isPure}, isValid=${city.isValid}',
-    );
-    print(
-      'country: value="${country.value}", isPure=${country.isPure}, isValid=${country.isValid}',
-    );
-    print(
-      'cardHolderName: value="${cardHolderName.value}", isPure=${cardHolderName.isPure}, isValid=${cardHolderName.isValid}',
-    );
-    print(
-      'cardNumber: value="${cardNumber.value}", isPure=${cardNumber.isPure}, isValid=${cardNumber.isValid}',
-    );
-    print(
-      'expiry: value="${expiry.value}", isPure=${expiry.isPure}, isValid=${expiry.isValid}',
-    );
-    print(
-      'cvv: value="${cvv.value}", isPure=${cvv.isPure}, isValid=${cvv.isValid}',
-    );
-    print('Formz.validate() result: $result');
-    print('============================');
-
     return result;
   }
 }
@@ -119,8 +82,9 @@ class PostalCodeFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{4,6}$').hasMatch(value.trim()))
+    if (!RegExp(r'^\d{4,6}$').hasMatch(value.trim())) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
@@ -176,8 +140,9 @@ class CardNumberFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{16}$').hasMatch(value.replaceAll(' ', '')))
+    if (!RegExp(r'^\d{16}$').hasMatch(value.replaceAll(' ', ''))) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
@@ -189,8 +154,9 @@ class ExpiryFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value.trim()))
+    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value.trim())) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
@@ -202,8 +168,9 @@ class CvvFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{3,4}$').hasMatch(value.trim()))
+    if (!RegExp(r'^\d{3,4}$').hasMatch(value.trim())) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
