@@ -1,7 +1,7 @@
 class ScheduledPayment {
   final String image;
   final String name;
-  final double amount; // ✅ now double
+  final String amount;
   final String dueDate;
 
   ScheduledPayment({
@@ -12,10 +12,12 @@ class ScheduledPayment {
   });
 }
 
+
 class RecentTransfer {
   final String image;
   final String name;
   final String amount;
+
 
   RecentTransfer({
     required this.image,
@@ -23,3 +25,4 @@ class RecentTransfer {
     required this.amount,
   });
 }
+

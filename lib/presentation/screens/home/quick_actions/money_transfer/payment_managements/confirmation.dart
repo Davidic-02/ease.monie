@@ -4,7 +4,7 @@ import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
+import 'package:flutter_svg/svg.dart';
 
 class Confirmation extends HookWidget {
   static const String routeName = 'Confirmation';
@@ -12,7 +12,6 @@ class Confirmation extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final accountName = args['accountName'];
@@ -189,8 +188,8 @@ class Confirmation extends HookWidget {
                           radius: 30,
                           backgroundColor: Colors.white,
                           child: ClipOval(
-                            child: Image.asset(
-                              'assets/images/profile3.png',
+                            child: SvgPicture.asset(
+                              'assets/svgs/profile_pic2.svg',
                               width: 56,
                               height: 56,
                               fit: BoxFit.cover,
@@ -200,7 +199,7 @@ class Confirmation extends HookWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: screenHeight * 0.1),
+                  AppSpacing.verticalSpaceHuge,
                   Button(
                     'Send Money',
                     onPressed: () {

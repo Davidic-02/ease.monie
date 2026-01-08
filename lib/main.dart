@@ -1,7 +1,5 @@
 import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
-import 'package:esae_monie/blocs/loan/loan_bloc.dart';
-import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
@@ -40,9 +38,6 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(FirebaseAuth.instance),
         ),
         BlocProvider<VerificationBloc>(create: (context) => VerificationBloc()),
-
-        BlocProvider<LoanBloc>(create: (context) => LoanBloc()),
-        BlocProvider<NetflixBloc>(create: (context) => NetflixBloc()),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,

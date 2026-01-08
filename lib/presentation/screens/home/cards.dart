@@ -175,14 +175,7 @@ class Cards extends HookWidget {
                 useToggle: true,
               ),
               AppSpacing.verticalSpaceMassive,
-              Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 20),
-                child: Button(
-                  'Save',
-                  onPressed: () {},
-                  color: Colors.blueAccent,
-                ),
-              ),
+              Button('Save', onPressed: () {}, color: Colors.blueAccent),
             ],
           ),
         ),
