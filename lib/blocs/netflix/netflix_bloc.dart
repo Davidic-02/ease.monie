@@ -79,6 +79,7 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
 
   void _cityChanged(_CityChanged event, Emitter<NetflixState> emit) {
     final city = CityFormz.dirty(event.city);
+    //this is good
     emit(
       state.copyWith(city: city.isValid ? city : CityFormz.pure(event.city)),
     );
@@ -93,6 +94,7 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
     );
   }
 
+  // Card Details Handlers
   void _cardHolderNameChanged(
     _CardHolderNameChanged event,
     Emitter<NetflixState> emit,
