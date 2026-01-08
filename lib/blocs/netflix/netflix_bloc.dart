@@ -23,6 +23,8 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
     on<_Submit>(_submit);
   }
 
+  // Personal Details Handlers
+
   void _firstNameChanged(_FirstNameChanged event, Emitter<NetflixState> emit) {
     final firstName = FirstNameFormz.dirty(event.firstName);
     emit(
@@ -79,7 +81,6 @@ class NetflixBloc extends Bloc<NetflixEvent, NetflixState> {
 
   void _cityChanged(_CityChanged event, Emitter<NetflixState> emit) {
     final city = CityFormz.dirty(event.city);
-    //this is good
     emit(
       state.copyWith(city: city.isValid ? city : CityFormz.pure(event.city)),
     );
