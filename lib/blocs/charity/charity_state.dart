@@ -1,0 +1,36 @@
+part of 'charity_bloc.dart';
+
+@freezed
+abstract class CharityState with _$CharityState {
+  const CharityState._();
+
+  const factory CharityState({
+    ServicesModel? selectedCharity,
+    @Default(0.0) double donatedAmount,
+    @Default(DonationAmountFormz.pure()) DonationAmountFormz donationAmount,
+
+    @Default(FormzSubmissionStatus.initial)
+    FormzSubmissionStatus submissionStatus,
+
+    String? errorMessage,
+  }) = _CharityState;
+}
+
+class DonationAmountFormz extends FormzInput<String, ValidationError> {
+  const DonationAmountFormz.pure([super.value = '']) : super.pure();
+  const DonationAmountFormz.dirty([super.value = '']) : super.dirty();
+
+  @override
+  ValidationError? validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return ValidationError.empty;
+    }
+
+    final amount = double.tryParse(value);
+    if (amount == null || amount <= 0) {
+      return ValidationError.invalid;
+    }
+
+    return null;
+  }
+}
