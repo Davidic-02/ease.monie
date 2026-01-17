@@ -198,27 +198,26 @@ final presetAmounts = [
 ];
 final paymentPlan = ['Monthly', 'Quartly', 'Yearly'];
 
-final charity1 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/child_education.png',
-    title: 'Donate For Child Education',
-    organizer: 'Arrange by HEADS Foundation',
-    targetAmount: 1000000,
-    donatedAmount: 25000,
-  ),
+final charity1 = ServicesModel(
+  id: 'charity1',
+  imagePath: 'assets/images/child_education.png',
+  title: 'Donate For Child Education',
+  organizer: 'Arrange by HEADS Foundation',
+  targetAmount: 1000000,
+  donatedAmount: 25000,
 );
 
-final charity2 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/cancer_patient.png',
-    title: 'Donate For Cancer Patients',
-    organizer: 'Arrange by Care Club',
-    targetAmount: 1000000,
-    donatedAmount: 15000,
-  ),
+final charity2 = ServicesModel(
+  id: 'charity2',
+  imagePath: 'assets/images/cancer_patient.png',
+  title: 'Donate For Cancer Patients',
+  organizer: 'Arrange by Care Club',
+  targetAmount: 1000000,
+  donatedAmount: 15000,
 );
 
 final gift1 = ServicesModel(
+  id: 'gift1',
   imagePath: 'assets/images/gift1.png',
   title: 'Eid Gift',
   organizer: 'Send Eid Gift to your loved ones',
@@ -227,6 +226,7 @@ final gift1 = ServicesModel(
 );
 
 final gift2 = ServicesModel(
+  id: 'gift2',
   imagePath: 'assets/images/gift2.png',
   title: 'Birthday Gift',
   organizer: 'Send Birthday Gift to your loved ones',
@@ -235,6 +235,7 @@ final gift2 = ServicesModel(
 );
 
 final gift3 = ServicesModel(
+  id: 'gift3',
   imagePath: 'assets/images/gift3.png',
   title: 'Marriage Gift',
   organizer: 'Send Marriage Gift to your loved ones',
@@ -246,6 +247,7 @@ final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));
 final birthdayOfferDeadline = DateTime.now().add(const Duration(days: 10));
 final insurance1 = useState(
   ServicesModel(
+    id: 'insurance1',
     imagePath: 'assets/images/insurance1.png',
     title: 'Family Insurance',
     organizer: 'Family Plans Cover two or more members',
@@ -254,24 +256,22 @@ final insurance1 = useState(
   ),
 );
 
-final insurance2 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/insurance2.png',
-    title: 'House Insurance',
-    organizer: 'Family Plans Cover two or more members',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final insurance2 = ServicesModel(
+  id: 'insurance2',
+  imagePath: 'assets/images/insurance2.png',
+  title: 'House Insurance',
+  organizer: 'Family Plans Cover two or more members',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
-final insurance3 = useState(
-  ServicesModel(
-    imagePath: 'assets/images/insurance3.png',
-    title: 'Health Insurance',
-    organizer: 'Family Plans Cover two or more members',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final insurance3 = ServicesModel(
+  id: 'insurance3',
+  imagePath: 'assets/images/insurance3.png',
+  title: 'Health Insurance',
+  organizer: 'Family Plans Cover two or more members',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
 final familyOfferDeadline = DateTime.now().add(const Duration(days: 3));

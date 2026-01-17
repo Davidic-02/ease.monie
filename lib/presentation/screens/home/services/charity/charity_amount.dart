@@ -1,3 +1,4 @@
+import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/services_model.dart';
@@ -9,6 +10,7 @@ import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class CharityAmount extends HookWidget {
@@ -17,16 +19,13 @@ class CharityAmount extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
-    final charity = args['charity'] as ServicesModel;
-    final accountName = args['accountName'];
-    final bankName = args['bankName'];
-    final accountNumber = args['accountNumber'];
     final amountFocusNode = useFocusNode();
     final controller = useTextEditingController();
-    final amount = useState<double>(0.0);
+    final state = context.watch<CharityBloc>().state;
+    final currentCharity = state.charities[state.selectedCharityId];
+    if (currentCharity == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -64,13 +63,24 @@ class CharityAmount extends HookWidget {
                   decimal: true,
                 ),
                 onChanged: (value) {
-                  final clean = value.replaceAll(RegExp(r'[^0-9.]'), '');
-                  final parsed = double.tryParse(clean) ?? 0.0;
-                  amount.value = parsed;
+                  final raw = value.replaceAll(',', '').replaceAll('₦', '');
+                  context.read<CharityBloc>().add(
+                    CharityEvent.donationAmountChanged(raw),
+                  );
                 },
+
                 onFieldSubmitted: (_) {
-                  final parsed = amount.value;
-                  controller.text = formatter.format(parsed);
+                  final value = context
+                      .read<CharityBloc>()
+                      .state
+                      .donationAmount
+                      .value;
+
+                  final parsed = double.tryParse(value);
+
+                  if (parsed != null) {
+                    controller.text = formatter.format(parsed);
+                  }
                 },
               ),
               AppSpacing.verticalSpaceMassive,
@@ -86,14 +96,20 @@ class CharityAmount extends HookWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: presetAmounts.map((amt) {
-                    final isSelected = amount.value == amt;
+                    final isSelected =
+                        state.donationAmount.value == amt.toString();
+
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: GestureDetector(
                         onTap: () {
-                          amount.value = amt;
                           controller.text = formatter.format(amt);
+
+                          context.read<CharityBloc>().add(
+                            CharityEvent.donationAmountChanged(amt.toString()),
+                          );
                         },
+
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             vertical: 12,
@@ -135,24 +151,8 @@ class CharityAmount extends HookWidget {
                 child: Button(
                   'Next',
                   color: AppColors.blueColor,
-                  onPressed: () async {
-                    final result = await Navigator.pushNamed(
-                      context,
-                      CharityConfirmation.routeName,
-                      arguments: {
-                        'charity': charity,
-                        'accountName': accountName,
-                        'bankName': bankName,
-                        'accountNumber': accountNumber,
-                        'amount': amount.value,
-                        'imagePath': args['imagePath'],
-                        'title': args['title'],
-                      },
-                    );
-
-                    if (result != null) {
-                      Navigator.pop(context, result);
-                    }
+                  onPressed: () {
+                    Navigator.pushNamed(context, CharityConfirmation.routeName);
                   },
                 ),
               ),

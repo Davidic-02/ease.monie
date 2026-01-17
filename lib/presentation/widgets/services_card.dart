@@ -29,7 +29,7 @@ class ServiceCard extends StatelessWidget {
     this.progressColor,
     this.progressBackgroundColor,
     this.deadlineDate,
-    this.showDaysLeftBadge = true, // Changed to true by default
+    this.showDaysLeftBadge = true,
   });
 
   int? get daysLeft {

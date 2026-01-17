@@ -1,28 +1,36 @@
+import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_transaction_success.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CharityConfirmation extends HookWidget {
+class CharityConfirmation extends StatelessWidget {
   static const String routeName = 'CharityConfirmation';
   const CharityConfirmation({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final accountName = args['accountName'];
-    final charity = args['charity'] as ServicesModel;
+    final state = context.watch<CharityBloc>().state;
+    final charityId = state.selectedCharityId;
 
-    final accountNumber = args['accountNumber'];
-    final amountDouble = args['amount'] as double;
+    // Handle no selected charity
+    if (charityId == null) {
+      return const Scaffold(body: Center(child: Text('No charity selected.')));
+    }
+
+    final currentCharity = state.charities[charityId];
+    if (currentCharity == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // Get donation amount from Bloc
+    final amountDouble = double.tryParse(state.donationAmount.value) ?? 0.0;
     final amount = amountDouble.toStringAsFixed(2);
-    final imagePath = charity.imagePath;
+
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: SafeArea(
@@ -41,16 +49,15 @@ class CharityConfirmation extends HookWidget {
                   ),
                   AppSpacing.verticalSpaceMassive,
                   Text(
-                    'Are You Sure ?',
+                    'Are You Sure?',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.blueColor.shade300,
                       fontSize: 25,
                     ),
                   ),
-
                   AppSpacing.verticalSpaceMedium,
                   Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 16.0,
                       horizontal: 25,
                     ),
@@ -76,17 +83,15 @@ class CharityConfirmation extends HookWidget {
                             children: [
                               AppSpacing.verticalSpaceMassive,
                               Text(
-                                accountName,
+                                currentCharity.organizer, // Use Bloc data
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
                               AppSpacing.verticalSpaceMedium,
-
                               Text(
-                                accountNumber,
+                                currentCharity.id,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
-
                               Chip(
                                 label: Text(
                                   'Transaction Status: Pending',
@@ -100,9 +105,7 @@ class CharityConfirmation extends HookWidget {
                                   color: Theme.of(context).colorScheme.error,
                                 ),
                               ),
-
                               const SizedBox(height: 20),
-
                               RichText(
                                 text: TextSpan(
                                   text: amount,
@@ -119,9 +122,7 @@ class CharityConfirmation extends HookWidget {
                                   ],
                                 ),
                               ),
-
                               const SizedBox(height: 20),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -140,9 +141,7 @@ class CharityConfirmation extends HookWidget {
                                   ),
                                 ],
                               ),
-
                               const Divider(height: 30),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -161,9 +160,7 @@ class CharityConfirmation extends HookWidget {
                                   ),
                                 ],
                               ),
-
                               const SizedBox(height: 10),
-
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -194,7 +191,7 @@ class CharityConfirmation extends HookWidget {
                           backgroundColor: Colors.white,
                           child: ClipOval(
                             child: Image.asset(
-                              imagePath,
+                              currentCharity.imagePath,
                               width: 56,
                               height: 56,
                               fit: BoxFit.cover,
@@ -213,19 +210,19 @@ class CharityConfirmation extends HookWidget {
                     child: Button(
                       color: AppColors.blueColor,
                       'Send Money',
-                      onPressed: () async {
-                        final result = await Navigator.pushNamed(
-                          context,
-                          CharityTransactionSuccess.routeName,
-                          arguments: {
-                            'amount': amountDouble,
-                            'imagePath': imagePath,
-                          },
+                      onPressed: () {
+                        final bloc = context.read<CharityBloc>();
+                        bloc.add(
+                          CharityEvent.donationCompleted(
+                            charityId: charityId,
+                            donatedAmount: amountDouble,
+                          ),
                         );
 
-                        if (result != null) {
-                          Navigator.pop(context, result);
-                        }
+                        Navigator.pushNamed(
+                          context,
+                          CharityTransactionSuccess.routeName,
+                        );
                       },
                     ),
                   ),

@@ -50,7 +50,7 @@ class Insurance extends HookWidget {
                     ),
                     AppSpacing.verticalSpaceMedium,
                     ServiceCard(
-                      service: insurance2.value,
+                      service: insurance2,
                       deadlineDate: houseOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -60,13 +60,13 @@ class Insurance extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfInsurance.routeName,
-                          arguments: insurance2.value,
+                          arguments: insurance2,
                         );
                       },
                     ),
                     AppSpacing.verticalSpaceMedium,
                     ServiceCard(
-                      service: insurance3.value,
+                      service: insurance3,
                       deadlineDate: houseOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -76,13 +76,13 @@ class Insurance extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfInsurance.routeName,
-                          arguments: insurance3.value,
+                          arguments: insurance3,
                         );
                       },
                     ),
                     AppSpacing.verticalSpaceMedium,
                     ServiceCard(
-                      service: insurance2.value,
+                      service: insurance2,
                       deadlineDate: familyOfferDeadline,
                       showProgressBar: false,
                       showPercentageBadge: false,
@@ -92,7 +92,7 @@ class Insurance extends HookWidget {
                         Navigator.pushNamed(
                           context,
                           TypeOfInsurance.routeName,
-                          arguments: insurance2.value,
+                          arguments: insurance2,
                         );
                       },
                     ),

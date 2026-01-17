@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ServicesModel {
+  final String id;
   final String imagePath;
   final String title;
   final String organizer;
   final double targetAmount;
   final double donatedAmount;
   ServicesModel({
+    required this.id,
     required this.imagePath,
     required this.title,
     required this.organizer,
@@ -23,6 +25,7 @@ class ServicesModel {
   }
 
   ServicesModel copyWith({
+    String? id,
     String? imagePath,
     String? title,
     String? organizer,
@@ -30,6 +33,7 @@ class ServicesModel {
     double? donatedAmount,
   }) {
     return ServicesModel(
+      id: id ?? this.id,
       imagePath: imagePath ?? this.imagePath,
       title: title ?? this.title,
       organizer: organizer ?? this.organizer,

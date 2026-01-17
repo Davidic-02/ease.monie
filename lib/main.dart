@@ -1,10 +1,12 @@
 import 'package:esae_monie/blocs/auth/auth_bloc.dart';
 import 'package:esae_monie/blocs/bank_transfer/bank_transfer_bloc.dart';
 import 'package:esae_monie/blocs/bank_verification/bank_verification_bloc.dart';
+import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/blocs/loan/loan_bloc.dart';
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
+import 'package:esae_monie/presentation/data/lists.dart'; // 👈 Add this import
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/router/app_routes.dart';
 import 'package:esae_monie/services/service_locator.dart';
@@ -45,6 +47,13 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoanBloc>(create: (context) => LoanBloc()),
         BlocProvider<NetflixBloc>(create: (context) => NetflixBloc()),
         BlocProvider<BankTransferBloc>(create: (context) => BankTransferBloc()),
+
+        BlocProvider<CharityBloc>(
+          create: (context) => CharityBloc()
+            ..add(
+              CharityEvent.started([charity1, charity2]),
+            ), // 👈 Initialize charities
+        ),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,

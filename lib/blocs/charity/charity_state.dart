@@ -5,13 +5,13 @@ abstract class CharityState with _$CharityState {
   const CharityState._();
 
   const factory CharityState({
-    ServicesModel? selectedCharity,
-    @Default(0.0) double donatedAmount,
+    @Default(<String, ServicesModel>{}) Map<String, ServicesModel> charities,
+
     @Default(DonationAmountFormz.pure()) DonationAmountFormz donationAmount,
 
     @Default(FormzSubmissionStatus.initial)
     FormzSubmissionStatus submissionStatus,
-
+    String? selectedCharityId,
     String? errorMessage,
   }) = _CharityState;
 }
