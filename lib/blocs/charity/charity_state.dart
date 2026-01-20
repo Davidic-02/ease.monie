@@ -7,7 +7,9 @@ abstract class CharityState with _$CharityState {
   const factory CharityState({
     @Default(<String, ServicesModel>{}) Map<String, ServicesModel> charities,
 
-    @Default(DonationAmountFormz.pure()) DonationAmountFormz donationAmount,
+    // Change this to store amount per charity ID
+    @Default(<String, DonationAmountFormz>{})
+    Map<String, DonationAmountFormz> donationAmounts,
 
     @Default(FormzSubmissionStatus.initial)
     FormzSubmissionStatus submissionStatus,

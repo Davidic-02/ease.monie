@@ -36,12 +36,11 @@ class Charity extends HookWidget {
                   children: [
                     AppSpacing.verticalSpaceHuge,
 
+                    // First Charity Card - charity1
                     BlocBuilder<CharityBloc, CharityState>(
                       builder: (context, state) {
-                        // Don't use fallback to static charity1 - force it to use bloc state
                         final currentCharity = state.charities[charity1.id];
 
-                        // If not in state yet, show loading
                         if (currentCharity == null) {
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -54,18 +53,13 @@ class Charity extends HookWidget {
                           showProgressBar: true,
                           showPercentageBadge: true,
                           buttonText: 'Donate',
-                          onButtonPressed: () async {
-                            final bloc = context.read<CharityBloc>();
-
-                            bloc.add(
+                          onButtonPressed: () {
+                            // Remove the await bloc.stream.first
+                            context.read<CharityBloc>().add(
                               CharityEvent.selectCharity(currentCharity.id),
                             );
 
-                            await bloc.stream.first;
-
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, Donation.routeName);
-                            }
+                            Navigator.pushNamed(context, Donation.routeName);
                           },
                         );
                       },
@@ -73,12 +67,11 @@ class Charity extends HookWidget {
 
                     AppSpacing.verticalSpaceHuge,
 
+                    // Second Charity Card - charity2
                     BlocBuilder<CharityBloc, CharityState>(
                       builder: (context, state) {
-                        // Don't use fallback to static charity1 - force it to use bloc state
-                        final currentCharity = state.charities[charity1.id];
+                        final currentCharity = state.charities[charity2.id];
 
-                        // If not in state yet, show loading
                         if (currentCharity == null) {
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -91,30 +84,23 @@ class Charity extends HookWidget {
                           showProgressBar: true,
                           showPercentageBadge: true,
                           buttonText: 'Donate',
-                          onButtonPressed: () async {
-                            final bloc = context.read<CharityBloc>();
-
-                            bloc.add(
+                          onButtonPressed: () {
+                            context.read<CharityBloc>().add(
                               CharityEvent.selectCharity(currentCharity.id),
                             );
 
-                            await bloc.stream.first;
-
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, Donation.routeName);
-                            }
+                            Navigator.pushNamed(context, Donation.routeName);
                           },
                         );
                       },
                     ),
                     AppSpacing.verticalSpaceMedium,
 
+                    // Third Charity Card - charity3
                     BlocBuilder<CharityBloc, CharityState>(
                       builder: (context, state) {
-                        // Don't use fallback to static charity1 - force it to use bloc state
                         final currentCharity = state.charities[charity1.id];
 
-                        // If not in state yet, show loading
                         if (currentCharity == null) {
                           return const Center(
                             child: CircularProgressIndicator(),
@@ -127,18 +113,12 @@ class Charity extends HookWidget {
                           showProgressBar: true,
                           showPercentageBadge: true,
                           buttonText: 'Donate',
-                          onButtonPressed: () async {
-                            final bloc = context.read<CharityBloc>();
-
-                            bloc.add(
+                          onButtonPressed: () {
+                            context.read<CharityBloc>().add(
                               CharityEvent.selectCharity(currentCharity.id),
                             );
 
-                            await bloc.stream.first;
-
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, Donation.routeName);
-                            }
+                            Navigator.pushNamed(context, Donation.routeName);
                           },
                         );
                       },

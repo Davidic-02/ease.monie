@@ -6,10 +6,12 @@ import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/giftsuccessful_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CharityTransactionSuccess extends StatelessWidget {
+class CharityTransactionSuccess extends HookWidget {
   static const String routeName = 'CharityTransactionSuccess';
+
   const CharityTransactionSuccess({super.key});
 
   @override
@@ -17,18 +19,45 @@ class CharityTransactionSuccess extends StatelessWidget {
     final state = context.watch<CharityBloc>().state;
     final charityId = state.selectedCharityId;
 
-    // If no charity is selected
-    if (charityId == null) {
-      return const Scaffold(body: Center(child: Text('No charity selected.')));
-    }
+    // useState hooks to capture amount & charityId
+    final capturedAmount = useState<double?>(null);
+    final capturedCharityId = useState<String?>(null);
 
-    final currentCharity = state.charities[charityId];
-    if (currentCharity == null) {
+    // Capture the donation amount once after first build
+    useEffect(() {
+      if (charityId != null && capturedAmount.value == null) {
+        final currentDonationAmount = state.donationAmounts[charityId];
+        final amountDouble =
+            double.tryParse(currentDonationAmount?.value ?? '') ?? 0.0;
+
+        capturedAmount.value = amountDouble;
+        capturedCharityId.value = charityId;
+
+        // Complete the donation (update charity's raised amount)
+        if (amountDouble > 0) {
+          context.read<CharityBloc>().add(
+            CharityEvent.donationCompleted(
+              charityId: charityId,
+              donatedAmount: amountDouble,
+            ),
+          );
+        }
+      }
+      return null;
+    }, [charityId, state.donationAmounts]);
+
+    final currentCharity = charityId != null
+        ? state.charities[charityId]
+        : null;
+
+    if (charityId == null || currentCharity == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final amountDouble = double.tryParse(state.donationAmount.value) ?? 0.0;
-    final amount = amountDouble.toStringAsFixed(2);
+    // Use captured amount if available
+    final amountDouble =
+        capturedAmount.value ??
+        (double.tryParse(state.donationAmounts[charityId]?.value ?? '') ?? 0.0);
 
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -87,8 +116,8 @@ class CharityTransactionSuccess extends StatelessWidget {
                     child: Button(
                       'View Receipts',
                       color: AppColors.blueColor,
-                      onPressed: () {
-                        showModalBottomSheet(
+                      onPressed: () async {
+                        await showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
                           useRootNavigator: true,
@@ -106,13 +135,17 @@ class CharityTransactionSuccess extends StatelessWidget {
                           ),
                         );
 
-                        context.read<CharityBloc>().add(
-                          CharityEvent.donationAmountChanged(''),
-                        );
-                        Navigator.popUntil(
-                          context,
-                          ModalRoute.withName(Charity.routeName),
-                        );
+                        // Clear donation amount and navigate back
+                        if (context.mounted) {
+                          context.read<CharityBloc>().add(
+                            CharityEvent.donationAmountChanged(''),
+                          );
+
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            Charity.routeName,
+                            (route) => route.isFirst,
+                          );
+                        }
                       },
                     ),
                   ),

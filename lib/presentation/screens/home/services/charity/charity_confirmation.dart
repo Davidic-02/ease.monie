@@ -26,8 +26,9 @@ class CharityConfirmation extends StatelessWidget {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    // Get donation amount from Bloc
-    final amountDouble = double.tryParse(state.donationAmount.value) ?? 0.0;
+    final currentDonationAmount =
+        state.donationAmounts[charityId] ?? const DonationAmountFormz.pure();
+    final amountDouble = double.tryParse(currentDonationAmount.value) ?? 0.0;
     final amount = amountDouble.toStringAsFixed(2);
 
     final screenHeight = MediaQuery.of(context).size.height;
@@ -83,7 +84,7 @@ class CharityConfirmation extends StatelessWidget {
                             children: [
                               AppSpacing.verticalSpaceMassive,
                               Text(
-                                currentCharity.organizer, // Use Bloc data
+                                currentCharity.organizer,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
@@ -211,14 +212,8 @@ class CharityConfirmation extends StatelessWidget {
                       color: AppColors.blueColor,
                       'Send Money',
                       onPressed: () {
-                        final bloc = context.read<CharityBloc>();
-                        bloc.add(
-                          CharityEvent.donationCompleted(
-                            charityId: charityId,
-                            donatedAmount: amountDouble,
-                          ),
-                        );
-
+                        // Just navigate - don't complete the donation yet!
+                        // The donation will be completed on the success screen
                         Navigator.pushNamed(
                           context,
                           CharityTransactionSuccess.routeName,

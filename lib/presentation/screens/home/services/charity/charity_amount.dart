@@ -1,7 +1,6 @@
 import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/data/formatter.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/charity/charity_confirmation.dart';
@@ -23,9 +22,14 @@ class CharityAmount extends HookWidget {
     final controller = useTextEditingController();
     final state = context.watch<CharityBloc>().state;
     final currentCharity = state.charities[state.selectedCharityId];
+
     if (currentCharity == null) {
       return const Center(child: CircularProgressIndicator());
     }
+
+    final currentDonationAmount =
+        state.donationAmounts[state.selectedCharityId] ??
+        const DonationAmountFormz.pure();
 
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -70,11 +74,8 @@ class CharityAmount extends HookWidget {
                 },
 
                 onFieldSubmitted: (_) {
-                  final value = context
-                      .read<CharityBloc>()
-                      .state
-                      .donationAmount
-                      .value;
+                  // ✅ Use currentDonationAmount instead
+                  final value = currentDonationAmount.value;
 
                   final parsed = double.tryParse(value);
 
@@ -96,8 +97,9 @@ class CharityAmount extends HookWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: presetAmounts.map((amt) {
+                    // ✅ Use currentDonationAmount instead
                     final isSelected =
-                        state.donationAmount.value == amt.toString();
+                        currentDonationAmount.value == amt.toString();
 
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),

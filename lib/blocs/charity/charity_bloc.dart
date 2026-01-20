@@ -31,17 +31,19 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
   }
 
   void _donatedAmount(_DonationAmount event, Emitter<CharityState> emit) {
+    final charityId = state.selectedCharityId;
+    if (charityId == null) return;
+
     final amount = DonationAmountFormz.dirty(event.amount);
 
-    emit(
-      state.copyWith(
-        donationAmount: amount.isValid
-            ? amount
-            : DonationAmountFormz.pure(event.amount),
-
-        errorMessage: null,
-      ),
+    final updatedAmounts = Map<String, DonationAmountFormz>.from(
+      state.donationAmounts,
     );
+    updatedAmounts[charityId] = amount.isValid
+        ? amount
+        : DonationAmountFormz.pure(event.amount);
+
+    emit(state.copyWith(donationAmounts: updatedAmounts, errorMessage: null));
   }
 
   void _donationCompleted(
@@ -63,10 +65,16 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
     final updatedCharities = Map<String, ServicesModel>.from(state.charities);
     updatedCharities[charityId] = updatedCharity;
 
+    // Clear only this charity's donation amount
+    final updatedAmounts = Map<String, DonationAmountFormz>.from(
+      state.donationAmounts,
+    );
+    updatedAmounts.remove(charityId);
+
     emit(
       state.copyWith(
         charities: updatedCharities,
-        donationAmount: DonationAmountFormz.pure(''),
+        donationAmounts: updatedAmounts,
         errorMessage: null,
       ),
     );
