@@ -73,11 +73,11 @@ class ServiceCard extends StatelessWidget {
         progressBackgroundColor ?? AppColors.blueColor.withOpacity(0.2);
 
     // Determine what to show at bottom left
-    String displayBottomText;
+    String overallDonatedAmount;
     if (bottomLeftText != null) {
-      displayBottomText = bottomLeftText!;
+      overallDonatedAmount = bottomLeftText!;
     } else {
-      displayBottomText = '₦${service.donatedAmount.toStringAsFixed(0)}';
+      overallDonatedAmount = '₦${service.donatedAmount.toStringAsFixed(0)}';
     }
 
     return Material(
@@ -229,7 +229,7 @@ class ServiceCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    displayBottomText,
+                    overallDonatedAmount,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

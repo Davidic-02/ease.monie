@@ -54,7 +54,6 @@ class Charity extends HookWidget {
                           showPercentageBadge: true,
                           buttonText: 'Donate',
                           onButtonPressed: () {
-                            // Remove the await bloc.stream.first
                             context.read<CharityBloc>().add(
                               CharityEvent.selectCharity(currentCharity.id),
                             );

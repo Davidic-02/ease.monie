@@ -11,15 +11,9 @@ part 'charity_bloc.freezed.dart';
 class CharityBloc extends Bloc<CharityEvent, CharityState> {
   CharityBloc() : super(const CharityState()) {
     on<_Started>(_started);
+    on<_SelectCharity>(_selectCharity);
     on<_DonationAmount>(_donatedAmount);
     on<_DonationCompleted>(_donationCompleted);
-    on<_SelectCharity>(_selectCharity);
-  }
-
-  void _selectCharity(_SelectCharity event, Emitter<CharityState> emit) {
-    emit(
-      state.copyWith(selectedCharityId: event.charityId, errorMessage: null),
-    );
   }
 
   void _started(_Started event, Emitter<CharityState> emit) {
@@ -28,6 +22,10 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
     };
 
     emit(state.copyWith(charities: map));
+  }
+
+  void _selectCharity(_SelectCharity event, Emitter<CharityState> emit) {
+    emit(state.copyWith(selectedCharityId: event.charityId));
   }
 
   void _donatedAmount(_DonationAmount event, Emitter<CharityState> emit) {
@@ -43,7 +41,7 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
         ? amount
         : DonationAmountFormz.pure(event.amount);
 
-    emit(state.copyWith(donationAmounts: updatedAmounts, errorMessage: null));
+    emit(state.copyWith(donationAmounts: updatedAmounts));
   }
 
   void _donationCompleted(
@@ -75,7 +73,6 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
       state.copyWith(
         charities: updatedCharities,
         donationAmounts: updatedAmounts,
-        errorMessage: null,
       ),
     );
   }
