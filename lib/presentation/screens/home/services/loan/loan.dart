@@ -1,5 +1,6 @@
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/presentation/screens/home/services/loan/loan_helper.dart';
 import 'package:esae_monie/presentation/screens/home/services/loan/loan_payment_plans.dart';
 import 'package:esae_monie/presentation/widgets/custom_topbar.dart';
 import 'package:esae_monie/presentation/widgets/custom_vertical_scrolls.dart';
@@ -14,30 +15,6 @@ import 'package:flutter_svg/svg.dart';
 class Loan extends HookWidget {
   static const String routeName = 'Loan';
   const Loan({super.key});
-  List<PieChartSectionData> buildLoanSections() {
-    return loanModel.map((loan) {
-      Color color;
-      if (loan.title == 'Paid') {
-        color = Colors.green;
-      } else if (loan.title == 'Due') {
-        color = Colors.red;
-      } else {
-        color = Colors.orange;
-      }
-
-      return PieChartSectionData(
-        value: loan.amount,
-        title: loan.title,
-        color: color,
-        radius: 45,
-        titleStyle: const TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      );
-    }).toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +47,9 @@ class Loan extends HookWidget {
                         children: [
                           PieChart(
                             PieChartData(
-                              sections: buildLoanSections(),
+                              sections: buildLoanSections(loanModel),
                               centerSpaceRadius: 40,
-
-                              sectionsSpace: 2, // space between slices
+                              sectionsSpace: 2,
                             ),
                           ),
 

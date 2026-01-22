@@ -22,8 +22,8 @@ class Recharge extends HookWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final amountFocusNode = useFocusNode();
+    final TextEditingController amountController = useTextEditingController();
 
-    final TextEditingController numberController = useTextEditingController();
     final numberFocus = useFocusNode();
     final paymentOptionsFocus = useFocusNode();
     return Scaffold(
@@ -54,7 +54,6 @@ class Recharge extends HookWidget {
                       builder: (context, state) {
                         return CustomTextFormField(
                           key: const ValueKey("recipient_number"),
-                          controller: numberController,
                           focusNode: numberFocus,
                           hintText: "Recipient Mobile Number",
                           textInputAction: TextInputAction.next,
@@ -149,15 +148,33 @@ class Recharge extends HookWidget {
                     BlocBuilder<RechargeBloc, RechargeState>(
                       builder: (context, state) {
                         return CustomTextFormField(
+                          controller: amountController,
                           focusNode: amountFocusNode,
                           hintText: 'Enter Amount',
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
                           onChanged: (value) {
-                            context.read<RechargeBloc>().add(
-                              RechargeEvent.amountChanged(value),
+                            final raw = value.replaceAll(
+                              RegExp(r'[^0-9.]'),
+                              '',
                             );
+                            context.read<RechargeBloc>().add(
+                              RechargeEvent.amountChanged(raw),
+                            );
+                            final parsed = double.tryParse(raw) ?? 0;
+                            final formatted = formatter.format(parsed);
+
+                            // Only update controller if needed to avoid infinite loop
+                            if (amountController.text != formatted) {
+                              amountController.text = formatted;
+                              amountController.selection =
+                                  TextSelection.fromPosition(
+                                    TextPosition(
+                                      offset: amountController.text.length,
+                                    ),
+                                  );
+                            }
                           },
 
                           errorText: state.amount.isNotValid
