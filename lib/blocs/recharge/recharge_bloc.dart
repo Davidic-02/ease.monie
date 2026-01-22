@@ -16,6 +16,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     on<_QuickAmountSelected>(_onQuickAmountSelected);
     on<_NetworkSelected>(_onNetworkSelected);
     on<_RechargeSubmitted>(_onRechargeSubmitted);
+    on<_ResetForm>(_onResetForm);
   }
 
   void _onPhoneNumberChanged(
@@ -28,9 +29,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
       state.copyWith(
         phoneNumber: phoneNumber.isValid
             ? phoneNumber
-            : PhoneNumberFormz.pure(event.phoneNumber),
-        submissionStatus: FormzSubmissionStatus.initial,
-        errorMessage: null,
+            : PhoneNumberFormz.dirty(event.phoneNumber),
       ),
     );
   }
@@ -40,9 +39,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
 
     emit(
       state.copyWith(
-        amount: amount.isValid ? amount : AmountFormz.pure(event.amount),
-        submissionStatus: FormzSubmissionStatus.initial,
-        errorMessage: null,
+        amount: amount.isValid ? amount : AmountFormz.dirty(event.amount),
       ),
     );
   }
@@ -96,5 +93,9 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
         errorMessage: null,
       ),
     );
+  }
+
+  void _onResetForm(_ResetForm event, Emitter<RechargeState> emit) {
+    emit(const RechargeState()); // Reset to initial state
   }
 }
