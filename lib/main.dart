@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoanBloc>(create: (context) => LoanBloc()),
         BlocProvider<NetflixBloc>(create: (context) => NetflixBloc()),
         BlocProvider<BankTransferBloc>(create: (context) => BankTransferBloc()),
-
+        BlocProvider(create: (context) => RechargeBloc()),
         BlocProvider<CharityBloc>(
           create: (context) =>
               CharityBloc()..add(CharityEvent.started([charity1, charity2])),
