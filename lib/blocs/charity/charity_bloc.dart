@@ -50,20 +50,20 @@ class CharityBloc extends Bloc<CharityEvent, CharityState> {
   ) {
     final charityId = event.charityId;
 
-    // Get current charity
+   
     final currentCharity = state.charities[charityId];
     if (currentCharity == null) return;
 
-    // Create updated charity
+
     final updatedCharity = currentCharity.copyWith(
       donatedAmount: currentCharity.donatedAmount + event.donatedAmount,
     );
 
-    // Replace in map
+
     final updatedCharities = Map<String, ServicesModel>.from(state.charities);
     updatedCharities[charityId] = updatedCharity;
 
-    // Clear only this charity's donation amount
+   
     final updatedAmounts = Map<String, DonationAmountFormz>.from(
       state.donationAmounts,
     );

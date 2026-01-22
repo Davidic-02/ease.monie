@@ -5,6 +5,7 @@ import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/blocs/loan/loan_bloc.dart';
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
+import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/data/lists.dart'; // 👈 Add this import
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
@@ -43,16 +44,13 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(FirebaseAuth.instance),
         ),
         BlocProvider<VerificationBloc>(create: (context) => VerificationBloc()),
-
         BlocProvider<LoanBloc>(create: (context) => LoanBloc()),
         BlocProvider<NetflixBloc>(create: (context) => NetflixBloc()),
         BlocProvider<BankTransferBloc>(create: (context) => BankTransferBloc()),
-
+        BlocProvider(create: (context) => RechargeBloc()),
         BlocProvider<CharityBloc>(
-          create: (context) => CharityBloc()
-            ..add(
-              CharityEvent.started([charity1, charity2]),
-            ), // 👈 Initialize charities
+          create: (context) =>
+              CharityBloc()..add(CharityEvent.started([charity1, charity2])),
         ),
       ],
       child: ValueListenableBuilder<ThemeMode>(
