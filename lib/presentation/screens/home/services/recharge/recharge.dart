@@ -59,14 +59,11 @@ class Recharge extends HookWidget {
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.phone,
                           onChanged: (value) {
-                            context.read().add(
+                            context.read<RechargeBloc>().add(
                               RechargeEvent.phoneNumberChanged(value),
                             );
                           },
 
-                          errorText: state.phoneNumber.isNotValid
-                              ? "Mobile number required"
-                              : null,
                           onFieldSubmitted: (_) =>
                               paymentOptionsFocus.requestFocus(),
                         );
@@ -155,6 +152,7 @@ class Recharge extends HookWidget {
                             decimal: true,
                           ),
                           onChanged: (value) {
+                            // only update BLoC
                             final raw = value.replaceAll(
                               RegExp(r'[^0-9.]'),
                               '',
@@ -162,24 +160,15 @@ class Recharge extends HookWidget {
                             context.read<RechargeBloc>().add(
                               RechargeEvent.amountChanged(raw),
                             );
-                            final parsed = double.tryParse(raw) ?? 0;
-                            final formatted = formatter.format(parsed);
 
-                            // Only update controller if needed to avoid infinite loop
-                            if (amountController.text != formatted) {
-                              amountController.text = formatted;
-                              amountController.selection =
-                                  TextSelection.fromPosition(
-                                    TextPosition(
-                                      offset: amountController.text.length,
-                                    ),
-                                  );
-                            }
+                            // do NOT change controller.text here!
                           },
-
-                          errorText: state.amount.isNotValid
-                              ? 'Invalid amount'
-                              : null,
+                          onFieldSubmitted: (_) {
+                            // optional: format after submit
+                            final parsed =
+                                double.tryParse(amountController.text) ?? 0;
+                            amountController.text = formatter.format(parsed);
+                          },
                         );
                       },
                     ),
