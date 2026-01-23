@@ -47,12 +47,9 @@ class Insurance extends HookWidget {
                             buttonText: 'Send',
                             bottomLeftText: getCashbackText(insurance.id),
                             onButtonPressed: () {
-                              // 1. Update the Bloc state
                               context.read<InsuranceBloc>().add(
                                 InsuranceEvent.selectInsurance(insurance.id),
                               );
-
-                              // 2. Navigate to next screen
                               Navigator.pushNamed(
                                 context,
                                 TypeOfInsurance.routeName,
