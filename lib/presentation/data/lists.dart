@@ -245,15 +245,13 @@ final gift3 = ServicesModel(
 
 final eidOfferDeadline = DateTime.now().add(const Duration(days: 3));
 final birthdayOfferDeadline = DateTime.now().add(const Duration(days: 10));
-final insurance1 = useState(
-  ServicesModel(
-    id: 'insurance1',
-    imagePath: 'assets/images/insurance1.png',
-    title: 'Family Insurance',
-    organizer: 'Family Plans Cover two or more members',
-    targetAmount: 0,
-    donatedAmount: 0,
-  ),
+final insurance1 = ServicesModel(
+  id: 'insurance1',
+  imagePath: 'assets/images/insurance1.png',
+  title: 'Family Insurance',
+  organizer: 'Family Plans Cover two or more members',
+  targetAmount: 0,
+  donatedAmount: 0,
 );
 
 final insurance2 = ServicesModel(
@@ -276,3 +274,29 @@ final insurance3 = ServicesModel(
 
 final familyOfferDeadline = DateTime.now().add(const Duration(days: 3));
 final houseOfferDeadline = DateTime.now().add(const Duration(days: 10));
+
+String getCashbackText(String insuranceId) {
+  switch (insuranceId) {
+    case 'insurance1':
+      return '🎁 Get 10% Cashback';
+    case 'insurance2':
+      return '🎁 Get 15% Cashback';
+    case 'insurance3':
+      return '🎁 Get 5% Cashback';
+    default:
+      return '🎁 Cashback Available';
+  }
+}
+
+DateTime getDeadline(String insuranceId) {
+  switch (insuranceId) {
+    case 'insurance1':
+      return familyOfferDeadline;
+    case 'insurance2':
+      return houseOfferDeadline;
+    case 'insurance3':
+      return houseOfferDeadline;
+    default:
+      return DateTime.now().add(const Duration(days: 7));
+  }
+}
