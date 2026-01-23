@@ -1,12 +1,12 @@
+import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/gift_model.dart';
-import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift_transaction_successful.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class GiftConfirmation extends HookWidget {
@@ -15,17 +15,23 @@ class GiftConfirmation extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<GiftBloc>().state;
+    final selectedGiftId = state.selectedGiftId;
+    if (selectedGiftId == null) {
+      return const Scaffold(body: Center(child: Text('No gift selected.')));
+    }
+    final currentGift = state.gifts[selectedGiftId];
+    if (currentGift == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     final screenHeight = MediaQuery.of(context).size.height;
-    final GiftPayload payload =
-        ModalRoute.of(context)!.settings.arguments as GiftPayload;
 
-    final ServicesModel myService = payload.service;
-    final String accountName = payload.name;
-    final String accountNumber = payload.accountNumber;
-    final double amountDouble = payload.amount;
-    final String imagePath = myService.imagePath;
-
-    final String amount = amountDouble.toStringAsFixed(2);
+    final recipientName = state.recipientName.value;
+    final accountNumber = state.accountNumber.value;
+    final amountDouble = double.tryParse(state.amount.value) ?? 0.0;
+    final amount = amountDouble.toStringAsFixed(2);
+    //final giftMessage = state.giftMessage.value;
 
     return Scaffold(
       body: SafeArea(
@@ -79,10 +85,10 @@ class GiftConfirmation extends HookWidget {
                             children: [
                               AppSpacing.verticalSpaceMassive,
 
-                              TextTitle(text: myService.title),
+                              TextTitle(text: currentGift.title),
 
                               Text(
-                                accountName,
+                                recipientName,
                                 style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),
@@ -200,7 +206,7 @@ class GiftConfirmation extends HookWidget {
                           backgroundColor: Colors.white,
                           child: ClipOval(
                             child: Image.asset(
-                              imagePath,
+                              currentGift.imagePath,
                               width: 70,
                               height: 70,
                               fit: BoxFit.cover,
@@ -214,22 +220,14 @@ class GiftConfirmation extends HookWidget {
                   Button(
                     color: AppColors.blueColor,
                     'Send Money',
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(
+                    onPressed: () {
+                      context.read<GiftBloc>().add(
+                        const GiftEvent.submitGift(),
+                      );
+                      Navigator.pushNamed(
                         context,
                         GiftTransactionSuccessful.routeName,
-                        arguments: {
-                          'service': myService, // your ServicesModel instance
-                          'name': accountName,
-                          'accountNumber': accountNumber,
-                          'amount': amountDouble,
-                          'imagePath': imagePath,
-                        },
                       );
-
-                      if (result != null) {
-                        Navigator.pop(context, result);
-                      }
                     },
                   ),
                 ],

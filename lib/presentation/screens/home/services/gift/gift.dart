@@ -29,6 +29,9 @@ class Gift extends HookWidget {
               child: BlocBuilder<GiftBloc, GiftState>(
                 builder: (context, state) {
                   final gifts = state.gifts.values.toList();
+                  if (gifts.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
                   return SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 30),

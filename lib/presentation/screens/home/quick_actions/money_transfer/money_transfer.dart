@@ -108,7 +108,6 @@ class MoneyTransfer extends HookWidget {
                             transfer.name,
                             style: context.textTheme.displayMedium?.copyWith(
                               fontWeight: FontWeight.w500,
-                              //  color: Colors.white,
                               fontSize: 18,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -117,7 +116,6 @@ class MoneyTransfer extends HookWidget {
                             transfer.amount,
                             style: context.textTheme.displayMedium?.copyWith(
                               fontWeight: FontWeight.w500,
-                              //  color: Colors.white,
                               fontSize: 18,
                             ),
                           ),
@@ -133,7 +131,6 @@ class MoneyTransfer extends HookWidget {
                 'Make New Transfer',
                 style: context.textTheme.displayMedium?.copyWith(
                   fontWeight: FontWeight.w500,
-                  //  color: Colors.white,
                   fontSize: 18,
                 ),
               ),

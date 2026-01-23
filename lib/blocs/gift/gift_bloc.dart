@@ -37,14 +37,8 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final recipientName = RecipientNameFormz.dirty(event.name);
-
-    emit(
-      state.copyWith(
-        recipientName: recipientName.isValid
-            ? recipientName
-            : RecipientNameFormz.pure(event.name),
-      ),
-    );
+    // ✅ Always emit dirty - no conditional!
+    emit(state.copyWith(recipientName: recipientName));
   }
 
   void _onAccountNumberChanged(
@@ -52,45 +46,26 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final accountNumber = AccountNumberFormz.dirty(event.accountNumber);
-    emit(
-      state.copyWith(
-        accountNumber: accountNumber.isValid
-            ? accountNumber
-            : AccountNumberFormz.pure(event.accountNumber),
-      ),
-    );
+    // ✅ Always emit dirty
+    emit(state.copyWith(accountNumber: accountNumber));
   }
 
   void _onPurposeChanged(_PurposeChanged event, Emitter<GiftState> emit) {
     final purpose = PurposeFormz.dirty(event.purpose);
-
-    emit(
-      state.copyWith(
-        purpose: purpose.isValid ? purpose : PurposeFormz.pure(event.purpose),
-      ),
-    );
+    // ✅ Always emit dirty
+    emit(state.copyWith(purpose: purpose));
   }
 
   void _onPasswordChanged(_PasswordChanged event, Emitter<GiftState> emit) {
     final password = PasswordFormz.dirty(event.password);
-
-    emit(
-      state.copyWith(
-        password: password.isValid
-            ? password
-            : PasswordFormz.pure(event.password),
-      ),
-    );
+    // ✅ Always emit dirty
+    emit(state.copyWith(password: password));
   }
 
   void _onGiftAmountChanged(_GiftAmountChanged event, Emitter<GiftState> emit) {
     final amount = GiftAmountFormz.dirty(event.amount);
-
-    emit(
-      state.copyWith(
-        amount: amount.isValid ? amount : GiftAmountFormz.pure(event.amount),
-      ),
-    );
+    // ✅ Always emit dirty
+    emit(state.copyWith(amount: amount));
   }
 
   void _onGiftMessageChanged(
@@ -98,14 +73,8 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final message = GiftMessageFormz.dirty(event.message);
-
-    emit(
-      state.copyWith(
-        giftMessage: message.isValid
-            ? message
-            : GiftMessageFormz.pure(event.message),
-      ),
-    );
+    // ✅ Always emit dirty
+    emit(state.copyWith(giftMessage: message));
   }
 
   void _onQuickAmountSelected(
@@ -113,14 +82,7 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final amount = GiftAmountFormz.dirty(event.amount.toString());
-
-    emit(
-      state.copyWith(
-        amount: amount.isValid
-            ? amount
-            : GiftAmountFormz.pure(event.amount.toString()),
-      ),
-    );
+    emit(state.copyWith(amount: amount));
   }
 
   Future<void> _onSubmitGift(_SubmitGift event, Emitter<GiftState> emit) async {
@@ -134,6 +96,9 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
           purpose: PurposeFormz.dirty(state.purpose.value),
           password: PasswordFormz.dirty(state.password.value),
           amount: GiftAmountFormz.dirty(state.amount.value),
+          giftMessage: GiftMessageFormz.dirty(
+            state.giftMessage.value,
+          ), // Add this!
           errorMessage: 'Please fill in all fields correctly.',
         ),
       );
