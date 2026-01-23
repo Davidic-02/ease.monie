@@ -7,7 +7,6 @@ import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:formz/formz.dart';
 
 class InsuranceTransaction extends HookWidget {
   static const String routeName = 'InsuranceTransaction';
@@ -21,9 +20,6 @@ class InsuranceTransaction extends HookWidget {
       builder: (context, state) {
         final currentInsurance = state.insurances[state.selectedInsuranceId];
         final paymentPlan = state.paymentPlan.value;
-        final isSubmitting =
-            state.submissionStatus == FormzSubmissionStatus.inProgress;
-
         if (currentInsurance == null) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -229,48 +225,16 @@ class InsuranceTransaction extends HookWidget {
                       ),
                       child: Button(
                         color: AppColors.blueColor,
-                        isSubmitting ? 'Processing...' : 'Send Money',
-                        onPressed: isSubmitting
-                            ? null
-                            : () async {
-                                // Trigger the submission
-                                context.read<InsuranceBloc>().add(
-                                  const InsuranceEvent.submitInsurance(),
-                                );
-
-                                // Wait a bit for the submission to complete
-                                await Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                );
-
-                                // Check the submission status
-                                final currentState = context
-                                    .read<InsuranceBloc>()
-                                    .state;
-
-                                if (currentState.submissionStatus ==
-                                    FormzSubmissionStatus.success) {
-                                  final result = await Navigator.pushNamed(
-                                    context,
-                                    InsuranceTransactionSuccessful.routeName,
-                                  );
-
-                                  if (result != null) {
-                                    Navigator.pop(context, result);
-                                  }
-                                } else if (currentState.submissionStatus ==
-                                    FormzSubmissionStatus.failure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        currentState.errorMessage ??
-                                            'Transaction failed',
-                                      ),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              },
+                        'Send Money',
+                        onPressed: () {
+                          context.read<InsuranceBloc>().add(
+                            const InsuranceEvent.submitInsurance(),
+                          );
+                          Navigator.pushNamed(
+                            context,
+                            InsuranceTransactionSuccessful.routeName,
+                          );
+                        },
                       ),
                     ),
                   ],

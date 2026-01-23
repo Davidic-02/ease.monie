@@ -20,13 +20,19 @@ class InsuranceTransactionSuccessful extends StatelessWidget {
     return BlocBuilder<InsuranceBloc, InsuranceState>(
       builder: (context, state) {
         final currentInsurance = state.insurances[state.selectedInsuranceId];
+        final selectedPlan = state.selectedInsurancePlan;
         final paymentPlan = state.paymentPlan.value;
 
-        if (currentInsurance == null) {
+        if (currentInsurance == null || selectedPlan == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final amountDouble = double.tryParse(paymentPlan) ?? 0.0;
+        // Get the amount from selectedInsurancePlan.amount (e.g., "$500")
+        // Remove $ sign and parse
+        final amountString = selectedPlan.amount
+            .replaceAll('\$', '')
+            .replaceAll(',', '');
+        final amountDouble = double.tryParse(amountString) ?? 0.0;
 
         return Scaffold(
           body: SafeArea(
@@ -96,7 +102,8 @@ class InsuranceTransactionSuccessful extends StatelessWidget {
                             ),
                             builder: (_) => GiftSuccessBottomSheet(
                               amount: amountDouble,
-                              accountName: paymentPlan,
+                              accountName:
+                                  paymentPlan, // "Monthly", "Quarterly", etc.
                               accountNumber: currentInsurance.organizer,
                               imagePath: currentInsurance.imagePath,
                               giftTitle: currentInsurance.title,

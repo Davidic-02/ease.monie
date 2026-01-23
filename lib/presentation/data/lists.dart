@@ -103,9 +103,24 @@ final List scheduledPaymentsScreen = [
 ];
 
 final List<InsuranceModel> insuranceModel = [
-  InsuranceModel(plan: 'Monthly Plan', time: 'month', amount: '2300.00'),
-  InsuranceModel(plan: 'One Time Plan', time: 'year', amount: '2000.00'),
-  InsuranceModel(plan: 'Yearly Plan', time: 'year', amount: '3000.00'),
+  InsuranceModel(
+    id: 'monthly',
+    plan: 'Monthly Plan',
+    time: 'month',
+    amount: '2300.00',
+  ),
+  InsuranceModel(
+    id: 'oneTime',
+    plan: 'One Time Plan',
+    time: 'year',
+    amount: '2000.00',
+  ),
+  InsuranceModel(
+    id: 'yearly',
+    plan: 'Yearly Plan',
+    time: 'year',
+    amount: '3000.00',
+  ),
 ];
 
 final List<LoanModel> loanModel = [

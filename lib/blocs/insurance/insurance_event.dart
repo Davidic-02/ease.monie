@@ -12,7 +12,6 @@ abstract class InsuranceEvent with _$InsuranceEvent {
   const factory InsuranceEvent.selectInsurance(String insuranceId) =
       _SelectInsurance;
 
-  /// User selects insurance plan (Basic / Premium)
   const factory InsuranceEvent.insurancePlanChanged(InsuranceModel plan) =
       _InsurancePlanChanged;
 
