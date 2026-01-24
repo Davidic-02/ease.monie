@@ -12,6 +12,7 @@ import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/text_child.dart';
 import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -24,13 +25,9 @@ class Recharge extends HookWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final amountFocusNode = useFocusNode();
     final TextEditingController amountController = useTextEditingController();
-    final TextEditingController phoneController =
-        useTextEditingController(); // Add this
 
     final numberFocus = useFocusNode();
-    final paymentOptionsFocus = useFocusNode();
 
-    // Reset form when widget is disposed (navigating away)
     useEffect(() {
       return () {
         context.read<RechargeBloc>().add(const RechargeEvent.resetForm());
@@ -62,38 +59,35 @@ class Recharge extends HookWidget {
                     AppSpacing.verticalSpaceHuge,
                     TextTitle(text: 'Add Mobile Number'),
                     AppSpacing.verticalSpaceSmall,
-                    TextChild(text: 'Enter receipent mobile Number'),
-
+                    TextChild(text: 'Enter recipient mobile Number'),
                     BlocBuilder<RechargeBloc, RechargeState>(
                       builder: (context, state) {
                         return CustomTextFormField(
-                          controller: phoneController, // Add controller
-                          key: const ValueKey("recipient_number"),
                           focusNode: numberFocus,
+                          maxLength: 11,
                           hintText: "Recipient Mobile Number",
-                          textInputAction: TextInputAction.next,
+                          textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.phone,
                           onChanged: (value) {
                             context.read<RechargeBloc>().add(
                               RechargeEvent.phoneNumberChanged(value),
                             );
                           },
-                          onFieldSubmitted: (_) =>
-                              paymentOptionsFocus.requestFocus(),
-                          // Add error text like bank screen
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                          ],
+
                           errorText:
                               !state.phoneNumber.isPure &&
                                   state.phoneNumber.isNotValid
                               ? state.phoneNumber.error == ValidationError.empty
                                     ? "Phone number is required"
-                                    : "Phone number must be at least 6 digits"
+                                    : "Phone number must be at least 11 digits"
                               : null,
                         );
                       },
                     ),
-
-                    SizedBox(height: screenHeight * 0.05),
-
+                    AppSpacing.verticalSpaceLarge,
                     TextTitle(text: 'Select Network'),
                     AppSpacing.verticalSpaceMedium,
                     BlocBuilder<RechargeBloc, RechargeState>(
@@ -123,8 +117,8 @@ class Recharge extends HookWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? theme.colorScheme.primary.withOpacity(
-                                          0.1,
+                                      ? theme.colorScheme.primary.withValues(
+                                          alpha: 0.1,
                                         )
                                       : Colors.transparent,
                                   border: Border.all(
@@ -162,7 +156,7 @@ class Recharge extends HookWidget {
                         );
                       },
                     ),
-                    SizedBox(height: screenHeight * 0.05),
+                    AppSpacing.verticalSpaceLarge,
                     TextTitle(text: 'Enter Amount'),
                     BlocBuilder<RechargeBloc, RechargeState>(
                       builder: (context, state) {
@@ -187,7 +181,6 @@ class Recharge extends HookWidget {
                                 double.tryParse(amountController.text) ?? 0;
                             amountController.text = formatter.format(parsed);
                           },
-                          // Add error text
                           errorText:
                               !state.amount.isPure && state.amount.isNotValid
                               ? state.amount.error == ValidationError.empty
@@ -217,7 +210,6 @@ class Recharge extends HookWidget {
                                         amt.toString(),
                                       ),
                                     );
-                                    // Update controller when quick amount selected
                                     amountController.text = formatter.format(
                                       amt,
                                     );
@@ -255,7 +247,7 @@ class Recharge extends HookWidget {
                         );
                       },
                     ),
-                    SizedBox(height: screenHeight * 0.1),
+                    SizedBox(height: screenHeight * 0.15),
                     BlocBuilder<RechargeBloc, RechargeState>(
                       builder: (context, state) {
                         return Padding(
