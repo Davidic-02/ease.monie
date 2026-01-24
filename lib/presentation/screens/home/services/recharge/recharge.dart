@@ -82,7 +82,7 @@ class Recharge extends HookWidget {
                                   state.phoneNumber.isNotValid
                               ? state.phoneNumber.error == ValidationError.empty
                                     ? "Phone number is required"
-                                    : "Phone number must be at least 11 digits"
+                                    : "Phone number must be at least 11 digits."
                               : null,
                         );
                       },
