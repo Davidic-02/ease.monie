@@ -1,6 +1,7 @@
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -29,6 +30,7 @@ class CustomTextFormField extends StatelessWidget {
     this.errorText,
     this.maxLines,
     this.minLines,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;
@@ -54,6 +56,7 @@ class CustomTextFormField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final int? maxLines;
   final int? minLines;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,7 @@ class CustomTextFormField extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           onTap: onTap,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             errorText: errorText,
             border: OutlineInputBorder(
