@@ -1,6 +1,7 @@
 import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/enums/validator_error.dart';
 import 'package:esae_monie/presentation/data/formatter.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
@@ -23,9 +24,19 @@ class Recharge extends HookWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final amountFocusNode = useFocusNode();
     final TextEditingController amountController = useTextEditingController();
+    final TextEditingController phoneController =
+        useTextEditingController(); // Add this
 
     final numberFocus = useFocusNode();
     final paymentOptionsFocus = useFocusNode();
+
+    // Reset form when widget is disposed (navigating away)
+    useEffect(() {
+      return () {
+        context.read<RechargeBloc>().add(const RechargeEvent.resetForm());
+      };
+    }, []);
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -35,6 +46,9 @@ class Recharge extends HookWidget {
               child: CustomTopbar(
                 title: 'Recharge',
                 onTap: () {
+                  context.read<RechargeBloc>().add(
+                    const RechargeEvent.resetForm(),
+                  );
                   Navigator.pop(context);
                 },
               ),
@@ -53,22 +67,27 @@ class Recharge extends HookWidget {
                     BlocBuilder<RechargeBloc, RechargeState>(
                       builder: (context, state) {
                         return CustomTextFormField(
+                          controller: phoneController, // Add controller
                           key: const ValueKey("recipient_number"),
                           focusNode: numberFocus,
                           hintText: "Recipient Mobile Number",
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.phone,
                           onChanged: (value) {
-                            context.read().add(
+                            context.read<RechargeBloc>().add(
                               RechargeEvent.phoneNumberChanged(value),
                             );
                           },
-
-                          errorText: state.phoneNumber.isNotValid
-                              ? "Mobile number required"
-                              : null,
                           onFieldSubmitted: (_) =>
                               paymentOptionsFocus.requestFocus(),
+                          // Add error text like bank screen
+                          errorText:
+                              !state.phoneNumber.isPure &&
+                                  state.phoneNumber.isNotValid
+                              ? state.phoneNumber.error == ValidationError.empty
+                                    ? "Phone number is required"
+                                    : "Phone number must be at least 6 digits"
+                              : null,
                         );
                       },
                     ),
@@ -162,23 +181,18 @@ class Recharge extends HookWidget {
                             context.read<RechargeBloc>().add(
                               RechargeEvent.amountChanged(raw),
                             );
-                            final parsed = double.tryParse(raw) ?? 0;
-                            final formatted = formatter.format(parsed);
-
-                            // Only update controller if needed to avoid infinite loop
-                            if (amountController.text != formatted) {
-                              amountController.text = formatted;
-                              amountController.selection =
-                                  TextSelection.fromPosition(
-                                    TextPosition(
-                                      offset: amountController.text.length,
-                                    ),
-                                  );
-                            }
                           },
-
-                          errorText: state.amount.isNotValid
-                              ? 'Invalid amount'
+                          onFieldSubmitted: (_) {
+                            final parsed =
+                                double.tryParse(amountController.text) ?? 0;
+                            amountController.text = formatter.format(parsed);
+                          },
+                          // Add error text
+                          errorText:
+                              !state.amount.isPure && state.amount.isNotValid
+                              ? state.amount.error == ValidationError.empty
+                                    ? "Amount is required"
+                                    : "Please enter a valid amount"
                               : null,
                         );
                       },
@@ -192,7 +206,8 @@ class Recharge extends HookWidget {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: presetAmounts.map((amt) {
-                              final isSelected = state.amount.value == amt;
+                              final isSelected =
+                                  state.amount.value == amt.toString();
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: GestureDetector(
@@ -201,6 +216,10 @@ class Recharge extends HookWidget {
                                       RechargeEvent.quickAmountSelected(
                                         amt.toString(),
                                       ),
+                                    );
+                                    // Update controller when quick amount selected
+                                    amountController.text = formatter.format(
+                                      amt,
                                     );
                                   },
                                   child: Container(
@@ -216,7 +235,6 @@ class Recharge extends HookWidget {
                                             ).colorScheme.primaryContainer,
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-
                                     child: Text(
                                       formatter.format(amt),
                                       style: TextStyle(

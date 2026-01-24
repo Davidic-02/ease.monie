@@ -1,9 +1,9 @@
-import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/presentation/data/lists.dart';
+import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/services_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Gift extends HookWidget {
@@ -26,84 +26,42 @@ class Gift extends HookWidget {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppSpacing.verticalSpaceHuge,
+              child: BlocBuilder<GiftBloc, GiftState>(
+                builder: (context, state) {
+                  final gifts = state.gifts.values.toList();
+                  if (gifts.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                    ServiceCard(
-                      service: gift1, // ✅ .value is correct here
-                      deadlineDate: eidOfferDeadline,
-                      showProgressBar: false,
-                      showPercentageBadge: false,
-                      buttonText: 'Send',
-                      bottomLeftText: '🎁 Get 10% Cashback',
-                      onButtonPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          TypeOfGift.routeName,
-                          arguments: gift1, // ✅ .value is correct here
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Column(
+                      children: gifts.map((gift) {
+                        return Padding(
+                          padding: EdgeInsetsGeometry.all(10),
+                          child: ServiceCard(
+                            service: gift,
+                            showProgressBar: false,
+                            showPercentageBadge: false,
+                            buttonText: 'Send',
+                            bottomLeftText: '🎁 Cashback Available',
+                            onButtonPressed: () {
+                              context.read<GiftBloc>().add(
+                                GiftEvent.selectGift(gift.id),
+                              );
+
+                              Navigator.pushNamed(
+                                context,
+                                TypeOfGift.routeName,
+                                arguments: gift.id,
+                              );
+                            },
+                          ),
                         );
-                      },
+                      }).toList(),
                     ),
-
-                    AppSpacing.verticalSpaceHuge,
-
-                    ServiceCard(
-                      service: gift2,
-                      deadlineDate: birthdayOfferDeadline,
-                      showProgressBar: false,
-                      showPercentageBadge: false,
-                      buttonText: 'Send',
-                      bottomLeftText: '🎁 Get 30% Cashback',
-                      onButtonPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          TypeOfGift.routeName,
-                          arguments: gift2,
-                        );
-                      },
-                    ),
-
-                    AppSpacing.verticalSpaceHuge,
-
-                    ServiceCard(
-                      service: gift3,
-                      showProgressBar: false,
-                      showPercentageBadge: false,
-                      showDaysLeftBadge: false,
-                      buttonText: 'Send',
-                      bottomLeftText: '🎁 Get 20% Cashback',
-                      onButtonPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          TypeOfGift.routeName,
-                          arguments: gift3,
-                        );
-                      },
-                    ),
-
-                    AppSpacing.verticalSpaceMedium,
-
-                    ServiceCard(
-                      service: gift1,
-                      deadlineDate: eidOfferDeadline,
-                      showProgressBar: false,
-                      showPercentageBadge: false,
-                      buttonText: 'Send',
-                      bottomLeftText: '🎁 Get 10% Cashback',
-                      onButtonPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          TypeOfGift.routeName,
-                          arguments: gift1,
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],

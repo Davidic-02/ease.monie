@@ -1,11 +1,12 @@
+import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/constants/app_colors.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
-import 'package:esae_monie/models/services_model.dart';
 import 'package:esae_monie/presentation/widgets/button.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/giftsuccessful_bottom_sheet.dart';
 import 'package:esae_monie/presentation/widgets/text_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class GiftTransactionSuccessful extends StatelessWidget {
   static const String routeName = 'GiftTransactionSuccessful';
@@ -13,14 +14,21 @@ class GiftTransactionSuccessful extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final state = context.watch<GiftBloc>().state;
+    final selectedGiftId = state.selectedGiftId;
 
-    final ServicesModel service = args['service'];
-    final String accountName = args['name'];
-    final String accountNumber = args['accountNumber'];
-    final double amountDouble = args['amount'];
-    final String imagePath = args['imagePath'];
+    if (selectedGiftId == null) {
+      return const Scaffold(body: Center(child: Text('No gift selected.')));
+    }
+
+    final currentGift = state.gifts[selectedGiftId];
+    if (currentGift == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final accountName = state.recipientName.value;
+    final accountNumber = state.accountNumber.value;
+    final amountDouble = double.tryParse(state.amount.value) ?? 0.0;
 
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -71,7 +79,6 @@ class GiftTransactionSuccessful extends StatelessWidget {
                     'View Receipts',
                     color: AppColors.blueColor,
                     onPressed: () {
-                      print('Button pressed!');
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -85,8 +92,8 @@ class GiftTransactionSuccessful extends StatelessWidget {
                           amount: amountDouble,
                           accountName: accountName,
                           accountNumber: accountNumber,
-                          imagePath: imagePath,
-                          giftTitle: service.title,
+                          imagePath: currentGift.imagePath,
+                          giftTitle: currentGift.title,
                         ),
                       );
                     },

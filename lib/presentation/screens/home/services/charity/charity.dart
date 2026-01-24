@@ -36,7 +36,6 @@ class Charity extends HookWidget {
                   children: [
                     AppSpacing.verticalSpaceHuge,
 
-                    // First Charity Card - charity1
                     BlocBuilder<CharityBloc, CharityState>(
                       builder: (context, state) {
                         final currentCharity = state.charities[charity1.id];
@@ -93,7 +92,6 @@ class Charity extends HookWidget {
                     ),
                     AppSpacing.verticalSpaceMedium,
 
-                    // Third Charity Card - charity3
                     BlocBuilder<CharityBloc, CharityState>(
                       builder: (context, state) {
                         final currentCharity = state.charities[charity1.id];

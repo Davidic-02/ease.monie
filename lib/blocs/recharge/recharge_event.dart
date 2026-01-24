@@ -14,4 +14,5 @@ class RechargeEvent with _$RechargeEvent {
       _QuickAmountSelected;
 
   const factory RechargeEvent.rechargeSubmitted() = _RechargeSubmitted;
+  const factory RechargeEvent.resetForm() = _ResetForm;
 }
