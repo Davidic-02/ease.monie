@@ -130,7 +130,6 @@ class TypeOfGift extends HookWidget {
                               GiftEvent.recipientNameChanged(value),
                             );
                           },
-
                           errorText:
                               !state.recipientName.isPure &&
                                   state.recipientName.isNotValid
