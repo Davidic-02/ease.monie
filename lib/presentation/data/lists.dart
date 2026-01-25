@@ -18,7 +18,6 @@ import 'package:esae_monie/presentation/screens/home/services/loan/loan.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 final double interestRate = 0.05;
 
