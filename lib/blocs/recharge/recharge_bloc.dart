@@ -63,6 +63,7 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
     emit(
       state.copyWith(
         selectedNetwork: event.network,
+        selectedNetworkname: event.network.name,
         submissionStatus: FormzSubmissionStatus.initial,
         errorMessage: null,
       ),
@@ -96,6 +97,6 @@ class RechargeBloc extends Bloc<RechargeEvent, RechargeState> {
   }
 
   void _onResetForm(_ResetForm event, Emitter<RechargeState> emit) {
-    emit(const RechargeState()); // Reset to initial state
+    emit(const RechargeState());
   }
 }

@@ -3,7 +3,7 @@ part of 'gift_bloc.dart';
 @freezed
 abstract class GiftEvent with _$GiftEvent {
   const factory GiftEvent() = _GiftEvent;
-  const factory GiftEvent.started(List<ServicesModel> initialGifts) = _Started;
+  const factory GiftEvent.init() = _Init;
   const factory GiftEvent.selectGift(String giftId) = _SelectGift;
   const factory GiftEvent.recipientNameChanged(String name) =
       _RecipientNameChanged;

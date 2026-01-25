@@ -7,7 +7,8 @@ abstract class GiftState with _$GiftState {
   const factory GiftState({
     @Default(<String, ServicesModel>{}) Map<String, ServicesModel> gifts,
     String? selectedGiftId,
-
+    ServicesModel? servicesModel,
+    @Default([]) List<ServicesModel> giftModel,
     @Default(RecipientNameFormz.pure()) RecipientNameFormz recipientName,
     @Default(AccountNumberFormz.pure()) AccountNumberFormz accountNumber,
     @Default(PurposeFormz.pure()) PurposeFormz purpose,
@@ -37,7 +38,7 @@ class RecipientNameFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    return null; // valid
+    return null;
   }
 }
 
@@ -48,8 +49,9 @@ class AccountNumberFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (value.length < 6)
-      return ValidationError.short; // bank account min 6 digits
+    if (value.length < 11) {
+      return ValidationError.short;
+    }
     return null;
   }
 }
@@ -72,7 +74,7 @@ class PasswordFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.isEmpty) return ValidationError.empty;
-    if (value.length < 4) return ValidationError.short; // minimum 4 digits
+    if (value.length < 4) return ValidationError.short;
     return null;
   }
 }
@@ -99,8 +101,9 @@ class GiftMessageFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (value.length < 5)
-      return ValidationError.short; // minimum message length
+    if (value.length < 5) {
+      return ValidationError.short;
+    }
     return null;
   }
 }

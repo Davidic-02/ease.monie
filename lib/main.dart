@@ -9,7 +9,7 @@ import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
-import 'package:esae_monie/presentation/data/lists.dart'; // 👈 Add this import
+import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
@@ -56,11 +56,7 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               CharityBloc()..add(CharityEvent.started([charity1, charity2])),
         ),
-        BlocProvider<GiftBloc>(
-          create: (_) =>
-              GiftBloc()..add(GiftEvent.started([gift1, gift2, gift3])),
-          child: Gift(),
-        ),
+        BlocProvider<GiftBloc>(create: (_) => GiftBloc()),
         BlocProvider<InsuranceBloc>(
           create: (_) => InsuranceBloc()
             ..add(InsuranceEvent.started([insurance1, insurance2, insurance3])),

@@ -8,14 +8,14 @@ abstract class RechargeState with _$RechargeState {
     SelectedNetwork? selectedNetwork,
 
     @Default(PhoneNumberFormz.pure()) PhoneNumberFormz phoneNumber,
-
     @Default(AmountFormz.pure()) AmountFormz amount,
-
     @Default(FormzSubmissionStatus.initial)
     FormzSubmissionStatus submissionStatus,
+    String? selectedNetworkname,
 
     String? errorMessage,
   }) = _RechargeState;
+
   bool get isRechargeFormValid =>
       phoneNumber.isValid && amount.isValid && selectedNetwork != null;
 }
@@ -47,10 +47,9 @@ class PhoneNumberFormz extends FormzInput<String, ValidationError> {
   ValidationError? validator(String? value) {
     if (value == null || value.isEmpty) return ValidationError.empty;
 
-    if (value.length < 6) {
+    if (value.length < 11) {
       return ValidationError.short;
     }
-
     return null;
   }
 }
