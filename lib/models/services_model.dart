@@ -7,6 +7,7 @@ class ServicesModel {
   final String organizer;
   final double targetAmount;
   final double donatedAmount;
+  final String? cashBack;
   ServicesModel({
     required this.id,
     required this.imagePath,
@@ -14,6 +15,7 @@ class ServicesModel {
     required this.organizer,
     required this.targetAmount,
     required this.donatedAmount,
+    this.cashBack,
   });
 
   double get donationProgress => donatedAmount / targetAmount;
@@ -42,3 +44,33 @@ class ServicesModel {
     );
   }
 }
+
+List<ServicesModel> giftModel = [
+  ServicesModel(
+    id: 'gift1',
+    imagePath: 'assets/images/gift1.png',
+    title: 'Eid Gift',
+    organizer: 'Send Eid Gift to your loved ones',
+    targetAmount: 0,
+    donatedAmount: 0,
+    cashBack: '10%',
+  ),
+  ServicesModel(
+    id: 'gift2',
+    imagePath: 'assets/images/gift2.png',
+    title: 'Birthday Gift',
+    organizer: 'Send Birthday Gift to your loved ones',
+    targetAmount: 0,
+    donatedAmount: 0,
+    cashBack: '20%',
+  ),
+  ServicesModel(
+    id: 'gift3',
+    imagePath: 'assets/images/gift3.png',
+    title: 'Marriage Gift',
+    organizer: 'Send Marriage Gift to your loved ones',
+    targetAmount: 0,
+    cashBack: '10%',
+    donatedAmount: 0,
+  ),
+];

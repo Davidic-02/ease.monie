@@ -10,7 +10,7 @@ part 'gift_bloc.freezed.dart';
 
 class GiftBloc extends Bloc<GiftEvent, GiftState> {
   GiftBloc() : super(const GiftState()) {
-    on<_Started>(_onStarted);
+    on<_Init>(_init);
     on<_SelectGift>(_onSelectGift);
     on<_RecipientNameChanged>(_onRecipientNameChanged);
     on<_AccountNumberChanged>(_onAccountNumberChanged);
@@ -21,11 +21,12 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     on<_QuickAmountSelected>(_onQuickAmountSelected);
     on<_SubmitGift>(_onSubmitGift);
     on<_ResetGift>(_onResetGift);
+
+    add(_Init());
   }
 
-  void _onStarted(_Started event, Emitter<GiftState> emit) {
-    final giftsMap = {for (final gift in event.initialGifts) gift.id: gift};
-    emit(state.copyWith(gifts: giftsMap));
+  void _init(_Init event, Emitter<GiftState> emit) {
+    emit(state.copyWith(giftModel: giftModel));
   }
 
   void _onSelectGift(_SelectGift event, Emitter<GiftState> emit) {
