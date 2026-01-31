@@ -74,3 +74,32 @@ List<ServicesModel> giftModel = [
     donatedAmount: 0,
   ),
 ];
+
+List<ServicesModel> insuranceModel = [
+  ServicesModel(
+    id: 'insurance1',
+    imagePath: 'assets/images/insurance1.png',
+    title: 'Family Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+
+  ServicesModel(
+    id: 'insurance2',
+    imagePath: 'assets/images/insurance2.png',
+    title: 'House Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+
+  ServicesModel(
+    id: 'insurance3',
+    imagePath: 'assets/images/insurance3.png',
+    title: 'Health Insurance',
+    organizer: 'Family Plans Cover two or more members',
+    targetAmount: 0,
+    donatedAmount: 0,
+  ),
+];

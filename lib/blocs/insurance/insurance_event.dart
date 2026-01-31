@@ -4,8 +4,7 @@ part of 'insurance_bloc.dart';
 abstract class InsuranceEvent with _$InsuranceEvent {
   const factory InsuranceEvent() = _InsuranceEvent;
 
-  const factory InsuranceEvent.started(List<ServicesModel> initialServices) =
-      _Started;
+  const factory InsuranceEvent.init() = _Init;
 
   /// User selects insurance service (Life, Health, etc.)
   const factory InsuranceEvent.selectInsurance(String insuranceId) =

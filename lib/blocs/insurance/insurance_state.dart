@@ -9,7 +9,7 @@ abstract class InsuranceState with _$InsuranceState {
 
     String? selectedInsuranceId,
     InsuranceModel? selectedInsurancePlan,
-
+    @Default([]) List<ServicesModel> insuranceModel,
     @Default(FirstNameFormz.pure()) FirstNameFormz firstName,
 
     @Default(LastNameFormz.pure()) LastNameFormz lastName,

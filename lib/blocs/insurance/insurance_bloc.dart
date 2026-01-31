@@ -11,7 +11,7 @@ part 'insurance_bloc.freezed.dart';
 
 class InsuranceBloc extends Bloc<InsuranceEvent, InsuranceState> {
   InsuranceBloc() : super(const InsuranceState()) {
-    on<_Started>(_onStarted);
+    on<_Init>(_init);
     on<_SelectInsurance>(_onSelectInsurance);
     on<_InsurancePlanChanged>(_onInsurancePlanChanged);
 
@@ -32,10 +32,8 @@ class InsuranceBloc extends Bloc<InsuranceEvent, InsuranceState> {
     on<_ResetInsurance>(_onResetInsurance);
   }
 
-  // Load insurance services
-  void _onStarted(_Started event, Emitter<InsuranceState> emit) {
-    final insurancesMap = {for (final s in event.initialServices) s.id: s};
-    emit(state.copyWith(insurances: insurancesMap));
+  void _init(_Init event, Emitter<InsuranceState> emit) {
+    emit(state.copyWith(insuranceModel: insuranceModel));
   }
 
   // Select service
