@@ -38,7 +38,7 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final recipientName = RecipientNameFormz.dirty(event.name);
-    // ✅ Always emit dirty - no conditional!
+
     emit(state.copyWith(recipientName: recipientName));
   }
 
@@ -47,13 +47,11 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
     Emitter<GiftState> emit,
   ) {
     final accountNumber = AccountNumberFormz.dirty(event.accountNumber);
-    // ✅ Always emit dirty
     emit(state.copyWith(accountNumber: accountNumber));
   }
 
   void _onPurposeChanged(_PurposeChanged event, Emitter<GiftState> emit) {
     final purpose = PurposeFormz.dirty(event.purpose);
-    // ✅ Always emit dirty
     emit(state.copyWith(purpose: purpose));
   }
 
@@ -65,7 +63,6 @@ class GiftBloc extends Bloc<GiftEvent, GiftState> {
 
   void _onGiftAmountChanged(_GiftAmountChanged event, Emitter<GiftState> emit) {
     final amount = GiftAmountFormz.dirty(event.amount);
-    // ✅ Always emit dirty
     emit(state.copyWith(amount: amount));
   }
 
