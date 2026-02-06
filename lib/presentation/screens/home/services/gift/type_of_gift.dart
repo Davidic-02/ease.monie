@@ -25,7 +25,6 @@ class TypeOfGift extends HookWidget {
     final passwordFocus = useFocusNode();
     final amountFocusNode = useFocusNode();
     final messageFocusNode = useFocusNode();
-    // final amountController = useTextEditingController();
     final amountController = useTextEditingController();
 
     return BlocBuilder<GiftBloc, GiftState>(
@@ -33,13 +32,14 @@ class TypeOfGift extends HookWidget {
           _giftBuildWhen(context, previous, current),
 
       builder: (context, state) {
-        final currentGift = state.giftModel.firstWhere(
+        final giftIndex = state.giftModel.indexWhere(
           (gift) => gift.id == state.selectedGiftId,
         );
 
-        if (currentGift == null) {
+        if (giftIndex == -1) {
           return const Center(child: CircularProgressIndicator());
         }
+        final currentGift = state.giftModel[giftIndex];
 
         return Scaffold(
           body: SafeArea(
