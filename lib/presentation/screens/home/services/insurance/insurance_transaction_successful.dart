@@ -19,17 +19,22 @@ class InsuranceTransactionSuccessful extends StatelessWidget {
 
     return BlocBuilder<InsuranceBloc, InsuranceState>(
       builder: (context, state) {
-        final currentInsurance = state.insurances[state.selectedInsuranceId];
         final selectedPlan = state.selectedInsurancePlan;
         final paymentPlan = state.paymentPlan.value;
 
-        if (currentInsurance == null || selectedPlan == null) {
+        final insuranceIndex = state.insuranceModel.indexWhere(
+          (insurance) => insurance.id == state.selectedInsuranceId,
+        );
+
+        if (insuranceIndex == -1 || state.selectedInsurancePlan == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        final currentInsurance = state.insuranceModel[insuranceIndex];
+
         // Get the amount from selectedInsurancePlan.amount (e.g., "$500")
         // Remove $ sign and parse
-        final amountString = selectedPlan.amount
+        final amountString = selectedPlan!.amount
             .replaceAll('\$', '')
             .replaceAll(',', '');
         final amountDouble = double.tryParse(amountString) ?? 0.0;

@@ -18,11 +18,17 @@ class InsuranceTransaction extends HookWidget {
 
     return BlocBuilder<InsuranceBloc, InsuranceState>(
       builder: (context, state) {
-        final currentInsurance = state.insurances[state.selectedInsuranceId];
-        final paymentPlan = state.paymentPlan.value;
-        if (currentInsurance == null) {
-          return const Center(child: CircularProgressIndicator());
+        final insuranceIndex = state.insuranceModel.indexWhere(
+          (insurance) => insurance.id == state.selectedInsuranceId,
+        );
+
+        if (insuranceIndex == -1) {
+          return const Center(child: Text('Insurance not found.'));
         }
+
+        final currentInsurance = state.insuranceModel[insuranceIndex];
+
+        final paymentPlan = state.paymentPlan.value;
 
         return Scaffold(
           body: SafeArea(

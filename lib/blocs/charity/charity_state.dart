@@ -8,6 +8,8 @@ abstract class CharityState with _$CharityState {
     @Default(<String, ServicesModel>{}) Map<String, ServicesModel> charities,
 
     // Change this to store amount per charity ID
+    ServicesModel? servicesModel,
+    @Default([]) List<ServicesModel> charityModel,
     @Default(<String, DonationAmountFormz>{})
     Map<String, DonationAmountFormz> donationAmounts,
 

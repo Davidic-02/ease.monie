@@ -5,7 +5,6 @@ abstract class GiftState with _$GiftState {
   const GiftState._();
 
   const factory GiftState({
-    @Default(<String, ServicesModel>{}) Map<String, ServicesModel> gifts,
     String? selectedGiftId,
     ServicesModel? servicesModel,
     @Default([]) List<ServicesModel> giftModel,

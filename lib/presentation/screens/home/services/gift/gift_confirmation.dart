@@ -23,13 +23,16 @@ class GiftConfirmation extends HookWidget {
           return const Scaffold(body: Center(child: Text('No gift selected.')));
         }
 
-        final currentGift = state.gifts[selectedGiftId];
+        // FIX: Try to find the gift, handle if not found
+        final giftIndex = state.giftModel.indexWhere(
+          (gift) => gift.id == selectedGiftId,
+        );
 
-        if (currentGift == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+        if (giftIndex == -1) {
+          return const Scaffold(body: Center(child: Text('Gift not found.')));
         }
+
+        final currentGift = state.giftModel[giftIndex];
 
         final screenHeight = MediaQuery.of(context).size.height;
         final recipientName = state.recipientName.value;
@@ -64,7 +67,6 @@ class GiftConfirmation extends HookWidget {
                               fontSize: 25,
                             ),
                       ),
-
                       AppSpacing.verticalSpaceMedium,
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -92,9 +94,7 @@ class GiftConfirmation extends HookWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   AppSpacing.verticalSpaceMassive,
-
                                   TextTitle(text: currentGift.title),
-
                                   Text(
                                     recipientName,
                                     style: Theme.of(context)
@@ -103,14 +103,12 @@ class GiftConfirmation extends HookWidget {
                                         ?.copyWith(fontWeight: FontWeight.w600),
                                   ),
                                   AppSpacing.verticalSpaceMedium,
-
                                   Text(
                                     accountNumber,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.bodyMedium,
                                   ),
-
                                   Chip(
                                     label: Text(
                                       'Transaction Status: Pending',
@@ -130,9 +128,7 @@ class GiftConfirmation extends HookWidget {
                                       ).colorScheme.error,
                                     ),
                                   ),
-
                                   const SizedBox(height: 20),
-
                                   RichText(
                                     text: TextSpan(
                                       text: amount,
@@ -149,9 +145,7 @@ class GiftConfirmation extends HookWidget {
                                       ],
                                     ),
                                   ),
-
                                   const SizedBox(height: 20),
-
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -170,9 +164,7 @@ class GiftConfirmation extends HookWidget {
                                       ),
                                     ],
                                   ),
-
                                   const Divider(height: 30),
-
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -191,9 +183,7 @@ class GiftConfirmation extends HookWidget {
                                       ),
                                     ],
                                   ),
-
                                   const SizedBox(height: 10),
-
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

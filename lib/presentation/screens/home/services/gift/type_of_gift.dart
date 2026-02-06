@@ -33,7 +33,9 @@ class TypeOfGift extends HookWidget {
           _giftBuildWhen(context, previous, current),
 
       builder: (context, state) {
-        final currentGift = state.gifts[state.selectedGiftId];
+        final currentGift = state.giftModel.firstWhere(
+          (gift) => gift.id == state.selectedGiftId,
+        );
 
         if (currentGift == null) {
           return const Center(child: CircularProgressIndicator());

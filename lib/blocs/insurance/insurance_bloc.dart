@@ -30,6 +30,7 @@ class InsuranceBloc extends Bloc<InsuranceEvent, InsuranceState> {
 
     on<_SubmitInsurance>(_onSubmitInsurance);
     on<_ResetInsurance>(_onResetInsurance);
+    add(_Init());
   }
 
   void _init(_Init event, Emitter<InsuranceState> emit) {

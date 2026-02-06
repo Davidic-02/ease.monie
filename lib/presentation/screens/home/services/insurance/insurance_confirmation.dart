@@ -19,14 +19,17 @@ class InsuranceConfirmation extends HookWidget {
 
     return BlocBuilder<InsuranceBloc, InsuranceState>(
       builder: (context, state) {
-        final currentInsurance = state.insurances[state.selectedInsuranceId];
-        final selectedPlan = state.selectedInsurancePlan;
-        final paymentPlan = state.paymentPlan.value;
+        final insuranceIndex = state.insuranceModel.indexWhere(
+          (insurance) => insurance.id == state.selectedInsuranceId,
+        );
 
-        if (currentInsurance == null || selectedPlan == null) {
+        if (insuranceIndex == -1 || state.selectedInsurancePlan == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        final currentInsurance = state.insuranceModel[insuranceIndex];
+        final selectedPlan = state.selectedInsurancePlan;
+        final paymentPlan = state.paymentPlan.value;
         return Scaffold(
           body: SafeArea(
             child: Column(
@@ -122,7 +125,7 @@ class InsuranceConfirmation extends HookWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      selectedPlan.amount,
+                                      selectedPlan!.amount,
                                       textAlign: TextAlign.end,
                                       style: Theme.of(
                                         context,

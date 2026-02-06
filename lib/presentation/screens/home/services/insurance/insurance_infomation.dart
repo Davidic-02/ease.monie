@@ -29,12 +29,15 @@ class InsuranceInfomation extends HookWidget {
 
     return BlocBuilder<InsuranceBloc, InsuranceState>(
       builder: (context, state) {
-        final currentInsurance = state.insurances[state.selectedInsuranceId];
+        final insuranceIndex = state.insuranceModel.indexWhere(
+          (insurance) => insurance.id == state.selectedInsuranceId,
+        );
 
-        if (currentInsurance == null) {
+        if (insuranceIndex == -1) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        final currentInsurance = state.insuranceModel[insuranceIndex];
         return Scaffold(
           body: SafeArea(
             child: Column(

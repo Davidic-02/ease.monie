@@ -21,10 +21,14 @@ class GiftTransactionSuccessful extends StatelessWidget {
       return const Scaffold(body: Center(child: Text('No gift selected.')));
     }
 
-    final currentGift = state.gifts[selectedGiftId];
-    if (currentGift == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    final giftIndex = state.giftModel.indexWhere(
+      (gift) => gift.id == selectedGiftId,
+    );
+
+    if (giftIndex == -1) {
+      return const Scaffold(body: Center(child: Text('Gift not found.')));
     }
+    final currentGift = state.giftModel[giftIndex];
 
     final accountName = state.recipientName.value;
     final accountNumber = state.accountNumber.value;
