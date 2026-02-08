@@ -1,5 +1,6 @@
 import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/home/services/gift/type_of_gift.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/service_option_card.dart';
@@ -38,8 +39,7 @@ class Gift extends HookWidget {
                           context.read<GiftBloc>().add(
                             GiftEvent.selectGift(gift.id),
                           );
-                          Navigator.pushNamed(
-                            context,
+                          context.navigator.pushNamed(
                             TypeOfGift.routeName,
                             arguments: gift,
                           );

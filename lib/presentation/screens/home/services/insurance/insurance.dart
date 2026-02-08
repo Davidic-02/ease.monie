@@ -1,5 +1,6 @@
 import 'package:esae_monie/blocs/insurance/insurance_bloc.dart';
 import 'package:esae_monie/constants/app_spacing.dart';
+import 'package:esae_monie/extensions/build_context.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/type_of_insurance.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:esae_monie/presentation/widgets/service_option_card.dart';
@@ -31,6 +32,7 @@ class Insurance extends HookWidget {
               child: BlocBuilder<InsuranceBloc, InsuranceState>(
                 builder: (context, state) {
                   return ListView.separated(
+                    itemCount: state.insuranceModel.length,
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       final insurance = state.insuranceModel[index];
@@ -39,8 +41,7 @@ class Insurance extends HookWidget {
                           context.read<InsuranceBloc>().add(
                             InsuranceEvent.selectInsurance(insurance.id),
                           );
-                          Navigator.pushNamed(
-                            context,
+                          context.navigator.pushNamed(
                             TypeOfInsurance.routeName,
                             arguments: insurance,
                           );
@@ -53,7 +54,6 @@ class Insurance extends HookWidget {
                     separatorBuilder: (context, index) {
                       return AppSpacing.verticalSpaceMedium;
                     },
-                    itemCount: state.insuranceModel.length,
                   );
                 },
               ),

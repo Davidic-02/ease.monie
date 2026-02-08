@@ -12,6 +12,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class TypeOfInsurance extends HookWidget {
   static const String routeName = 'TypeOfInsurance';
+
   const TypeOfInsurance({super.key});
 
   @override
@@ -48,7 +49,6 @@ class TypeOfInsurance extends HookWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppSpacing.verticalSpaceHuge,
-
                         Material(
                           elevation: 2,
                           borderRadius: BorderRadius.circular(16),
@@ -65,9 +65,8 @@ class TypeOfInsurance extends HookWidget {
                                   height: 180,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.08),
+                                    color: Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: .08),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Image.asset(
@@ -89,7 +88,7 @@ class TypeOfInsurance extends HookWidget {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface
-                                            .withOpacity(0.6),
+                                            .withValues(alpha: .6),
                                       ),
                                 ),
                               ],
@@ -128,7 +127,7 @@ class TypeOfInsurance extends HookWidget {
                                 elevation: 4,
                                 borderRadius: BorderRadius.circular(12),
                                 color: isSelected
-                                    ? AppColors.blueColor.withOpacity(0.08)
+                                    ? AppColors.primaryColor
                                     : Theme.of(context).cardColor,
                                 child: Container(
                                   margin: const EdgeInsets.symmetric(
