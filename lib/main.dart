@@ -11,6 +11,7 @@ import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
+import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
 import 'package:esae_monie/router/app_routes.dart';
 import 'package:esae_monie/services/service_locator.dart';
 import 'package:esae_monie/services/theme_services.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: currentMode,
-            initialRoute: Login.routeName,
+            initialRoute: MainScreen.routeName,
             routes: AppRoutes.routes,
           ),
         ),
