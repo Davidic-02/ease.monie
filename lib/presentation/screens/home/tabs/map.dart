@@ -1,4 +1,6 @@
+import 'package:esae_monie/blocs/map/map_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
@@ -15,11 +17,15 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: myCurrentLocation,
-          zoom: 15,
-        ),
+      body: BlocBuilder<MapBloc, MapState>(
+        builder: (context, state) {
+          return GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: myCurrentLocation,
+              zoom: 15,
+            ),
+          );
+        },
       ),
     );
   }
