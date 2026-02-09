@@ -74,9 +74,8 @@ class InsuranceInfomation extends HookWidget {
                                   height: 180,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.08),
+                                    color: Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Image.asset(
@@ -98,7 +97,7 @@ class InsuranceInfomation extends HookWidget {
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onSurface
-                                            .withOpacity(0.6),
+                                            .withValues(alpha: 0.6),
                                       ),
                                 ),
                               ],

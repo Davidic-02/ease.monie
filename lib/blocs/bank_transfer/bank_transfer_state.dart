@@ -49,8 +49,9 @@ class ExpiryFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value.trim()))
+    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(value.trim())) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
@@ -62,8 +63,9 @@ class CvvFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{3,4}$').hasMatch(value.trim()))
+    if (!RegExp(r'^\d{3,4}$').hasMatch(value.trim())) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }
