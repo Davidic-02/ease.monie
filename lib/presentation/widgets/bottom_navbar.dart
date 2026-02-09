@@ -1,4 +1,5 @@
-import 'package:esae_monie/blocs/map/map_bloc.dart';
+import 'package:esae_monie/blocs/location/location_bloc.dart';
+
 import 'package:esae_monie/presentation/screens/home/tabs/home.dart';
 import 'package:esae_monie/presentation/screens/home/tabs/map.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MainScreen extends HookWidget {
       Text(Home.routeName),
     ];
 
-    return BlocBuilder<MapBloc, MapState>(
+    return BlocBuilder<LocationBloc, LocationState>(
       builder: (context, state) {
         return Scaffold(
           body: screens[currentIndex.value],

@@ -5,7 +5,7 @@ import 'package:esae_monie/blocs/charity/charity_bloc.dart';
 import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/blocs/insurance/insurance_bloc.dart';
 import 'package:esae_monie/blocs/loan/loan_bloc.dart';
-import 'package:esae_monie/blocs/map/map_bloc.dart';
+import 'package:esae_monie/blocs/location/location_bloc.dart';
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GiftBloc>(create: (_) => GiftBloc()),
         BlocProvider<InsuranceBloc>(create: (_) => InsuranceBloc()),
-        BlocProvider<MapBloc>(create: (context) => MapBloc()),
+        BlocProvider<LocationBloc>(create: (context) => LocationBloc()),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,

@@ -1,4 +1,4 @@
-import 'package:esae_monie/blocs/map/map_bloc.dart';
+import 'package:esae_monie/blocs/location/location_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,7 +17,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<MapBloc, MapState>(
+      body: BlocBuilder<LocationBloc, LocationState>(
         builder: (context, state) {
           if (!state.isLocationServiceEnabled) {
             WidgetsBinding.instance.addPostFrameCallback((_) {

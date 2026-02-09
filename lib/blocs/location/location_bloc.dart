@@ -7,19 +7,19 @@ import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:geolocator/geolocator.dart';
 
-part 'map_event.dart';
-part 'map_state.dart';
-part 'map_bloc.freezed.dart';
+part 'location_event.dart';
+part 'location_state.dart';
+part 'location_bloc.freezed.dart';
 
-class MapBloc extends Bloc<MapEvent, MapState> {
-  MapBloc() : super(const MapState()) {
+class LocationBloc extends Bloc<LocationEvent, LocationState> {
+  LocationBloc() : super(const LocationState()) {
     on<_Init>(_init);
     on<_RequestPermissions>(_requestPermissions);
 
     add(const _Init());
   }
 
-  void _init(_Init event, Emitter<MapState> emit) async {
+  void _init(_Init event, Emitter<LocationState> emit) async {
     final bool hasShownLocationRationale = await PersistenceService()
         .getHasShownLocationRationale();
     emit(state.copyWith(hasShownRationale: hasShownLocationRationale));
@@ -29,7 +29,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _requestPermissions(
     _RequestPermissions event,
-    Emitter<MapState> emit,
+    Emitter<LocationState> emit,
   ) async {
     emit(
       state.copyWith(

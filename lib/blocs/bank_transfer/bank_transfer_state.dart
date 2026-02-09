@@ -35,8 +35,9 @@ class CardNumberFormz extends FormzInput<String, ValidationError> {
   @override
   ValidationError? validator(String? value) {
     if (value == null || value.trim().isEmpty) return ValidationError.empty;
-    if (!RegExp(r'^\d{16}$').hasMatch(value.replaceAll(' ', '')))
+    if (!RegExp(r'^\d{16}$').hasMatch(value.replaceAll(' ', ''))) {
       return ValidationError.invalid;
+    }
     return null;
   }
 }

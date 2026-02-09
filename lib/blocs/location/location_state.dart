@@ -1,10 +1,10 @@
-part of 'map_bloc.dart';
+part of 'location_bloc.dart';
 
 @freezed
-abstract class MapState with _$MapState {
-  const MapState._();
+abstract class LocationState with _$LocationState {
+  const LocationState._();
 
-  const factory MapState({
+  const factory LocationState({
     Position? currentLocation,
     @Default(true) bool isLocationServiceEnabled,
     @Default(LocationPermission.denied) LocationPermission permissionStatus,
@@ -12,5 +12,5 @@ abstract class MapState with _$MapState {
     @Default(false) bool showRationale,
     @Default(false) bool hasShownRationale,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus mapStatus,
-  }) = _MapState;
+  }) = _LocationState;
 }
