@@ -70,7 +70,7 @@ class ServiceCard extends StatelessWidget {
     final finalButtonColor = buttonColor ?? AppColors.blueColor;
     final finalProgressColor = progressColor ?? AppColors.blueColor;
     final finalProgressBgColor =
-        progressBackgroundColor ?? AppColors.blueColor.withOpacity(0.2);
+        progressBackgroundColor ?? AppColors.blueColor.withValues(alpha: 0.2);
 
     // Determine what to show at bottom left
     String overallDonatedAmount;
@@ -101,7 +101,7 @@ class ServiceCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
-                    ).colorScheme.primary.withOpacity(0.08),
+                    ).colorScheme.primary.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ClipRRect(
@@ -132,12 +132,12 @@ class ServiceCard extends StatelessWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: _getDaysLeftColor().withOpacity(
-                              0.2,
+                            color: _getDaysLeftColor().withValues(
+                              alpha: 0.2,
                             ), // very transparent
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               width: 1,
                             ),
                           ),
@@ -177,7 +177,7 @@ class ServiceCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: badgeColor.withOpacity(0.15),
+                      color: badgeColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -195,7 +195,9 @@ class ServiceCard extends StatelessWidget {
             Text(
               service.organizer,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
 

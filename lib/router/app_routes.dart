@@ -30,6 +30,7 @@ import 'package:esae_monie/presentation/screens/home/services/loan/loan_transact
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
+import 'package:esae_monie/presentation/screens/home/tabs/map.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';
@@ -65,8 +66,8 @@ class AppRoutes {
     GiftConfirmation.routeName: (context) => GiftConfirmation(),
     GiftTransactionSuccessful.routeName: (context) =>
         GiftTransactionSuccessful(),
-    Insurance.routeName: (contex) => Insurance(),
-    TypeOfInsurance.routeName: (contex) => TypeOfInsurance(),
+    Insurance.routeName: (context) => Insurance(),
+    TypeOfInsurance.routeName: (context) => TypeOfInsurance(),
     InsuranceInfomation.routeName: (context) => InsuranceInfomation(),
     InsuranceConfirmation.routeName: (context) => InsuranceConfirmation(),
     InsuranceTransaction.routeName: (context) => InsuranceTransaction(),
@@ -86,5 +87,7 @@ class AppRoutes {
         NetflixPaymentConfirmation(),
     NetflixTransactionSuccessful.routeName: (context) =>
         NetflixTransactionSuccessful(),
+
+    MapScreen.routeName: (context) => MapScreen(),
   };
 }

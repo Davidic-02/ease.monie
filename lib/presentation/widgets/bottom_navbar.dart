@@ -1,5 +1,9 @@
-import 'package:esae_monie/presentation/screens/home/home.dart';
+import 'package:esae_monie/blocs/location/location_bloc.dart';
+
+import 'package:esae_monie/presentation/screens/home/tabs/home.dart';
+import 'package:esae_monie/presentation/screens/home/tabs/map.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,83 +17,87 @@ class MainScreen extends HookWidget {
 
     final screens = [
       Home(),
-      Text(Home.routeName),
+      MapScreen(),
       Text(Home.routeName),
       Text(Home.routeName),
       Text(Home.routeName),
     ];
 
-    return Scaffold(
-      body: screens[currentIndex.value],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex.value,
-        onTap: (index) => currentIndex.value = index,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/home.svg',
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                currentIndex.value == 0 ? Colors.blue : Colors.grey,
-                BlendMode.srcIn,
+    return BlocBuilder<LocationBloc, LocationState>(
+      builder: (context, state) {
+        return Scaffold(
+          body: screens[currentIndex.value],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex.value,
+            onTap: (index) => currentIndex.value = index,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svgs/home.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    currentIndex.value == 0 ? Colors.blue : Colors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: "Home",
               ),
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/location.svg',
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                currentIndex.value == 1 ? Colors.blue : Colors.grey,
-                BlendMode.srcIn,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svgs/location.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    currentIndex.value == 1 ? Colors.blue : Colors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: "Location",
               ),
-            ),
-            label: "Location",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/scanner.svg',
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                currentIndex.value == 2 ? Colors.blue : Colors.grey,
-                BlendMode.srcIn,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svgs/scanner.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    currentIndex.value == 2 ? Colors.blue : Colors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: "Scan",
               ),
-            ),
-            label: "Scan",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/upward_Stat.svg',
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                currentIndex.value == 3 ? Colors.blue : Colors.grey,
-                BlendMode.srcIn,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svgs/upward_Stat.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    currentIndex.value == 3 ? Colors.blue : Colors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: "Trends",
               ),
-            ),
-            label: "Trends",
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              'assets/svgs/category.svg',
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(
-                currentIndex.value == 4 ? Colors.blue : Colors.grey,
-                BlendMode.srcIn,
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset(
+                  'assets/svgs/category.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: ColorFilter.mode(
+                    currentIndex.value == 4 ? Colors.blue : Colors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: "Categories",
               ),
-            ),
-            label: "Categories",
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

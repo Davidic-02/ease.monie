@@ -56,6 +56,17 @@ class PersistenceService {
     return _manager._preferences!.getString(PrefKeys.themeMode);
   }
 
+  Future<void> saveHasShownLocationRationale(bool value) async {
+    await _manager._ensurePreferenceLoaded();
+    _manager._preferences!.setBool(PrefKeys.hasShownLocationRationale, value);
+  }
+
+  Future<bool> getHasShownLocationRationale() async {
+    await _manager._ensurePreferenceLoaded();
+    return _manager._preferences!.getBool(PrefKeys.hasShownLocationRationale) ??
+        false;
+  }
+
   Future<void> signOut() async {
     await _manager._ensurePreferenceLoaded();
     await _manager._preferences!.remove(PrefKeys.userEmail);

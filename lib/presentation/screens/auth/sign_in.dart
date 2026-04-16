@@ -90,11 +90,11 @@ class Login extends HookWidget {
                           onSuffixIconPressed: () {
                             obscurePassword.value = !obscurePassword.value;
                           },
-                          onFieldSubmitted: (_) => context.read<AuthBloc>().add(
-                            const AuthEvent.login(),
-                          ),
                           onChanged: (value) => context.read<AuthBloc>().add(
                             AuthEvent.passwordChanged(value),
+                          ),
+                          onFieldSubmitted: (_) => context.read<AuthBloc>().add(
+                            const AuthEvent.login(),
                           ),
                         ),
 
