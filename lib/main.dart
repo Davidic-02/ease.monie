@@ -6,6 +6,7 @@ import 'package:esae_monie/blocs/gift/gift_bloc.dart';
 import 'package:esae_monie/blocs/insurance/insurance_bloc.dart';
 import 'package:esae_monie/blocs/loan/loan_bloc.dart';
 import 'package:esae_monie/blocs/location/location_bloc.dart';
+import 'package:esae_monie/blocs/maps/maps_bloc.dart';
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
@@ -40,6 +41,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<LocationBloc>(create: (context) => LocationBloc()),
+        BlocProvider<MapBloc>(
+          create: (context) =>
+              MapBloc(locationBloc: context.read<LocationBloc>()),
+        ),
         BlocProvider<OnBoardingBloc>(
           create: (context) => OnBoardingBloc(FirebaseAuth.instance),
         ),
