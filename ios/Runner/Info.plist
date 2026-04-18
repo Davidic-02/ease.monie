@@ -30,7 +30,6 @@
 	<string>This app needs your location while in use to show nearby services.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs your location even in the background to provide continuous tracking.</string>
-
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
