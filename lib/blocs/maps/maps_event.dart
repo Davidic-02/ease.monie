@@ -9,10 +9,13 @@ class MapEvent with _$MapEvent {
   const factory MapEvent.yourLocationTapped() = _YourLocationTapped;
   const factory MapEvent.userLocationUpdated(LatLng location) =
       _UserLocationUpdated;
+  const factory MapEvent.customLocationSelected(LatLng location) =
+      _CustomLocationSelected;
 
   // Map Interaction Events
   const factory MapEvent.mapMoved(LatLngBounds bounds) = _MapMoved;
   const factory MapEvent.cameraIdle(LatLngBounds bounds) = _CameraIdle;
+  const factory MapEvent.resetSearchCenter() = _ResetSearchCenter;
 
   // ATM Selection Events
   const factory MapEvent.markerTapped(ATM atm) = _MarkerTapped;

@@ -9,6 +9,8 @@ abstract class MapState with _$MapState {
     @Default([]) List<String> searchSuggestions,
     ATM? selectedATM,
     LatLng? userLocation,
+    LatLng? searchCenter,
+    @Default(false) bool isSearchingFromCustomLocation,
     LatLngBounds? visibleMapBounds,
     @Default('') String searchQuery,
     @Default('') String error,
