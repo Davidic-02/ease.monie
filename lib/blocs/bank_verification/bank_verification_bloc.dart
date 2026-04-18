@@ -70,7 +70,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
         return;
       }
 
-      final result = await locator<BankApi>().resolveAccount(
+      final result = await getIt<BankApi>().resolveAccount(
         ResolveAccountRequest(
           account_number: state.bankAccount.value,
           account_bank: state.selectedBank.value!.code,
@@ -113,7 +113,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     emit(state.copyWith(getBanksStatus: FormzSubmissionStatus.inProgress));
 
     try {
-      final response = await locator<BankApi>().getBanks();
+      final response = await getIt<BankApi>().getBanks();
       add(_GetBanksSuccessful(response));
       logInfo(response);
     } catch (error, trace) {
