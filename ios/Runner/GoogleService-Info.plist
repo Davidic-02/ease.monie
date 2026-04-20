@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GOOGLE_MAPS_IOS_API_KEY</key>
+	<key>API_KEY</key>
 	<string>AIzaSyDr06cSQ6fc02W4c1Yfp4LbNQ8EZjut020</string>
+	<key>GOOGLE_MAPS_IOS_API_KEY</key>
+	<string>AIzaSyBU2Qs7tFDdSXla1mnqR9Bm6V2IsFN1q_Y</string>
 	<key>GCM_SENDER_ID</key>
 	<string>564819506011</string>
 	<key>PLIST_VERSION</key>

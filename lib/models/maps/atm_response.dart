@@ -6,21 +6,18 @@ part 'atm_response.g.dart';
 @JsonSerializable()
 class ATMResponse {
   final String status;
-  final List<ATM> data;
-  final String? message;
-  @JsonKey(defaultValue: 0)
-  final int? count;
 
-  ATMResponse({
-    required this.status,
-    required this.data,
-    this.message,
-    this.count,
-  });
+  @JsonKey(name: "results")
+  final List<ATM> data;
+
+  final String? nextPageToken;
+
+  ATMResponse({required this.status, required this.data, this.nextPageToken});
 
   factory ATMResponse.fromJson(Map<String, dynamic> json) =>
       _$ATMResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$ATMResponseToJson(this);
 
-  bool get isSuccess => status.toLowerCase() == 'success';
+  bool get isSuccess => status == 'OK';
 }

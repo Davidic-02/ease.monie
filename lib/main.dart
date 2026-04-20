@@ -28,8 +28,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load();
-  await setupServiceLocator();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupServiceLocator();
 
   runApp(const MyApp());
 }
@@ -41,10 +41,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LocationBloc>(create: (context) => LocationBloc()),
+        BlocProvider<LocationBloc>(create: (context) => getIt<LocationBloc>()),
         BlocProvider<MapBloc>(
-          create: (context) =>
-              MapBloc(locationBloc: context.read<LocationBloc>()),
+          create: (context) => MapBloc(locationBloc: getIt<LocationBloc>()),
         ),
         BlocProvider<OnBoardingBloc>(
           create: (context) => OnBoardingBloc(FirebaseAuth.instance),
@@ -55,7 +54,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<VerificationBloc>(create: (context) => VerificationBloc()),
         BlocProvider<LoanBloc>(create: (context) => LoanBloc()),
         BlocProvider<NetflixBloc>(create: (context) => NetflixBloc()),
-        BlocProvider<BankTransferBloc>(create: (context) => BankTransferBloc()),
+        BlocProvider<BankTransferBloc>(
+          create: (context) => getIt<BankTransferBloc>(),
+        ),
         BlocProvider(create: (context) => RechargeBloc()),
         BlocProvider<CharityBloc>(
           create: (context) =>
@@ -63,7 +64,6 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<GiftBloc>(create: (_) => GiftBloc()),
         BlocProvider<InsuranceBloc>(create: (_) => InsuranceBloc()),
-        BlocProvider<LocationBloc>(create: (context) => LocationBloc()),
       ],
       child: ValueListenableBuilder<ThemeMode>(
         valueListenable: ThemeService.themeModeNotifier,

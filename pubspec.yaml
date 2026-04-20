@@ -60,6 +60,8 @@ dependencies:
   google_maps_flutter: ^2.14.0
   geolocator: ^14.0.2
   timeago: ^3.7.1
+  url_launcher: ^6.3.2
+  geocoding: ^4.0.0
 
 
 

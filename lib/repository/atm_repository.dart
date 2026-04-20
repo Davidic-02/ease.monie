@@ -1,11 +1,13 @@
 import 'package:esae_monie/models/maps/atm.dart';
-import 'package:esae_monie/models/maps/map_bounds.dart';
+import 'package:esae_monie/models/maps/direction_response.dart';
 import 'package:esae_monie/retrofit/atm_api.dart';
 import 'package:esae_monie/services/logging_helper.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AtmRepository {
   final ATMApi _atmApi;
+
   AtmRepository(this._atmApi);
 
   Future<List<ATM>> getNearbyATMs({
@@ -20,14 +22,13 @@ class AtmRepository {
       );
 
       final response = await _atmApi.getNearbyATMs(
-        latitude,
-        longitude,
+        '$latitude,$longitude',
         radiusInMeters,
-        limit,
+        'atm',
       );
 
       if (!response.isSuccess) {
-        throw Exception(response.message ?? 'Failed to fetch nearby ATMs');
+        throw Exception('Failed to fetch nearby ATMs');
       }
 
       logInfo('Successfully fetched ${response.data.length} nearby ATMs');
@@ -46,18 +47,15 @@ class AtmRepository {
   }) async {
     try {
       logInfo('Searching ATMs with query: $query');
-
       final response = await _atmApi.searchATMs(
-        query,
-        latitude,
-        longitude,
-        limit,
+        '$query ATM',
+        '$latitude,$longitude',
+        5000,
+        'atm',
       );
-
       if (!response.isSuccess) {
-        throw Exception(response.message ?? 'Search failed');
+        throw Exception('Failed to fetch nearby ATMs');
       }
-      logInfo('Search returned ${response.data.length} results');
       return response.data;
     } catch (e) {
       logError('Error searching ATMs: $e', StackTrace.current);
@@ -65,49 +63,75 @@ class AtmRepository {
     }
   }
 
-  Future<List<ATM>> getATMsInBounds({
+  List<ATM> filterATMsInBounds({
+    required List<ATM> allATMs,
     required LatLngBounds bounds,
-    int limit = 50,
+  }) {
+    return allATMs.where((atm) {
+      return bounds.contains(LatLng(atm.latitude, atm.longitude));
+    }).toList();
+  }
+
+  Future<DirectionsResponse> getRoute({
+    required double originLat,
+    required double originLng,
+    required double destLat,
+    required double destLng,
   }) async {
     try {
-      logInfo(
-        'Fetching ATMs in bounds: NE(${bounds.northeast.latitude}, ${bounds.northeast.longitude}), SW(${bounds.southwest.latitude}, ${bounds.southwest.longitude})',
+      final response = await _atmApi.getDirections(
+        '$originLat,$originLng',
+        '$destLat,$destLng',
+        'driving',
       );
-      final request = MapBoundsRequest.fromLatLngBounds(bounds);
-      final response = await _atmApi.getATMsInBounds(request, limit);
-      if (!response.isSuccess) {
-        throw Exception(response.message ?? 'Failed to fetch ATMs in bounds');
+      if (response.status != 'OK') {
+        throw Exception('Directions API failed: ${response.status}');
       }
 
-      logInfo('Successfully fetched ${response.data.length} ATMs in bounds');
-      return response.data;
+      if (response.routes.isEmpty) {
+        throw Exception('No route returned from Google API');
+      }
+
+      return response;
     } catch (e) {
-      logError('Error fetching ATMs in bounds: $e', StackTrace.current);
+      logError('Error fetching route: $e', StackTrace.current);
       rethrow;
     }
   }
 
-  Future<ATM> getAtMById(String atmId) async {
-    try {
-      logInfo('Fetching ATM details for ID: $atmId');
-      final atm = await _atmApi.getATMById(atmId);
-      logInfo('Successfully fetched ATM: ${atm.name}');
-      return atm;
-    } catch (e) {
-      logError('Error fetching ATM by ID: $e', StackTrace.current);
-      rethrow;
-    }
-  }
+  List<LatLng> decodePolyline(String encoded) {
+    final List<LatLng> points = [];
+    int index = 0;
+    final int len = encoded.length;
+    int lat = 0, lng = 0;
 
-  Future<ATM> getATMDetails(String atmId) async {
-    try {
-      logInfo('Fetching detailed ATM info for ID: $atmId');
-      final atm = await _atmApi.getATMDetails(atmId);
-      logInfo('Successfully fetched ATM details: ${atm.name}');
-      return atm;
-    } catch (e) {
-      logError('Error fetching ATM details: $e', StackTrace.current);
-      rethrow;
+    while (index < len) {
+      int b, shift = 0, result = 0;
+
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1F) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      final int dlat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1F) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+
+      final int dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lng += dlng;
+
+      points.add(LatLng(lat / 1e5, lng / 1e5));
     }
+
+    return points;
   }
 }

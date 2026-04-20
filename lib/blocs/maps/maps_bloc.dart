@@ -1,3 +1,4 @@
+import 'package:esae_monie/presentation/widgets/maps/poly_line_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:formz/formz.dart';
@@ -25,57 +26,71 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<_YourLocationTapped>(_onYourLocationTapped);
     on<_UserLocationUpdated>(_onUserLocationUpdated);
     on<_MapMoved>(_onMapMoved);
-
     on<_CameraIdle>(
       _onCameraIdle,
       transformer: _debounce(const Duration(milliseconds: 400)),
     );
-
     on<_MarkerTapped>(_onMarkerTapped);
     on<_ATMSelected>(_onATMSelected);
     on<_ATMDeselected>(_onATMDeselected);
-
     on<_SearchChanged>(
       _onSearchChanged,
       transformer: _debounce(const Duration(milliseconds: 300)),
     );
-
     on<_SearchCleared>(_onSearchCleared);
     on<_SearchSubmitted>(_onSearchSubmitted);
     on<_RouteRequested>(_onRouteRequested);
     on<_RetryFetchATMs>(_onRetryFetchATMs);
     on<_ClearError>(_onClearError);
     on<_CustomLocationSelected>(_onCustomLocationSelected);
-
     on<_ResetSearchCenter>(_onResetSearchCenter);
 
     add(const MapEvent.init());
   }
 
+  // ── SINGLE SOURCE OF TRUTH ──────────────────────────────────────────────
+  // Everything reads from here — never directly from locationBloc
+  LatLng? _activeLocation() {
+    return state.searchCenter ?? state.userLocation;
+  }
+
+  LatLng? _gpsLatLng() {
+    final gps = locationBloc.state.currentLocation;
+    if (gps == null) return null;
+    return LatLng(gps.latitude, gps.longitude);
+  }
+
+  // ── INIT ────────────────────────────────────────────────────────────────
   Future<void> _onInit(_Init event, Emitter<MapState> emit) async {
     emit(
       state.copyWith(fetchStatus: FormzSubmissionStatus.inProgress, error: ''),
     );
+
     try {
-      final userLocation = locationBloc.state.currentLocation;
-      if (userLocation == null) {
+      // Always resolve GPS first so userLocation is populated
+      final gpsLatLng = _gpsLatLng();
+      if (gpsLatLng != null) {
+        emit(state.copyWith(userLocation: gpsLatLng));
+      }
+
+      // Active location: custom pin wins, GPS is fallback
+      final location = _activeLocation();
+
+      if (location == null) {
         emit(
           state.copyWith(
             fetchStatus: FormzSubmissionStatus.failure,
-            error:
-                'User location not available. Please enable location services.',
+            error: 'Location not available. Please enable location services.',
           ),
         );
-
         return;
       }
 
-      final userLatLng = LatLng(userLocation.latitude, userLocation.longitude);
-      logInfo('Starting map: User at ($userLatLng)');
+      logInfo('Starting map: Active location at ($location)');
 
       final atms = await _atmRepository.getNearbyATMs(
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         radiusInMeters: 5000,
         limit: 50,
       );
@@ -86,14 +101,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         state.copyWith(
           allATMs: atms,
           displayedATMs: atms,
-          userLocation: userLatLng,
+          userLocation: gpsLatLng ?? state.userLocation,
           fetchStatus: FormzSubmissionStatus.success,
           noATMsFound: atms.isEmpty,
           error: '',
         ),
       );
     } catch (e) {
-      logError('Error in _onStarted: $e', StackTrace.current);
+      logError('Error in _onInit: $e', StackTrace.current);
       emit(
         state.copyWith(
           fetchStatus: FormzSubmissionStatus.failure,
@@ -103,77 +118,28 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  Future<void> _onYourLocationTapped(
-    _YourLocationTapped event,
-    Emitter<MapState> emit,
-  ) async {
-    final userLocation = locationBloc.state.currentLocation;
-    if (userLocation != null) {
-      emit(
-        state.copyWith(
-          userLocation: LatLng(userLocation.latitude, userLocation.longitude),
-          selectedATM: null,
-        ),
-      );
-    }
-  }
-
-  Future<void> _onUserLocationUpdated(
-    _UserLocationUpdated event,
-    Emitter<MapState> emit,
-  ) async {
-    emit(state.copyWith(userLocation: event.location));
-  }
-
-  Future<void> _onMapMoved(_MapMoved event, Emitter<MapState> emit) async {
-    emit(state.copyWith(visibleMapBounds: event.bounds));
-  }
-
-  Future<void> _onCameraIdle(_CameraIdle event, Emitter<MapState> emit) async {
-    emit(
-      state.copyWith(
-        boundsStatus: FormzSubmissionStatus.inProgress,
-        visibleMapBounds: event.bounds,
-      ),
-    );
-
-    try {
-      final atms = await _atmRepository.getATMsInBounds(
-        bounds: event.bounds,
-        limit: 50,
-      );
-      logInfo('Camera idle: Fetched ${atms.length} ATMs in bounds');
-      emit(
-        state.copyWith(
-          displayedATMs: atms,
-          boundsStatus: FormzSubmissionStatus.success,
-          error: '',
-        ),
-      );
-    } catch (e) {
-      logError('Error in _onCameraIdle: $e', StackTrace.current);
-      emit(
-        state.copyWith(
-          boundsStatus: FormzSubmissionStatus.failure,
-          error: 'Failed to fetch ATMs: ${e.toString()}',
-        ),
-      );
-    }
-  }
-
+  // ── CUSTOM LOCATION SELECTED (map tap or long press) ────────────────────
   Future<void> _onCustomLocationSelected(
     _CustomLocationSelected event,
     Emitter<MapState> emit,
   ) async {
+    // Immediately switch to custom mode and clear old selection
     emit(
       state.copyWith(
         searchCenter: event.location,
         isSearchingFromCustomLocation: true,
+        selectedATM: null,
+        polylines: {},
         fetchStatus: FormzSubmissionStatus.inProgress,
+        error: '',
       ),
     );
 
     try {
+      logInfo(
+        'Custom location selected: ${event.location.latitude}, ${event.location.longitude}',
+      );
+
       final atms = await _atmRepository.getNearbyATMs(
         latitude: event.location.latitude,
         longitude: event.location.longitude,
@@ -187,9 +153,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           displayedATMs: atms,
           fetchStatus: FormzSubmissionStatus.success,
           noATMsFound: atms.isEmpty,
+          error: atms.isEmpty ? 'No ATMs found near this location' : '',
         ),
       );
     } catch (e) {
+      logError(
+        'Error fetching ATMs for custom location: $e',
+        StackTrace.current,
+      );
       emit(
         state.copyWith(
           fetchStatus: FormzSubmissionStatus.failure,
@@ -199,20 +170,73 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
+  // ── RESET TO GPS ────────────────────────────────────────────────────────
   Future<void> _onResetSearchCenter(
     _ResetSearchCenter event,
     Emitter<MapState> emit,
   ) async {
-    // snap back to real GPS and re-run the original fetch
     emit(
       state.copyWith(
-        searchCenter: state.userLocation,
+        searchCenter: null, // ← null = GPS takes over
         isSearchingFromCustomLocation: false,
+        selectedATM: null,
+        polylines: {},
+        searchQuery: '',
+        searchSuggestions: [],
+        error: '',
       ),
     );
+    // Re-init with GPS
     add(const MapEvent.init());
   }
 
+  // ── YOUR LOCATION TAPPED ────────────────────────────────────────────────
+  Future<void> _onYourLocationTapped(
+    _YourLocationTapped event,
+    Emitter<MapState> emit,
+  ) async {
+    final gps = _gpsLatLng();
+    if (gps != null) {
+      emit(
+        state.copyWith(
+          userLocation: gps,
+          // Don't override searchCenter — just updates GPS store
+        ),
+      );
+    }
+  }
+
+  // ── USER LOCATION UPDATED (stream from GPS) ─────────────────────────────
+  Future<void> _onUserLocationUpdated(
+    _UserLocationUpdated event,
+    Emitter<MapState> emit,
+  ) async {
+    emit(state.copyWith(userLocation: event.location));
+  }
+
+  // ── MAP MOVED ───────────────────────────────────────────────────────────
+  Future<void> _onMapMoved(_MapMoved event, Emitter<MapState> emit) async {
+    emit(state.copyWith(visibleMapBounds: event.bounds));
+  }
+
+  // ── CAMERA IDLE — filter ATMs to visible bounds (no API call) ───────────
+  Future<void> _onCameraIdle(_CameraIdle event, Emitter<MapState> emit) async {
+    emit(state.copyWith(visibleMapBounds: event.bounds));
+
+    final visible = _atmRepository.filterATMsInBounds(
+      allATMs: state.allATMs,
+      bounds: event.bounds,
+    );
+
+    emit(
+      state.copyWith(
+        displayedATMs: visible.isEmpty ? state.allATMs : visible,
+        boundsStatus: FormzSubmissionStatus.success,
+      ),
+    );
+  }
+
+  // ── MARKER TAPPED ───────────────────────────────────────────────────────
   Future<void> _onMarkerTapped(
     _MarkerTapped event,
     Emitter<MapState> emit,
@@ -221,6 +245,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(selectedATM: event.atm));
   }
 
+  // ── ATM SELECTED ────────────────────────────────────────────────────────
   Future<void> _onATMSelected(
     _ATMSelected event,
     Emitter<MapState> emit,
@@ -229,14 +254,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(selectedATM: event.atm));
   }
 
+  // ── ATM DESELECTED ──────────────────────────────────────────────────────
   Future<void> _onATMDeselected(
     _ATMDeselected event,
     Emitter<MapState> emit,
   ) async {
     logInfo('ATM deselected');
-    emit(state.copyWith(selectedATM: null));
+    emit(state.copyWith(selectedATM: null, polylines: {}));
   }
 
+  // ── SEARCH CHANGED ──────────────────────────────────────────────────────
   Future<void> _onSearchChanged(
     _SearchChanged event,
     Emitter<MapState> emit,
@@ -248,6 +275,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           searchSuggestions: [],
           searchStatus: FormzSubmissionStatus.success,
           noATMsFound: false,
+          searchQuery: '',
           error: '',
         ),
       );
@@ -262,37 +290,50 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
 
     try {
-      final searchCenter = state.searchCenter;
-      final currentLocation = locationBloc.state.currentLocation;
+      // Use active location — custom pin wins over GPS
+      final location = _activeLocation();
 
-      final LatLng? center =
-          searchCenter ??
-          (currentLocation != null
-              ? LatLng(currentLocation.latitude, currentLocation.longitude)
-              : null);
-
-      if (center == null) {
+      if (location == null) {
         throw Exception('Location not available');
       }
 
       final results = await _atmRepository.searchATMs(
         query: event.query,
-        latitude: center.latitude,
-        longitude: center.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         limit: 50,
       );
 
-      final suggestions = results.map((atm) => atm.name).take(5).toList();
+      final suggestions = results.map((atm) => atm.name).take(6).toList();
 
-      emit(
-        state.copyWith(
-          displayedATMs: results,
-          searchSuggestions: suggestions,
-          searchStatus: FormzSubmissionStatus.success,
-          noATMsFound: results.isEmpty,
-          error: results.isEmpty ? 'No ATMs found' : '',
-        ),
-      );
+      if (results.isNotEmpty) {
+        // Move search center to first result area so map follows the search
+        emit(
+          state.copyWith(
+            displayedATMs: results,
+            searchSuggestions: suggestions,
+            searchStatus: FormzSubmissionStatus.success,
+            noATMsFound: false,
+            error: '',
+            // ← update searchCenter to first result so map can pan there
+            searchCenter: LatLng(
+              results.first.latitude,
+              results.first.longitude,
+            ),
+            isSearchingFromCustomLocation: true,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            displayedATMs: [],
+            searchSuggestions: [],
+            searchStatus: FormzSubmissionStatus.success,
+            noATMsFound: true,
+            error: 'No ATMs found for "${event.query}"',
+          ),
+        );
+      }
     } catch (e) {
       emit(
         state.copyWith(
@@ -304,6 +345,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
+  // ── SEARCH CLEARED ──────────────────────────────────────────────────────
   Future<void> _onSearchCleared(
     _SearchCleared event,
     Emitter<MapState> emit,
@@ -312,16 +354,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(
       state.copyWith(
         searchQuery: '',
-        displayedATMs: state.allATMs, // ← same restore point
+        displayedATMs: state.allATMs,
         searchSuggestions: [],
         selectedATM: null,
         searchStatus: FormzSubmissionStatus.initial,
         noATMsFound: false,
         error: '',
+        // Keep searchCenter if user had custom location
+        // Only clear if user explicitly resets
       ),
     );
   }
 
+  // ── SEARCH SUBMITTED ────────────────────────────────────────────────────
   Future<void> _onSearchSubmitted(
     _SearchSubmitted event,
     Emitter<MapState> emit,
@@ -329,6 +374,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     add(MapEvent.searchChanged(event.query));
   }
 
+  // ── ROUTE REQUESTED ─────────────────────────────────────────────────────
   Future<void> _onRouteRequested(
     _RouteRequested event,
     Emitter<MapState> emit,
@@ -337,33 +383,65 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       state.copyWith(
         selectedATM: event.atm,
         routeStatus: FormzSubmissionStatus.inProgress,
+        polylines: {},
+        routeDistanceM: null, // ← clear old values
+        routeDurationMin: null,
       ),
     );
 
     try {
-      logInfo('Route requested to: ${event.atm.name}');
+      final origin = _activeLocation();
 
-      // TODO: launch url_launcher with Maps deep-link:
-      // final url = Uri.parse(
-      //   'https://www.google.com/maps/dir/?api=1'
-      //   '&origin=${state.userLocation?.latitude},${state.userLocation?.longitude}'
-      //   '&destination=${event.atm.latitude},${event.atm.longitude}'
-      //   '&travelmode=driving',
-      // );
-      // await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (origin == null) {
+        emit(
+          state.copyWith(
+            routeStatus: FormzSubmissionStatus.failure,
+            error: 'No location available for routing',
+          ),
+        );
+        return;
+      }
 
-      emit(state.copyWith(routeStatus: FormzSubmissionStatus.success));
+      final direction = await _atmRepository.getRoute(
+        originLat: origin.latitude,
+        originLng: origin.longitude,
+        destLat: event.atm.latitude,
+        destLng: event.atm.longitude,
+      );
+
+      final route = direction.routes.first;
+      final encoded = route['overview_polyline']['points'];
+      final polylinePoints = _atmRepository.decodePolyline(encoded);
+      final polyline = PolylineHelper.buildRoute(polylinePoints);
+
+      // ← Parse distance and duration from legs
+      final leg = route['legs']?.first;
+      final distanceM = leg?['distance']?['value'] as int?;
+      final durationSec = leg?['duration']?['value'] as int?;
+      final durationMin = durationSec != null
+          ? (durationSec / 60).ceil()
+          : null;
+
+      emit(
+        state.copyWith(
+          polylines: {polyline},
+          routeStatus: FormzSubmissionStatus.success,
+          routeDistanceM: distanceM,
+          routeDurationMin: durationMin,
+        ),
+      );
     } catch (e) {
       logError('Error in _onRouteRequested: $e', StackTrace.current);
       emit(
         state.copyWith(
           routeStatus: FormzSubmissionStatus.failure,
-          error: 'Failed to open directions: ${e.toString()}',
+          error: 'Failed to get directions: ${e.toString()}',
         ),
       );
     }
   }
 
+  // ── RETRY ───────────────────────────────────────────────────────────────
   Future<void> _onRetryFetchATMs(
     _RetryFetchATMs event,
     Emitter<MapState> emit,
@@ -372,6 +450,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     add(const MapEvent.init());
   }
 
+  // ── CLEAR ERROR ─────────────────────────────────────────────────────────
   Future<void> _onClearError(_ClearError event, Emitter<MapState> emit) async {
     emit(state.copyWith(error: ''));
   }

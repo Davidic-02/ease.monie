@@ -1,6 +1,6 @@
 import 'package:esae_monie/models/maps/atm.dart';
 import 'package:esae_monie/models/maps/atm_response.dart';
-import 'package:esae_monie/models/maps/map_bounds.dart';
+import 'package:esae_monie/models/maps/direction_response.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
@@ -10,31 +10,31 @@ part 'atm_api.g.dart';
 abstract class ATMApi {
   factory ATMApi(Dio dio, {String? baseUrl}) = _ATMApi;
 
-  @GET("atms/nearby")
+  @GET("place/nearbysearch/json")
   Future<ATMResponse> getNearbyATMs(
-    @Query("latitude") double latitude,
-    @Query("longitude") double longitude,
-    @Query("radius") int radiusInMeters,
-    @Query("limit") int limit,
+    @Query("location") String location, // "lat,lng"
+    @Query("radius") int radius,
+    @Query("type") String type, // "atm"
   );
 
-  @GET("atms/search")
+  @GET("place/textsearch/json")
   Future<ATMResponse> searchATMs(
     @Query("query") String searchQuery,
-    @Query("latitude") double latitude,
-    @Query("longitude") double longitude,
-    @Query("limit") int limit,
+    @Query("location") String location,
+    @Query("radius") int radius,
+    @Query("type") String type,
   );
 
-  @POST("atms/bounds")
-  Future<ATMResponse> getATMsInBounds(
-    @Body() MapBoundsRequest request,
-    @Query("limit") int limit,
+  @GET("place/details/json")
+  Future<ATM> getATMById(
+    @Query("place_id") String placeId,
+    @Query("key") String apiKey,
   );
 
-  @GET("atms/{id}")
-  Future<ATM> getATMById(@Path("id") String atmId);
-
-  @GET("atms/{id}/details")
-  Future<ATM> getATMDetails(@Path("id") String atmId);
+  @GET("directions/json")
+  Future<DirectionsResponse> getDirections(
+    @Query("origin") String origin,
+    @Query("destination") String destination,
+    @Query("mode") String mode,
+  );
 }
