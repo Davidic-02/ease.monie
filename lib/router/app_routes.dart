@@ -30,7 +30,7 @@ import 'package:esae_monie/presentation/screens/home/services/loan/loan_transact
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_confirmation.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge_transaction_successful.dart';
-import 'package:esae_monie/presentation/screens/home/tabs/map.dart';
+import 'package:esae_monie/presentation/screens/tabs/map.dart';
 import 'package:esae_monie/presentation/screens/onboarding/onboarding.dart';
 import 'package:esae_monie/presentation/screens/auth/sign_in.dart';
 import 'package:esae_monie/presentation/screens/onboarding/sign_up.dart';

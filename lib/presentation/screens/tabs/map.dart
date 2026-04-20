@@ -1,6 +1,10 @@
 import 'package:esae_monie/blocs/location/location_bloc.dart';
 import 'package:esae_monie/blocs/maps/maps_bloc.dart';
+import 'package:esae_monie/constants/app_colors.dart';
+import 'package:esae_monie/constants/app_spacing.dart';
 import 'package:esae_monie/models/maps/atm.dart';
+import 'package:esae_monie/presentation/widgets/button.dart';
+import 'package:esae_monie/presentation/widgets/custom_text_form_field.dart';
 import 'package:esae_monie/presentation/widgets/custom_topBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +22,14 @@ class MapScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = useTextEditingController();
+    final searchFocusNode = useFocusNode();
     final mapController = useRef<GoogleMapController?>(null);
     final mapReady = useRef(false);
     final showSuggestions = useState(false);
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? AppColors.darkSurface : AppColors.whiteColor;
+    final shadowColor = AppColors.shadowColor;
 
     return Scaffold(
       body: BlocListener<LocationBloc, LocationState>(
@@ -32,15 +41,16 @@ class MapScreen extends HookWidget {
         child: BlocBuilder<LocationBloc, LocationState>(
           builder: (context, locationState) {
             if (!locationState.isLocationServiceEnabled) {
-              return const Center(
-                child: Text('Location services are disabled'),
+              return Center(
+                child: Text(
+                  'Location services are disabled',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               );
             }
 
             return BlocConsumer<MapBloc, MapState>(
-              // In BlocConsumer listener — also pan camera when searchCenter changes
               listener: (context, mapState) {
-                // Pan to selected ATM
                 if (mapState.selectedATM != null &&
                     mapReady.value &&
                     mapController.value != null) {
@@ -57,7 +67,6 @@ class MapScreen extends HookWidget {
                   );
                 }
 
-                // Pan camera when search finds results in a new area
                 if (mapState.isSearchingFromCustomLocation &&
                     mapState.searchCenter != null &&
                     mapState.selectedATM == null &&
@@ -90,8 +99,6 @@ class MapScreen extends HookWidget {
                         });
                       },
                       onTap: (LatLng position) {
-                        // Only set custom location if not tapping a marker
-                        // (marker onTap fires first and stops propagation)
                         showSuggestions.value = false;
                         FocusScope.of(context).unfocus();
                         context.read<MapBloc>().add(
@@ -104,12 +111,15 @@ class MapScreen extends HookWidget {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text(
+                            backgroundColor: surfaceColor,
+                            content: Text(
                               '📍 Searching ATMs near this location...',
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             duration: const Duration(seconds: 2),
                             action: SnackBarAction(
                               label: 'Reset',
+                              textColor: AppColors.primaryColor,
                               onPressed: () {
                                 context.read<MapBloc>().add(
                                   const MapEvent.resetSearchCenter(),
@@ -128,7 +138,6 @@ class MapScreen extends HookWidget {
                               ),
                         zoom: 15,
                       ),
-                      // ← polylines drawn here
                       polylines: mapState.polylines,
                       markers: {
                         ...mapState.displayedATMs.map((atm) {
@@ -172,6 +181,7 @@ class MapScreen extends HookWidget {
                       myLocationButtonEnabled: false,
                     ),
 
+                    // ── TOP BAR ───────────────────────────────────────────
                     Positioned(
                       top: 0,
                       left: 0,
@@ -179,7 +189,7 @@ class MapScreen extends HookWidget {
                       child: SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: CustomTopbar(title: 'Atm Locator'),
+                          child: CustomTopbar(title: 'ATM Locator'),
                         ),
                       ),
                     ),
@@ -193,19 +203,21 @@ class MapScreen extends HookWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Column(
                           children: [
+                            // Search field using CustomTextFormField
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: surfaceColor,
                                 borderRadius: BorderRadius.circular(12),
                                 boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 10,
-                                  ),
+                                  BoxShadow(color: shadowColor, blurRadius: 10),
                                 ],
                               ),
-                              child: TextField(
+                              child: CustomTextFormField(
                                 controller: searchController,
+                                focusNode: searchFocusNode,
+                                hintText: 'Search ATM...',
+                                keyboardType: TextInputType.text,
+                                prefixIcon: 'search', // your SVG asset name
                                 onChanged: (query) {
                                   showSuggestions.value = query.isNotEmpty;
                                   context.read<MapBloc>().add(
@@ -217,31 +229,26 @@ class MapScreen extends HookWidget {
                                     showSuggestions.value = true;
                                   }
                                 },
-                                decoration: InputDecoration(
-                                  hintText: 'Search ATM...',
-                                  border: InputBorder.none,
-                                  prefixIcon: const Icon(Icons.search),
-                                  suffixIcon: mapState.searchQuery.isNotEmpty
-                                      ? IconButton(
-                                          icon: const Icon(Icons.clear),
-                                          onPressed: () {
-                                            searchController.clear();
-                                            showSuggestions.value = false;
-                                            context.read<MapBloc>().add(
-                                              const MapEvent.searchCleared(),
-                                            );
-                                          },
-                                        )
-                                      : null,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                ),
+                                editIcon: mapState.searchQuery.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          searchController.clear();
+                                          showSuggestions.value = false;
+                                          context.read<MapBloc>().add(
+                                            const MapEvent.searchCleared(),
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.clear,
+                                          color: AppColors.greyColor,
+                                        ),
+                                      )
+                                    : null,
+                                customFilled: mapState.searchQuery.isNotEmpty,
                               ),
                             ),
 
-                            // Dropdown list
+                            // ── SUGGESTION DROPDOWN ───────────────────────
                             if (showSuggestions.value &&
                                 mapState.displayedATMs.isNotEmpty)
                               Container(
@@ -250,11 +257,11 @@ class MapScreen extends HookWidget {
                                   maxHeight: 250,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: surfaceColor,
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color: shadowColor,
                                       blurRadius: 10,
                                     ),
                                   ],
@@ -264,42 +271,73 @@ class MapScreen extends HookWidget {
                                   padding: EdgeInsets.zero,
                                   itemCount: mapState.displayedATMs.length
                                       .clamp(0, 6),
-                                  separatorBuilder: (_, __) =>
-                                      const Divider(height: 1),
+                                  separatorBuilder: (_, __) => Divider(
+                                    height: 1,
+                                    color: AppColors.greyColor.withOpacity(.2),
+                                  ),
                                   itemBuilder: (context, index) {
                                     final atm = mapState.displayedATMs[index];
                                     return ListTile(
-                                      leading: const Icon(
-                                        Icons.atm,
-                                        color: Colors.blue,
+                                      leading: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primaryColor
+                                              .withOpacity(.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.atm,
+                                          color: AppColors.primaryColor,
+                                          size: 18,
+                                        ),
                                       ),
                                       title: Text(
                                         atm.name,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                       ),
                                       subtitle: Text(
                                         atm.address ?? '',
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 12),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(fontSize: 12),
                                       ),
-                                      trailing: atm.isOpen
-                                          ? const Text(
-                                              'Open',
-                                              style: TextStyle(
-                                                color: Colors.green,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            )
-                                          : const Text(
-                                              'Closed',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 12,
-                                              ),
-                                            ),
+                                      trailing: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: atm.isOpen
+                                              ? AppColors.greenColor
+                                                    .withOpacity(.1)
+                                              : AppColors.redColor.withOpacity(
+                                                  .1,
+                                                ),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          atm.isOpen ? 'Open' : 'Closed',
+                                          style: TextStyle(
+                                            color: atm.isOpen
+                                                ? AppColors.greenColor
+                                                : AppColors.redColor,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
                                       onTap: () {
                                         searchController.text = atm.name;
                                         showSuggestions.value = false;
@@ -307,7 +345,6 @@ class MapScreen extends HookWidget {
                                         context.read<MapBloc>().add(
                                           MapEvent.atmSelected(atm),
                                         );
-                                        // Camera move handled by BlocConsumer listener
                                       },
                                     );
                                   },
@@ -317,10 +354,15 @@ class MapScreen extends HookWidget {
                         ),
                       ),
                     ),
+
                     // ── LOADING ───────────────────────────────────────────
                     if (mapState.fetchStatus ==
                         FormzSubmissionStatus.inProgress)
-                      const Center(child: CircularProgressIndicator()),
+                      Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
 
                     // ── ERROR ─────────────────────────────────────────────
                     if (mapState.error.isNotEmpty)
@@ -331,27 +373,28 @@ class MapScreen extends HookWidget {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.red.shade50,
-                            border: Border.all(color: Colors.red),
-                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.errorColor.withOpacity(.08),
+                            border: Border.all(color: AppColors.errorColor),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
                             children: [
                               const Icon(
                                 Icons.error_outline,
-                                color: Colors.red,
+                                color: AppColors.errorColor,
                               ),
-                              const SizedBox(width: 8),
+                              AppSpacing.horizontalSpaceSmall,
                               Expanded(
                                 child: Text(
                                   mapState.error,
-                                  style: const TextStyle(color: Colors.red),
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(color: AppColors.errorColor),
                                 ),
                               ),
                               IconButton(
                                 icon: const Icon(
                                   Icons.close,
-                                  color: Colors.red,
+                                  color: AppColors.errorColor,
                                 ),
                                 onPressed: () => context.read<MapBloc>().add(
                                   const MapEvent.clearError(),
@@ -372,21 +415,30 @@ class MapScreen extends HookWidget {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: surfaceColor,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 5,
-                            ),
+                            BoxShadow(color: shadowColor, blurRadius: 5),
                           ],
                         ),
-                        child: Text(
-                          '${mapState.displayedATMs.length} ATMs',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.atm,
+                              size: 14,
+                              color: AppColors.primaryColor,
+                            ),
+                            AppSpacing.horizontalSpaceTiny,
+                            Text(
+                              '${mapState.displayedATMs.length} ATMs',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.primaryColor,
+                                  ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -408,30 +460,37 @@ class MapScreen extends HookWidget {
                     Positioned(
                       bottom: mapState.selectedATM != null ? 310 : 32,
                       right: 16,
-                      child: FloatingActionButton(
-                        mini: true,
-                        backgroundColor: Colors.white,
-                        onPressed: () {
-                          context.read<MapBloc>().add(
-                            const MapEvent.yourLocationTapped(),
-                          );
-                          final loc = locationState.currentLocation;
-                          if (loc != null &&
-                              mapReady.value &&
-                              mapController.value != null) {
-                            mapController.value!.animateCamera(
-                              CameraUpdate.newCameraPosition(
-                                CameraPosition(
-                                  target: LatLng(loc.latitude, loc.longitude),
-                                  zoom: 15,
-                                ),
-                              ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: surfaceColor,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: shadowColor, blurRadius: 8),
+                          ],
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.my_location,
+                            color: AppColors.primaryColor,
+                          ),
+                          onPressed: () {
+                            context.read<MapBloc>().add(
+                              const MapEvent.yourLocationTapped(),
                             );
-                          }
-                        },
-                        child: const Icon(
-                          Icons.my_location,
-                          color: Colors.blue,
+                            final loc = locationState.currentLocation;
+                            if (loc != null &&
+                                mapReady.value &&
+                                mapController.value != null) {
+                              mapController.value!.animateCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: LatLng(loc.latitude, loc.longitude),
+                                    zoom: 15,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -451,8 +510,9 @@ class MapScreen extends HookWidget {
     Position? userLocation,
   ) {
     final atm = mapState.selectedATM!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? AppColors.darkSurface : AppColors.whiteColor;
 
-    // ── Distance & duration from real route data ──
     final distanceM = mapState.routeDistanceM;
     final durationMin = mapState.routeDurationMin;
 
@@ -464,8 +524,6 @@ class MapScreen extends HookWidget {
 
     final durationText = durationMin == null ? '-- min' : '$durationMin min';
 
-    // ── User location label ──
-    // Replace the userLabel line inside _buildFloatingCard:
     final userLabel = mapState.isSearchingFromCustomLocation
         ? (mapState.customLocationLabel.isNotEmpty
               ? mapState.customLocationLabel
@@ -477,17 +535,17 @@ class MapScreen extends HookWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // ── ROUTE BAR (only visible after route is drawn) ──────────────
+        // ── ROUTE BAR ─────────────────────────────────────────────────
         if (mapState.polylines.isNotEmpty)
           Container(
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: AppColors.primaryColor,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.3),
+                  color: AppColors.primaryColor.withOpacity(.3),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -496,39 +554,13 @@ class MapScreen extends HookWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.directions_walk,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      distanceText,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
+                _routeStat(Icons.directions_walk, distanceText),
+                Container(
+                  width: 1,
+                  height: 20,
+                  color: AppColors.whiteColor.withOpacity(.4),
                 ),
-                Container(width: 1, height: 20, color: Colors.white38),
-                Row(
-                  children: [
-                    const Icon(Icons.timer, color: Colors.white, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      durationText,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
+                _routeStat(Icons.timer, durationText),
               ],
             ),
           ),
@@ -537,11 +569,11 @@ class MapScreen extends HookWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.12),
+                color: AppColors.shadowColor,
                 blurRadius: 20,
                 offset: const Offset(0, 6),
               ),
@@ -551,47 +583,12 @@ class MapScreen extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ── YOUR LOCATION ──────────────────────────────────────
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.home_outlined,
-                      size: 18,
-                      color: Colors.blue,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Your Location',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          userLabel,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              // ── YOUR LOCATION ROW ──────────────────────────────────
+              _locationRow(
+                context,
+                icon: Icons.home_outlined,
+                label: 'Your Location',
+                sublabel: userLabel,
               ),
 
               // ── DOTTED CONNECTOR ───────────────────────────────────
@@ -605,7 +602,7 @@ class MapScreen extends HookWidget {
                       height: 5,
                       margin: const EdgeInsets.symmetric(vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
+                        color: AppColors.greyColor.withOpacity(.4),
                         borderRadius: BorderRadius.circular(1),
                       ),
                     ),
@@ -613,54 +610,27 @@ class MapScreen extends HookWidget {
                 ),
               ),
 
-              // ── ATM NEARBY ─────────────────────────────────────────
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.atm, size: 18, color: Colors.blue),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'ATM Nearby',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          atm.address?.isNotEmpty == true
-                              ? atm.address!
-                              : atm.name,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              // ── ATM ROW ────────────────────────────────────────────
+              _locationRow(
+                context,
+                icon: Icons.atm,
+                label: 'ATM Nearby',
+                sublabel: atm.address?.isNotEmpty == true
+                    ? atm.address!
+                    : atm.name,
               ),
 
-              const SizedBox(height: 20),
+              AppSpacing.verticalSpaceLarge,
 
-              // ── ROUTE LOADING INDICATOR ────────────────────────────
+              // ── ROUTE LOADING ──────────────────────────────────────
               if (mapState.routeStatus == FormzSubmissionStatus.inProgress)
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: Center(child: CircularProgressIndicator()),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
                 ),
 
               // ── ACTION BUTTONS ─────────────────────────────────────
@@ -668,52 +638,28 @@ class MapScreen extends HookWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton.icon(
+                      child: Button(
+                        mapState.polylines.isEmpty ? 'Show Route' : 'Reroute',
+                        icon: Icons.route,
+                        iconColor: AppColors.whiteColor,
+                        color: AppColors.primaryColor,
                         onPressed: () => context.read<MapBloc>().add(
                           MapEvent.routeRequested(atm),
                         ),
-                        icon: const Icon(
-                          Icons.route,
-                          size: 18,
-                          color: Colors.white,
-                        ),
-                        label: Text(
-                          mapState.polylines.isEmpty ? 'Show Route' : 'Reroute',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          padding: const EdgeInsets.symmetric(vertical: 13),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    AppSpacing.horizontalSpaceSmall,
                     Expanded(
-                      child: ElevatedButton.icon(
+                      child: Button(
+                        'Navigate',
+                        icon: Icons.directions,
+                        iconColor: AppColors.whiteColor,
+                        color: AppColors.greenColor,
                         onPressed: () => _launchDirections(
                           context,
                           atm,
                           userLocation,
                           mapState,
-                        ),
-                        icon: const Icon(
-                          Icons.directions,
-                          size: 18,
-                          color: Colors.white,
-                        ),
-                        label: const Text(
-                          'Navigate',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          padding: const EdgeInsets.symmetric(vertical: 13),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                         ),
                       ),
                     ),
@@ -726,13 +672,72 @@ class MapScreen extends HookWidget {
     );
   }
 
+  Widget _routeStat(IconData icon, String label) {
+    return Row(
+      children: [
+        Icon(icon, color: AppColors.whiteColor, size: 20),
+        AppSpacing.horizontalSpaceSmall,
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.whiteColor,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _locationRow(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String sublabel,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor.withOpacity(.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, size: 18, color: AppColors.primaryColor),
+        ),
+        AppSpacing.horizontalSpaceMedium,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                sublabel,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(fontSize: 12),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Future<void> _launchDirections(
     BuildContext context,
     ATM atm,
     Position? userLocation,
-    MapState mapState, // ← pass mapState
+    MapState mapState,
   ) async {
-    // Use custom location as origin if active, else GPS
     final origin =
         mapState.isSearchingFromCustomLocation && mapState.searchCenter != null
         ? '${mapState.searchCenter!.latitude},${mapState.searchCenter!.longitude}'
@@ -770,26 +775,32 @@ class MapScreen extends HookWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text(
+        backgroundColor: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
           'Enable Location Services',
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-        content: const Text(
+        content: Text(
           'Location Services are turned off on your device.\n\n'
           'To use map features and access your current location, '
           'please enable Location Services in your phone settings.',
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Not Now'),
+            child: Text(
+              'Not Now',
+              style: TextStyle(color: AppColors.greyColor),
+            ),
           ),
-          ElevatedButton(
+          Button(
+            'Open Settings',
             onPressed: () async {
               Navigator.pop(context);
               await Geolocator.openLocationSettings();
             },
-            child: const Text('Open Settings'),
           ),
         ],
       ),
