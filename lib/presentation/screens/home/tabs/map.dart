@@ -172,59 +172,17 @@ class MapScreen extends HookWidget {
                       myLocationButtonEnabled: false,
                     ),
 
-                    Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 30),
-                      child: Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: SafeArea(
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
                           child: CustomTopbar(title: 'Atm Locator'),
                         ),
                       ),
                     ),
-
-                    // ── CUSTOM LOCATION BANNER ────────────────────────────
-                    if (mapState.isSearchingFromCustomLocation)
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: SafeArea(
-                          bottom: false,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.location_searching,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                              const SizedBox(width: 8),
-                              const Expanded(
-                                child: Text(
-                                  'Showing ATMs near custom location',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () => context.read<MapBloc>().add(
-                                  const MapEvent.resetSearchCenter(),
-                                ),
-                                child: const Text(
-                                  'Reset',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
 
                     // ── SEARCH BAR + DROPDOWN ─────────────────────────────
                     Positioned(
@@ -507,11 +465,13 @@ class MapScreen extends HookWidget {
     final durationText = durationMin == null ? '-- min' : '$durationMin min';
 
     // ── User location label ──
+    // Replace the userLabel line inside _buildFloatingCard:
     final userLabel = mapState.isSearchingFromCustomLocation
-        ? 'Custom selected location'
-        : (userLocation != null
-              ? '${userLocation.latitude.toStringAsFixed(5)}, '
-                    '${userLocation.longitude.toStringAsFixed(5)}'
+        ? (mapState.customLocationLabel.isNotEmpty
+              ? mapState.customLocationLabel
+              : 'Resolving location…')
+        : (mapState.userAddressLabel.isNotEmpty
+              ? mapState.userAddressLabel
               : 'Acquiring location…');
 
     return Column(

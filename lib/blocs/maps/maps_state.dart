@@ -10,6 +10,8 @@ abstract class MapState with _$MapState {
     @Default({}) Set<Polyline> polylines,
     @Default(null) int? routeDistanceM,
     @Default(null) int? routeDurationMin,
+    @Default('') String userAddressLabel,
+    @Default('') String customLocationLabel,
     ATM? selectedATM,
     LatLng? userLocation,
     LatLng? searchCenter,

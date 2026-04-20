@@ -9,6 +9,7 @@ import 'package:esae_monie/repository/atm_repository.dart';
 import 'package:esae_monie/services/logging_helper.dart';
 import 'package:esae_monie/services/service_locator.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:geocoding/geocoding.dart';
 
 part 'maps_event.dart';
 part 'maps_state.dart';
@@ -67,15 +68,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
 
     try {
-      // Always resolve GPS first so userLocation is populated
       final gpsLatLng = _gpsLatLng();
       if (gpsLatLng != null) {
         emit(state.copyWith(userLocation: gpsLatLng));
+
+        // ← Reverse geocode GPS position
+        final label = await _reverseGeocode(
+          gpsLatLng.latitude,
+          gpsLatLng.longitude,
+        );
+        emit(state.copyWith(userAddressLabel: label));
       }
 
-      // Active location: custom pin wins, GPS is fallback
       final location = _activeLocation();
-
       if (location == null) {
         emit(
           state.copyWith(
@@ -86,16 +91,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         return;
       }
 
-      logInfo('Starting map: Active location at ($location)');
-
       final atms = await _atmRepository.getNearbyATMs(
         latitude: location.latitude,
         longitude: location.longitude,
         radiusInMeters: 5000,
         limit: 50,
       );
-
-      logInfo('Fetched ${atms.length} nearby ATMs');
 
       emit(
         state.copyWith(
@@ -118,12 +119,30 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
+  // Add this private method to MapBloc
+  Future<String> _reverseGeocode(double lat, double lng) async {
+    try {
+      final placemarks = await placemarkFromCoordinates(lat, lng);
+      if (placemarks.isEmpty) return '$lat, $lng';
+      final p = placemarks.first;
+      // Build a readable address from available parts
+      final parts = [
+        if (p.name?.isNotEmpty == true && p.name != p.street) p.name,
+        if (p.street?.isNotEmpty == true) p.street,
+        if (p.subLocality?.isNotEmpty == true) p.subLocality,
+        if (p.locality?.isNotEmpty == true) p.locality,
+      ].whereType<String>().toList();
+      return parts.isNotEmpty ? parts.take(2).join(', ') : '$lat, $lng';
+    } catch (_) {
+      return '${lat.toStringAsFixed(4)}, ${lng.toStringAsFixed(4)}';
+    }
+  }
+
   // ── CUSTOM LOCATION SELECTED (map tap or long press) ────────────────────
   Future<void> _onCustomLocationSelected(
     _CustomLocationSelected event,
     Emitter<MapState> emit,
   ) async {
-    // Immediately switch to custom mode and clear old selection
     emit(
       state.copyWith(
         searchCenter: event.location,
@@ -131,15 +150,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         selectedATM: null,
         polylines: {},
         fetchStatus: FormzSubmissionStatus.inProgress,
+        customLocationLabel:
+            'Resolving location…', // ← temp label while geocoding
         error: '',
       ),
     );
 
-    try {
-      logInfo(
-        'Custom location selected: ${event.location.latitude}, ${event.location.longitude}',
-      );
+    // ← Reverse geocode the tapped point in parallel with ATM fetch
+    final labelFuture = _reverseGeocode(
+      event.location.latitude,
+      event.location.longitude,
+    );
 
+    try {
       final atms = await _atmRepository.getNearbyATMs(
         latitude: event.location.latitude,
         longitude: event.location.longitude,
@@ -147,16 +170,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         limit: 50,
       );
 
+      final label = await labelFuture; // ← await the geocode result
+
       emit(
         state.copyWith(
           allATMs: atms,
           displayedATMs: atms,
           fetchStatus: FormzSubmissionStatus.success,
           noATMsFound: atms.isEmpty,
+          customLocationLabel: label, // ← real place name now
           error: atms.isEmpty ? 'No ATMs found near this location' : '',
         ),
       );
     } catch (e) {
+      final label = await labelFuture;
       logError(
         'Error fetching ATMs for custom location: $e',
         StackTrace.current,
@@ -164,6 +191,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       emit(
         state.copyWith(
           fetchStatus: FormzSubmissionStatus.failure,
+          customLocationLabel: label,
           error: 'Failed to load ATMs near selected location: ${e.toString()}',
         ),
       );
@@ -177,16 +205,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   ) async {
     emit(
       state.copyWith(
-        searchCenter: null, // ← null = GPS takes over
+        searchCenter: null,
         isSearchingFromCustomLocation: false,
         selectedATM: null,
         polylines: {},
         searchQuery: '',
         searchSuggestions: [],
+        customLocationLabel: '', // ← reset
         error: '',
       ),
     );
-    // Re-init with GPS
     add(const MapEvent.init());
   }
 
