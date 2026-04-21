@@ -12,6 +12,7 @@ abstract class MapState with _$MapState {
     @Default(null) int? routeDurationMin,
     @Default('') String userAddressLabel,
     @Default('') String customLocationLabel,
+    @Default(false) bool isDarkMode,
     ATM? selectedATM,
     LatLng? userLocation,
     LatLng? searchCenter,

@@ -1,4 +1,5 @@
 import 'package:esae_monie/presentation/widgets/maps/poly_line_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:formz/formz.dart';
@@ -8,6 +9,7 @@ import 'package:esae_monie/models/maps/atm.dart';
 import 'package:esae_monie/repository/atm_repository.dart';
 import 'package:esae_monie/services/logging_helper.dart';
 import 'package:esae_monie/services/service_locator.dart';
+import 'package:esae_monie/services/theme_services.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -21,6 +23,12 @@ EventTransformer<E> _debounce<E>(Duration duration) =>
 class MapBloc extends Bloc<MapEvent, MapState> {
   final LocationBloc locationBloc;
   final AtmRepository _atmRepository = getIt<AtmRepository>();
+
+  // ── ThemeService listener — owned entirely by the BLoC ─────────────────
+  // The BLoC subscribes to ThemeService.themeModeNotifier directly.
+  // When the notifier fires, the BLoC converts the new ThemeMode into a
+  // bool and emits a new state. The screen never needs to touch theme logic.
+  late final VoidCallback _themeListener;
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
     on<_Init>(_onInit);
@@ -45,12 +53,48 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<_ClearError>(_onClearError);
     on<_CustomLocationSelected>(_onCustomLocationSelected);
     on<_ResetSearchCenter>(_onResetSearchCenter);
+    on<_MapThemeChanged>(_onMapThemeChanged);
+
+    // ── Register the theme listener NOW, inside the BLoC constructor ──────
+    // _resolveIsDark() does NOT need a BuildContext — it reads ThemeMode
+    // directly from the ValueNotifier value, which is always current.
+    _themeListener = () {
+      add(MapEvent.mapThemeChanged(_resolveIsDark()));
+    };
+    ThemeService.themeModeNotifier.addListener(_themeListener);
+
+    // Seed the initial dark-mode value so the very first build is correct
+    add(MapEvent.mapThemeChanged(_resolveIsDark()));
 
     add(const MapEvent.init());
   }
 
+  // ── Resolve dark mode from ThemeMode WITHOUT needing a BuildContext ──────
+  // ThemeMode.system is handled via WidgetsBinding so the BLoC stays
+  // context-free and can be instantiated anywhere.
+  bool _resolveIsDark() {
+    final mode = ThemeService.themeModeNotifier.value;
+    switch (mode) {
+      case ThemeMode.dark:
+        return true;
+      case ThemeMode.light:
+        return false;
+      case ThemeMode.system:
+        // WidgetsBinding gives us the platform brightness without a context
+        final brightness =
+            WidgetsBinding.instance.platformDispatcher.platformBrightness;
+        return brightness == Brightness.dark;
+    }
+  }
+
+  @override
+  Future<void> close() {
+    // Always clean up the listener when the BLoC is disposed
+    ThemeService.themeModeNotifier.removeListener(_themeListener);
+    return super.close();
+  }
+
   // ── SINGLE SOURCE OF TRUTH ──────────────────────────────────────────────
-  // Everything reads from here — never directly from locationBloc
   LatLng? _activeLocation() {
     return state.searchCenter ?? state.userLocation;
   }
@@ -71,8 +115,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final gpsLatLng = _gpsLatLng();
       if (gpsLatLng != null) {
         emit(state.copyWith(userLocation: gpsLatLng));
-
-        // ← Reverse geocode GPS position
         final label = await _reverseGeocode(
           gpsLatLng.latitude,
           gpsLatLng.longitude,
@@ -119,13 +161,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // Add this private method to MapBloc
+  // ── THEME CHANGED ────────────────────────────────────────────────────────
+  Future<void> _onMapThemeChanged(
+    _MapThemeChanged event,
+    Emitter<MapState> emit,
+  ) async {
+    emit(state.copyWith(isDarkMode: event.isDark));
+  }
+
+  // ── REVERSE GEOCODE ──────────────────────────────────────────────────────
   Future<String> _reverseGeocode(double lat, double lng) async {
     try {
       final placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isEmpty) return '$lat, $lng';
       final p = placemarks.first;
-      // Build a readable address from available parts
       final parts = [
         if (p.name?.isNotEmpty == true && p.name != p.street) p.name,
         if (p.street?.isNotEmpty == true) p.street,
@@ -138,7 +187,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // ── CUSTOM LOCATION SELECTED (map tap or long press) ────────────────────
+  // ── CUSTOM LOCATION SELECTED ─────────────────────────────────────────────
   Future<void> _onCustomLocationSelected(
     _CustomLocationSelected event,
     Emitter<MapState> emit,
@@ -150,13 +199,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         selectedATM: null,
         polylines: {},
         fetchStatus: FormzSubmissionStatus.inProgress,
-        customLocationLabel:
-            'Resolving location…', // ← temp label while geocoding
+        customLocationLabel: 'Resolving location…',
         error: '',
       ),
     );
 
-    // ← Reverse geocode the tapped point in parallel with ATM fetch
     final labelFuture = _reverseGeocode(
       event.location.latitude,
       event.location.longitude,
@@ -170,7 +217,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         limit: 50,
       );
 
-      final label = await labelFuture; // ← await the geocode result
+      final label = await labelFuture;
 
       emit(
         state.copyWith(
@@ -178,7 +225,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
           displayedATMs: atms,
           fetchStatus: FormzSubmissionStatus.success,
           noATMsFound: atms.isEmpty,
-          customLocationLabel: label, // ← real place name now
+          customLocationLabel: label,
           error: atms.isEmpty ? 'No ATMs found near this location' : '',
         ),
       );
@@ -198,7 +245,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // ── RESET TO GPS ────────────────────────────────────────────────────────
+  // ── RESET TO GPS ─────────────────────────────────────────────────────────
   Future<void> _onResetSearchCenter(
     _ResetSearchCenter event,
     Emitter<MapState> emit,
@@ -211,30 +258,25 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         polylines: {},
         searchQuery: '',
         searchSuggestions: [],
-        customLocationLabel: '', // ← reset
+        customLocationLabel: '',
         error: '',
       ),
     );
     add(const MapEvent.init());
   }
 
-  // ── YOUR LOCATION TAPPED ────────────────────────────────────────────────
+  // ── YOUR LOCATION TAPPED ─────────────────────────────────────────────────
   Future<void> _onYourLocationTapped(
     _YourLocationTapped event,
     Emitter<MapState> emit,
   ) async {
     final gps = _gpsLatLng();
     if (gps != null) {
-      emit(
-        state.copyWith(
-          userLocation: gps,
-          // Don't override searchCenter — just updates GPS store
-        ),
-      );
+      emit(state.copyWith(userLocation: gps));
     }
   }
 
-  // ── USER LOCATION UPDATED (stream from GPS) ─────────────────────────────
+  // ── USER LOCATION UPDATED ────────────────────────────────────────────────
   Future<void> _onUserLocationUpdated(
     _UserLocationUpdated event,
     Emitter<MapState> emit,
@@ -242,12 +284,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(userLocation: event.location));
   }
 
-  // ── MAP MOVED ───────────────────────────────────────────────────────────
+  // ── MAP MOVED ────────────────────────────────────────────────────────────
   Future<void> _onMapMoved(_MapMoved event, Emitter<MapState> emit) async {
     emit(state.copyWith(visibleMapBounds: event.bounds));
   }
 
-  // ── CAMERA IDLE — filter ATMs to visible bounds (no API call) ───────────
+  // ── CAMERA IDLE ──────────────────────────────────────────────────────────
   Future<void> _onCameraIdle(_CameraIdle event, Emitter<MapState> emit) async {
     emit(state.copyWith(visibleMapBounds: event.bounds));
 
@@ -264,7 +306,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
   }
 
-  // ── MARKER TAPPED ───────────────────────────────────────────────────────
+  // ── MARKER TAPPED ────────────────────────────────────────────────────────
   Future<void> _onMarkerTapped(
     _MarkerTapped event,
     Emitter<MapState> emit,
@@ -273,7 +315,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(selectedATM: event.atm));
   }
 
-  // ── ATM SELECTED ────────────────────────────────────────────────────────
+  // ── ATM SELECTED ─────────────────────────────────────────────────────────
   Future<void> _onATMSelected(
     _ATMSelected event,
     Emitter<MapState> emit,
@@ -282,7 +324,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(selectedATM: event.atm));
   }
 
-  // ── ATM DESELECTED ──────────────────────────────────────────────────────
+  // ── ATM DESELECTED ───────────────────────────────────────────────────────
   Future<void> _onATMDeselected(
     _ATMDeselected event,
     Emitter<MapState> emit,
@@ -291,7 +333,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     emit(state.copyWith(selectedATM: null, polylines: {}));
   }
 
-  // ── SEARCH CHANGED ──────────────────────────────────────────────────────
+  // ── SEARCH CHANGED ───────────────────────────────────────────────────────
   Future<void> _onSearchChanged(
     _SearchChanged event,
     Emitter<MapState> emit,
@@ -318,12 +360,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
 
     try {
-      // Use active location — custom pin wins over GPS
       final location = _activeLocation();
-
-      if (location == null) {
-        throw Exception('Location not available');
-      }
+      if (location == null) throw Exception('Location not available');
 
       final results = await _atmRepository.searchATMs(
         query: event.query,
@@ -335,7 +373,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final suggestions = results.map((atm) => atm.name).take(6).toList();
 
       if (results.isNotEmpty) {
-        // Move search center to first result area so map follows the search
         emit(
           state.copyWith(
             displayedATMs: results,
@@ -343,7 +380,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             searchStatus: FormzSubmissionStatus.success,
             noATMsFound: false,
             error: '',
-            // ← update searchCenter to first result so map can pan there
             searchCenter: LatLng(
               results.first.latitude,
               results.first.longitude,
@@ -373,7 +409,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // ── SEARCH CLEARED ──────────────────────────────────────────────────────
+  // ── SEARCH CLEARED ───────────────────────────────────────────────────────
   Future<void> _onSearchCleared(
     _SearchCleared event,
     Emitter<MapState> emit,
@@ -388,13 +424,11 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         searchStatus: FormzSubmissionStatus.initial,
         noATMsFound: false,
         error: '',
-        // Keep searchCenter if user had custom location
-        // Only clear if user explicitly resets
       ),
     );
   }
 
-  // ── SEARCH SUBMITTED ────────────────────────────────────────────────────
+  // ── SEARCH SUBMITTED ─────────────────────────────────────────────────────
   Future<void> _onSearchSubmitted(
     _SearchSubmitted event,
     Emitter<MapState> emit,
@@ -402,7 +436,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     add(MapEvent.searchChanged(event.query));
   }
 
-  // ── ROUTE REQUESTED ─────────────────────────────────────────────────────
+  // ── ROUTE REQUESTED ──────────────────────────────────────────────────────
   Future<void> _onRouteRequested(
     _RouteRequested event,
     Emitter<MapState> emit,
@@ -412,14 +446,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         selectedATM: event.atm,
         routeStatus: FormzSubmissionStatus.inProgress,
         polylines: {},
-        routeDistanceM: null, // ← clear old values
+        routeDistanceM: null,
         routeDurationMin: null,
       ),
     );
 
     try {
       final origin = _activeLocation();
-
       if (origin == null) {
         emit(
           state.copyWith(
@@ -442,7 +475,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       final polylinePoints = _atmRepository.decodePolyline(encoded);
       final polyline = PolylineHelper.buildRoute(polylinePoints);
 
-      // ← Parse distance and duration from legs
       final leg = route['legs']?.first;
       final distanceM = leg?['distance']?['value'] as int?;
       final durationSec = leg?['duration']?['value'] as int?;
@@ -469,7 +501,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     }
   }
 
-  // ── RETRY ───────────────────────────────────────────────────────────────
+  // ── RETRY ────────────────────────────────────────────────────────────────
   Future<void> _onRetryFetchATMs(
     _RetryFetchATMs event,
     Emitter<MapState> emit,
@@ -478,7 +510,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     add(const MapEvent.init());
   }
 
-  // ── CLEAR ERROR ─────────────────────────────────────────────────────────
+  // ── CLEAR ERROR ──────────────────────────────────────────────────────────
   Future<void> _onClearError(_ClearError event, Emitter<MapState> emit) async {
     emit(state.copyWith(error: ''));
   }
