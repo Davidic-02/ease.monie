@@ -21,6 +21,7 @@ class MapEvent with _$MapEvent {
   const factory MapEvent.markerTapped(ATM atm) = _MarkerTapped;
   const factory MapEvent.atmSelected(ATM atm) = _ATMSelected;
   const factory MapEvent.atmDeselected() = _ATMDeselected;
+  const factory MapEvent.mapThemeChanged(bool isDark) = _MapThemeChanged;
 
   // Search Events
   const factory MapEvent.searchChanged(String query) = _SearchChanged;

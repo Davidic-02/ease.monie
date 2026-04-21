@@ -10,6 +10,7 @@ import 'package:esae_monie/blocs/maps/maps_bloc.dart';
 import 'package:esae_monie/blocs/netflix/netflix_bloc.dart';
 import 'package:esae_monie/blocs/onboarding/onboarding_bloc.dart';
 import 'package:esae_monie/blocs/recharge/recharge_bloc.dart';
+import 'package:esae_monie/blocs/scan/scan_bloc.dart';
 import 'package:esae_monie/constants/theme_data.dart';
 import 'package:esae_monie/presentation/data/lists.dart';
 import 'package:esae_monie/presentation/widgets/bottom_navbar.dart';
@@ -30,6 +31,7 @@ void main() async {
   await dotenv.load();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupServiceLocator();
+  await ThemeService.initializeTheme();
 
   runApp(const MyApp());
 }
@@ -41,6 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => ScanBloc()),
         BlocProvider<LocationBloc>(create: (context) => getIt<LocationBloc>()),
         BlocProvider<MapBloc>(
           create: (context) => MapBloc(locationBloc: getIt<LocationBloc>()),

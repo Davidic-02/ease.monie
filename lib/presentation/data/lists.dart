@@ -16,10 +16,18 @@ import 'package:esae_monie/presentation/screens/home/services/gift/gift.dart';
 import 'package:esae_monie/presentation/screens/home/services/insurance/insurance.dart';
 import 'package:esae_monie/presentation/screens/home/services/loan/loan.dart';
 import 'package:esae_monie/presentation/screens/home/services/recharge/recharge.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 final double interestRate = 0.05;
+final graphData = useState<List<FlSpot>>([
+  FlSpot(0, 200),
+  FlSpot(1, 500),
+  FlSpot(2, 300),
+  FlSpot(3, 700),
+]);
 
 final colors = [
   AppColors.accentNeon.withValues(alpha: 0.4),
