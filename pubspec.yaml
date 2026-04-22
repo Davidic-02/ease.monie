@@ -62,6 +62,7 @@ dependencies:
   timeago: ^3.7.1
   url_launcher: ^6.3.2
   geocoding: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
 
 
 
@@ -136,3 +137,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/insurance1.png"

@@ -53,3 +53,11 @@ ios/GoogleService-Info.plist
 # Generated Files.
 *.g.dart
 *.freezed.dart
+# Launcher icons only
+android/app/src/main/res/mipmap-hdpi/ic_launcher.*
+android/app/src/main/res/mipmap-mdpi/ic_launcher.*
+android/app/src/main/res/mipmap-xhdpi/ic_launcher.*
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher.*
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.*
+
+ios/Runner/Assets.xcassets/AppIcon.appiconset/*
