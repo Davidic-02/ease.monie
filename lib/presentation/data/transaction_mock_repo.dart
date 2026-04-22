@@ -1,5 +1,5 @@
 // lib/repository/fintech_mock_repository.dart
-import 'package:esae_monie/models/fintech/transaction.dart';
+
 import 'package:esae_monie/models/transaction/transaction.dart';
 
 class FintechMockRepository {

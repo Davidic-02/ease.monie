@@ -99,8 +99,8 @@ class _FinanceChartState extends State<FinanceChart> {
                     isCurved: true,
                     gradient: LinearGradient(
                       colors: [
-                        AppColors.blueColor.withOpacity(0.8),
-                        AppColors.blueColor.withOpacity(0.2),
+                        AppColors.blueColor.withValues(alpha: 0.8),
+                        AppColors.blueColor.withValues(alpha: 0.2),
                       ],
                     ),
                     barWidth: 3,
@@ -120,8 +120,8 @@ class _FinanceChartState extends State<FinanceChart> {
                       show: true,
                       gradient: LinearGradient(
                         colors: [
-                          AppColors.blueColor.withOpacity(0.3),
-                          AppColors.blueColor.withOpacity(0.0),
+                          AppColors.blueColor.withValues(alpha: 0.3),
+                          AppColors.blueColor.withValues(alpha: 0.0),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
