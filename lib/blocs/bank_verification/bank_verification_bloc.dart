@@ -4,7 +4,7 @@ import 'package:esae_monie/models/resolve_account_request.dart';
 import 'package:esae_monie/models/resolve_account_response.dart';
 import 'package:esae_monie/retrofit/bank_api.dart';
 import 'package:esae_monie/services/logging_helper.dart';
-import 'package:esae_monie/services/service_locator.dart';
+import 'package:esae_monie/services/services_locator.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';

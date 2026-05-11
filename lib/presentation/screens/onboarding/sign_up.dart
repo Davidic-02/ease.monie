@@ -65,7 +65,7 @@ class SignUpScreen extends HookWidget {
                           hintText: 'Name',
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.text,
-                          fillColor: AppColors.whiteColor,
+                          //  fillColor: AppColors.whiteColor,
                           errorText:
                               !state.fullName.isPure &&
                                   state.fullName.isNotValid
@@ -83,7 +83,7 @@ class SignUpScreen extends HookWidget {
                           textInputAction: TextInputAction.next,
                           hintText: 'Email',
                           keyboardType: TextInputType.emailAddress,
-                          fillColor: AppColors.whiteColor,
+                          // fillColor: AppColors.whiteColor,
                           onFieldSubmitted: (_) =>
                               mobileNumberFocusNode.requestFocus(),
                           onChanged: (value) => context
@@ -100,7 +100,7 @@ class SignUpScreen extends HookWidget {
                           textInputAction: TextInputAction.next,
                           hintText: 'Mobile Number',
                           keyboardType: TextInputType.number,
-                          fillColor: AppColors.whiteColor,
+                          //  fillColor: AppColors.whiteColor,
                           onFieldSubmitted: (_) =>
                               passwordFocusNode.requestFocus(),
                           onChanged: (value) => context
@@ -113,7 +113,7 @@ class SignUpScreen extends HookWidget {
                           textInputAction: TextInputAction.done,
                           hintText: 'Password',
                           keyboardType: TextInputType.text,
-                          fillColor: AppColors.whiteColor,
+                          //  fillColor: AppColors.whiteColor,
                           obscureText: !obscurePassword.value,
                           isPassword: true,
                           errorText:
@@ -138,7 +138,7 @@ class SignUpScreen extends HookWidget {
                           textInputAction: TextInputAction.done,
                           hintText: 'Confirm Password',
                           keyboardType: TextInputType.text,
-                          fillColor: AppColors.whiteColor,
+                          // fillColor: AppColors.whiteColor,
                           obscureText: !obscureConfirmPassword.value,
                           isPassword: true,
                           errorText:

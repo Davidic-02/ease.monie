@@ -55,7 +55,7 @@ class ForgotPasswordScreen extends HookWidget {
                       hintText: 'Email Address',
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
-                      fillColor: AppColors.whiteColor,
+                      //  fillColor: AppColors.whiteColor,
                       onFieldSubmitted: (_) => context.read<AuthBloc>().add(
                         AuthEvent.forgotPassword(),
                       ),

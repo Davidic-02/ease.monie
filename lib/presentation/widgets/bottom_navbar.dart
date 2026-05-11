@@ -2,6 +2,7 @@ import 'package:esae_monie/blocs/location/location_bloc.dart';
 
 import 'package:esae_monie/presentation/screens/tabs/home_screen.dart';
 import 'package:esae_monie/presentation/screens/tabs/map_screen.dart';
+import 'package:esae_monie/presentation/screens/tabs/profile_screen.dart';
 import 'package:esae_monie/presentation/screens/tabs/scan_screen.dart';
 import 'package:esae_monie/presentation/screens/tabs/transaction_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MainScreen extends HookWidget {
       MapScreen(),
       Scan(),
       TransactionScreen(),
-      Text(Home.routeName),
+      ProfileScreen(),
     ];
 
     return BlocBuilder<LocationBloc, LocationState>(

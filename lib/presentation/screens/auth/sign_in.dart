@@ -62,7 +62,7 @@ class Login extends HookWidget {
                           hintText: 'Email',
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.emailAddress,
-                          fillColor: AppColors.whiteColor,
+                          // fillColor: AppColors.whiteColor,
                           onChanged: (value) => context.read<AuthBloc>().add(
                             AuthEvent.emailChanged(value),
                           ),
@@ -79,7 +79,7 @@ class Login extends HookWidget {
                           textInputAction: TextInputAction.send,
                           hintText: 'Password',
                           keyboardType: TextInputType.text,
-                          fillColor: AppColors.whiteColor,
+                          //   fillColor: AppColors.whiteColor,
                           obscureText: !obscurePassword.value,
                           isPassword: true,
                           errorText:

@@ -8,7 +8,7 @@ import 'package:esae_monie/blocs/location/location_bloc.dart';
 import 'package:esae_monie/models/maps/atm.dart';
 import 'package:esae_monie/repository/atm_repository.dart';
 import 'package:esae_monie/services/logging_helper.dart';
-import 'package:esae_monie/services/service_locator.dart';
+import 'package:esae_monie/services/services_locator.dart';
 import 'package:esae_monie/services/theme_services.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:geocoding/geocoding.dart';

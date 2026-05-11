@@ -104,7 +104,11 @@ class ServiceOptionCard extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 2,
-                      child: Button('Send', onPressed: onPressed),
+                      child: Button(
+                        'Send',
+                        onPressed: onPressed,
+                        color: AppColors.blueColor,
+                      ),
                     ),
                   ],
                 ),
